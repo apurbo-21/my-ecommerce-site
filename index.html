@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apurbo - Web Developer & Shop</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+    /* --- বেসিক সেটআপ --- */
+    :root {
+        --primary-color: #2563eb;
+        --dark-bg: #0f172a;
+        --card-bg: #1e293b;
+        --text-color: #f8fafc;
+        --accent-color: #38bdf8;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+        background-color: var(--dark-bg);
+        color: var(--text-color);
+        line-height: 1.6;
+    }
+
+    /* --- NAVBAR STYLES (লোগো বামে, আইকন ডানে) --- */
+    .navbar {
+        display: flex;
+        justify-content: space-between; /* দুই প্রান্তে ঠেলে দেবে */
+        align-items: center;
+        background-color: #111827;
+        padding: 15px 5%;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        border-bottom: 2px solid var(--primary-color);
+    }
+
+    .logo {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: white;
+        cursor: pointer;
+    }
+    .logo span { color: var(--primary-color); }
+
+    /* --- ডানপাশের আইকন গ্রুপ (Search, Cart, Menu) --- */
+    .nav-icons {
+        display: flex;
+        align-items: center;
+        gap: 20px; /* আইকনগুলোর মাঝখানে সমান ফাঁকা */
+    }
+
+    /* --- সার্চ বক্স ডিজাইন (Dropdown Animation) --- */
+    .search-box {
+        position: relative; /* ড্রপ-ডাউনের জন্য জরুরি */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* সাদা সার্চ আইকন (কোনো ব্যাকগ্রাউন্ড ছাড়া) */
+    .search-btn {
+        color: #ffffff !important; /* একদম সাদা */
+        font-size: 1.4rem;
+        background: transparent; /* নীল গোল্লা মুছে ফেলা হলো */
+        border: none;
+        cursor: pointer;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: 0.3s;
+    }
+    .search-btn:hover { transform: scale(1.1); }
+
+    /* ইনপুট বক্স (যেটা নিচে নামবে) */
+    .search-txt {
+        position: absolute; /* আইকনের সাপেক্ষে ভাসবে */
+        top: 50px; /* আইকন থেকে নিচে */
+        right: - 200; /* ডান দিক সমান */
+        
+        width: 200px;
+        padding: 10px;
+        background: #1f2937;
+        border: 2px solid var(--primary-color);
+        border-radius: 10px;
+        color: white;
+        font-size: 14px;
+        outline: none;
+        
+        /* এনিমেশন সেটআপ (লুকানো অবস্থা) */
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-15px); /* একটু উপরে থাকবে */
+        transition: 0.4s ease;
+    }
+
+    /* যখন সার্চ বক্স ওপেন হবে */
+    .search-box.active .search-txt {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0); /* স্মুথলি নিচে নামবে */
+    }
+
+    /* --- কার্ট এবং মেনু আইকন --- */
+    .cart-icon {
+        font-size: 1.5rem;
+        color: white;
+        cursor: pointer;
+        position: relative;
+    }
+    .cart-icon:hover { color: var(--primary-color); transform: scale(1.1); }
+
+    #cart-count {
+        position: absolute;
+        top: -8px;
+        right: -10px;
+        background-color: red;
+        color: white;
+        font-size: 12px;
+        font-weight: bold;
+        padding: 2px 6px;
+        border-radius: 50%;
+        border: 2px solid #111827;
+    }
+
+    .menu-bar {
+        font-size: 1.5rem;
+        color: white;
+        cursor: pointer;
+    }
+
+    /* --- SIDEBAR DESIGN --- */
+    .sidebar {
+        position: fixed;
+        top: 0;
+        right: -300px;
+        width: 300px;
+        height: 100%;
+        background-color: #111827;
+        box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+        padding-top: 60px;
+        transition: 0.4s;
+        z-index: 2000;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .sidebar.active { right: 0; }
+
+    .sidebar a {
+        padding: 15px 25px;
+        text-decoration: none;
+        font-size: 1.1rem;
+        color: #cbd5e1;
+        transition: 0.3s;
+        border-bottom: 1px solid #1f2937;
+    }
+    .sidebar a:hover {
+        color: var(--primary-color);
+        padding-left: 35px;
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .close-icon {
+        position: absolute;
+        top: 15px;
+        left: 20px;
+        font-size: 1.5rem;
+        color: white;
+        cursor: pointer;
+    }
+    .close-icon:hover { color: red; }
+
+    /* --- CART SIDEBAR DESIGN --- */
+    .cart-header {
+        display: flex;
+        justify-content: space-between;
+        padding: 15px;
+        border-bottom: 1px solid #333;
+        color: white;
+    }
+    .cart-item {
+        display: flex;
+        gap: 10px;
+        padding: 10px;
+        border-bottom: 1px solid #333;
+        color: white;
+        align-items: center;
+    }
+    .cart-item img {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+    .cart-footer {
+        padding: 20px;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background: #111827;
+        border-top: 2px solid var(--primary-color);
+        text-align: center;
+        color: white;
+    }
+
+    /* --- HERO & PRODUCT STYLES --- */
+    .hero-section {
+        height: 40vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.85)), 
+                    url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1350&q=80');
+        background-size: cover;
+        background-position: center;
+        text-align: center;
+    }
+    .hero-section h1 { font-size: 3.5rem; margin: 10px 0; text-transform: uppercase; }
+    .hero-section p { font-size: 1.5rem; color: var(--accent-color); }
+    
+    .profile-circle {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        border: 3px solid var(--primary-color);
+        object-fit: cover;
+        box-shadow: 0 0 15px rgba(37, 99, 235, 0.6);
+    }
+
+    .container { max-width: 1200px; margin: 50px auto; padding: 20px; }
+    .section-title { text-align: center; font-size: 2.2rem; margin-bottom: 50px; }
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+    
+    .product-card {
+        background: var(--card-bg);
+        border-radius: 15px;
+        overflow: hidden;
+        border: 1px solid #334155;
+        display: flex;
+        flex-direction: column;
+        transition: 0.3s;
+    }
+    .product-card:hover { transform: translateY(-10px); box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+    
+    .product-img { width: 100%; height: 250px; overflow: hidden; background: #000; }
+    .product-img img { width: 100%; height: 100%; object-fit: cover; }
+    
+    .product-info { padding: 20px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+    .product-name { font-size: 1.1rem; margin-bottom: 10px; font-weight: 600; }
+    .price { color: var(--accent-color); font-size: 1.4rem; font-weight: 700; margin-bottom: 15px; }
+
+    .btn-container { display: flex; flex-direction: column; gap: 10px; width: 100%; margin-top: auto; }
+    .btn { padding: 10px 20px; border-radius: 50px; font-weight: 600; cursor: pointer; border: none; transition: 0.3s; width: 100%; font-size: 0.9rem; }
+    .btn-buy { background-color: var(--primary-color); color: white; }
+    .btn-cart { background-color: transparent; border: 2px solid var(--primary-color); color: var(--text-color); }
+    .btn-cart:hover { background-color: var(--primary-color); color: white; }
+
+    /* --- CONTACT & FOOTER --- */
+    .contact-section {
+        max-width: 600px;
+        margin: 80px auto 50px auto;
+        padding: 0 20px;
+        text-align: center;
+    }
+    .contact-form {
+        display: flex; flex-direction: column; gap: 15px;
+        background: var(--card-bg); padding: 30px; border-radius: 15px; border: 1px solid #334155;
+    }
+    .contact-input {
+        width: 100%; padding: 15px; border-radius: 10px; border: 1px solid #334155;
+        background-color: var(--dark-bg); color: white; outline: none;
+    }
+
+    .footer {
+        background-color: #111827;
+        color: #cbd5e1;
+        padding-top: 50px;
+        margin-top: 50px;
+        border-top: 4px solid var(--primary-color);
+    }
+    .footer-container {
+        max-width: 1200px; margin: 0 auto; padding: 0 20px;
+        display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px;
+    }
+    .footer-col h3 { color: white; margin-bottom: 20px; }
+    .footer-col h3 span { color: var(--primary-color); }
+    .footer-col ul { list-style: none; padding: 0; }
+    .footer-col ul li { margin-bottom: 10px; }
+    .footer-col ul li a { color: #cbd5e1; text-decoration: none; transition: 0.3s; }
+    .footer-col ul li a:hover { color: #38bdf8; padding-left: 5px; }
+    .footer-bottom { text-align: center; padding: 20px; margin-top: 40px; border-top: 1px solid #334155; }
+    
+    /* --- সাজেশন বক্স ডিজাইন (Copy & Paste) --- */
+#suggestion-box {
+    position: absolute;
+    top: 100px;
+    right: - 0.5px;
+    width: 250px;
+    background: #1f2937;
+    border: 1px solid #2563eb;
+    border-radius: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+    display: none; /* শুরুতে লুকানো */
+    z-index: 9999;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+}
+
+.suggestion-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #374151;
+    cursor: pointer;
+    text-decoration: none;
+    color: white;
+    transition: 0.2s;
+}
+
+.suggestion-item:hover {
+    background: #374151;
+}
+
+.suggestion-item img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-right: 10px;
+    border: 1px solid #2563eb;
+}
+
+.suggestion-item span {
+    font-size: 14px;
+    font-weight: 500;
+}
+/* --- কার্ট ডিলিট বাটন ডিজাইন --- */
+.remove-btn {
+    color: #ef4444; /* লাল রং */
+    cursor: pointer;
+    font-size: 1.2rem;
+    margin-left: auto; /* আইকনকে একদম ডানে ঠেলে দেবে */
+    transition: 0.3s;
+    padding: 5px;
+}
+.remove-btn:hover {
+    transform: scale(1.2); /* মাউস নিলে বড় হবে */
+    color: red;
+}
+
+
+</style>
+
+</head>
+<body>
+    
+
+<nav class="navbar">
+    <div class="logo">APURBO<span>.DEV</span></div>
+    
+    <div class="nav-icons">
+        
+        <div class="search-box">
+    <input class="search-txt" type="text" id="search-box" placeholder="Type to search..." onkeyup="showSuggestions()">
+    <a class="search-btn" href="#" onclick="toggleSearch()">
+        <i class="fas fa-search"></i>
+    </a>
+    
+    <div id="suggestion-box"></div>
+</div>
+
+
+        <div class="cart-icon" onclick="toggleCart()">
+            <i class="fas fa-shopping-cart"></i>
+            <span id="cart-count">0</span>
+        </div>
+        
+        <div class="menu-bar" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+    </div>
+</nav>
+
+
+<div class="sidebar" id="sideMenu">
+    <i class="fas fa-times close-icon" onclick="toggleMenu()"></i>
+    <a href="#" onclick="toggleMenu()">Home</a>
+    <a href="#" onclick="toggleMenu()">Shop</a>
+    <a href="#" onclick="toggleMenu()">Profile</a>
+    <a href="#" onclick="toggleMenu()">Contact Us</a>
+</div>
+
+<div class="sidebar" id="cartSidebar">
+    <div class="cart-header">
+        <h3>My Cart</h3>
+        <i class="fas fa-times close-icon" onclick="toggleCart()"></i>
+    </div>
+    <div id="cart-items-container" style="padding: 20px; color: grey;">
+        Cart is empty!
+    </div>
+    <div class="cart-footer">
+    <h4>Total: <span id="cart-total">0</span> BDT</h4>
+    
+    <button class="btn" style="background: #ef4444; color: white; margin-bottom: 10px; width: 100%; border: none;" onclick="clearCart()">
+        <i class="fas fa-trash-alt"></i> Clear Cart
+    </button>
+    
+    <button class="btn btn-buy" style="width: 100%;" onclick="checkout()">Checkout Now</button>
+</div>
+
+</div>
+
+<section class="hero-section">
+    <img src="https://i.ibb.co/XxXtjQmv/wycggw.jpg" alt="Apurbo Profile" class="profile-circle">
+    <h1>Apurbo</h1>
+    <p>Premium Gadgets for Developers</p>
+</section>
+
+<div class="container">
+    <h2 class="section-title">Latest Gadgets & Items</h2>
+
+    <div class="product-grid">
+
+        <div class="product-card">
+            <div class="product-img">
+                <a href="product_details.html">
+                    <img src="https://i.ibb.co.com/HL39hg93/K65-PLUS-WIRELESS-14-width-1000-bgcolor-000-format-webp.webp" alt="Keyboard">
+                </a>
+            </div>
+            <div class="product-info">
+                <h3 class="product-name">K65 PLUS Wireless Keyboard</h3>
+                <p class="price">৳ 4,500</p>
+                <div class="btn-container">
+                    <button class="btn btn-buy" onclick="buyNow('K65 Keyboard')">Buy Now</button>
+                    <button class="btn btn-cart" onclick="addToCart('K65 Keyboard', 4500, 'https://i.ibb.co.com/HL39hg93/K65-PLUS-WIRELESS-14-width-1000-bgcolor-000-format-webp.webp')">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <div class="product-img">
+                <a href="suit_details.html">
+                    <img src="https://i.ibb.co.com/jkxLG2Nq/3c.jpg" alt="Premium Suit">
+                </a>
+            </div>
+            <div class="product-info">
+                <h3 class="product-name">Premium Slim Fit Suit</h3>
+                <p class="price">৳ 3,200</p>
+                <div class="btn-container">
+                    <button class="btn btn-buy" onclick="buyNow('Premium Suit')">Buy Now</button>
+                    <button class="btn btn-cart" onclick="addToCart('Premium Suit', 3200, 'https://i.ibb.co.com/jkxLG2Nq/3c.jpg')">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <div class="product-img">
+                <a href="mouse_details.html">
+                    <img src="https://i.ibb.co/xR3SP9K/s-l1200.jpg" alt="Gaming Mouse">
+                </a>
+            </div>
+            <div class="product-info">
+                <h3 class="product-name">Wireless Gaming Mouse</h3>
+                <p class="price">৳ 1,800</p>
+                <div class="btn-container">
+                    <button class="btn btn-buy" onclick="buyNow('Gaming Mouse')">Buy Now</button>
+                    <button class="btn btn-cart" onclick="addToCart('Gaming Mouse', 1800, 'https://i.ibb.co/xR3SP9K/s-l1200.jpg')">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    </div>
+
+<section class="contact-section">
+    <h2 class="section-title">Send us a Message</h2>
+    <div class="contact-form">
+        <input type="text" placeholder="Your Name" class="contact-input">
+        <input type="email" placeholder="Your Email" class="contact-input">
+        <textarea rows="5" placeholder="Write your message here..." class="contact-input"></textarea>
+        <button class="btn btn-buy" onclick="sendMessage()">Send Message</button>
+    </div>
+</section>
+
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-col">
+            <h3>Apurbo<span>.Dev</span></h3>
+            <p>You can choose your best gadgets and fashion store in BD.</p>
+        </div>
+        <div class="footer-col">
+            <h3>Quick Links</h3>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Shop</a></li>
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h3>Contact Us</h3>
+            <p><i class="fas fa-map-marker-alt"></i> Joydebpur Bustand</p>
+            <p><i class="fas fa-phone"></i> 01326567948</p>
+            <p><i class="fas fa-envelope"></i> mofassirhossain21@gmail.com</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2025 Apurbo.Dev | All rights reserved.</p>
+    </div>
+</footer>
+
+<script>
+    function buyNow(name) {
+        alert("Proceeding to buy " + name);
+    }
+        // --- সার্চ ফাংশন ---
+        // --- স্মার্ট অটো-সার্চ ফাংশন ---
+    
+    // --- এই ফাংশনটি অটোমেটিক সাজেশন দেখাবে ---
+    function showSuggestions() {
+        let input = document.getElementById('search-box').value.toLowerCase().trim();
+        let suggestionBox = document.getElementById('suggestion-box');
+        let productCards = document.getElementsByClassName('product-card');
+
+        // বক্স ক্লিয়ার ও রিসেট
+        suggestionBox.innerHTML = '';
+        
+        if (input.length === 0) {
+            suggestionBox.style.display = 'none';
+            return;
+        }
+
+        let matchFound = false;
+
+        // প্রোডাক্ট খোঁজা হচ্ছে
+        for (let i = 0; i < productCards.length; i++) {
+            let name = productCards[i].querySelector(".product-name").innerText;
+            let imageSrc = productCards[i].querySelector("img").src;
+            
+            // নাম থেকে লিংক খুঁজে বের করা (<a> ট্যাগ থেকে)
+            let linkElement = productCards[i].querySelector("a");
+            let link = linkElement ? linkElement.href : "#"; 
+
+            // যদি নাম মিলে যায়
+            if (name.toLowerCase().includes(input)) {
+                suggestionBox.style.display = 'block';
+                
+                suggestionBox.innerHTML += `
+                    <a href="${link}" class="suggestion-item">
+                        <img src="${imageSrc}" alt="Product">
+                        <span>${name}</span>
+                    </a>
+                `;
+                matchFound = true;
+            }
+        }
+
+        // কিছু না মিললে
+        if (!matchFound) {
+            suggestionBox.style.display = 'block';
+            suggestionBox.innerHTML = `<div style="padding:10px; color:grey; text-align:center;">No items found</div>`;
+        }
+    }
+
+    // বক্সের বাইরে ক্লিক করলে সাজেশন বন্ধ হবে
+    document.addEventListener('click', function(e) {
+        if (!document.querySelector('.search-box').contains(e.target)) {
+            document.getElementById('suggestion-box').style.display = 'none';
+        }
+    });
+
+    // সার্চ বার ওপেন করার ফাংশন (তোমার আগেরটাই)
+    function toggleSearch() {
+        const searchBox = document.querySelector('.search-box');
+        searchBox.classList.toggle('active');
+        if(searchBox.classList.contains('active')){
+            document.getElementById("search-box").focus();
+        } else {
+             document.getElementById('suggestion-box').style.display = 'none';
+        }
+    }
+
+
+
+    function sendMessage() {
+        alert("Message sent successfully!");
+    }
+
+    // ১. মেনু বের করার ফাংশন
+    function toggleMenu() {
+        document.getElementById("sideMenu").classList.toggle("active");
+    }
+
+    // ২. কার্ট বের করার ফাংশন
+    function toggleCart() {
+        document.getElementById("cartSidebar").classList.toggle("active");
+    }
+
+    // ৩. কার্টের হিসাব নিকাশ
+    let cart = []; 
+
+    function addToCart(name, price, image) {
+        cart.push({ name: name, price: price, image: image });
+        document.getElementById("cart-count").innerText = cart.length;
+        updateCartHTML();
+        toggleCart();
+    }
+
+    // এই ফাংশনটি এখন ঠিক করা হয়েছে
+        // --- ১. কার্ট আপডেট এবং ডিলিট বাটন দেখানোর নতুন ফাংশন ---
+    function updateCartHTML() {
+        let container = document.getElementById("cart-items-container");
+        let totalElement = document.getElementById("cart-total");
+
+        container.innerHTML = ""; // আগের লিস্ট পরিষ্কার করা
+        let totalPrice = 0;
+
+        // লুপ চালিয়ে আইটেম দেখানো হচ্ছে
+        cart.forEach((item, index) => {
+            totalPrice += parseInt(item.price); // দাম যোগ হচ্ছে
+            
+            // নিচের এই অংশে HTML তৈরি হচ্ছে (খেয়াল করো trash icon যোগ করা হয়েছে)
+            container.innerHTML += `
+                <div class="cart-item">
+                    <img src="${item.image}" alt="Product">
+                    
+                    <div style="flex-grow: 1; margin-left: 10px;">
+                        <h4 style="font-size: 14px; margin: 0;">${item.name}</h4>
+                        <p style="font-size: 12px; color: #38bdf8; margin: 0;">${item.price} BDT</p>
+                    </div>
+
+                    <i class="fas fa-trash remove-btn" onclick="removeFromCart(${index})"></i>
+                </div>
+            `;
+        });
+
+        // মোট দাম আপডেট করা
+        totalElement.innerText = totalPrice;
+        
+        // যদি কার্ট খালি থাকে, তবে মেসেজ দেখাবে
+        if (cart.length === 0) {
+            container.innerHTML = "<div style='text-align:center; padding:20px; color: grey;'>Cart is empty!</div>";
+        }
+    }
+
+    // --- ২. একটা একটা করে ডিলিট করার ফাংশন ---
+    function removeFromCart(index) {
+        // কার্ট থেকে ওই নম্বরের আইটেমটি কেটে ফেলে দেওয়া হচ্ছে
+        cart.splice(index, 1); 
+        
+        // কার্ট আইকনের লাল সংখ্যা আপডেট করা হচ্ছে
+        document.getElementById("cart-count").innerText = cart.length; 
+        
+        // লিস্ট আবার নতুন করে সাজানো হচ্ছে
+        updateCartHTML(); 
+    }
+
+    // --- ৩. সব একসাথে ডিলিট করার ফাংশন ---
+    function clearCart() {
+        // যদি কার্ট আগে থেকেই খালি থাকে
+        if (cart.length === 0) {
+            alert("Cart is already empty!");
+            return;
+        }
+        
+        // ইউজারকে জিজ্ঞেস করা হবে সে শিওর কি না
+        if (confirm("Are you sure you want to remove ALL items?")) {
+            cart = []; // সব আইটেম মুছে ফেলা হলো
+            document.getElementById("cart-count").innerText = "0"; // লাল সংখ্যা ০ করা হলো
+            updateCartHTML(); // স্ক্রিন আপডেট
+        }
+    }
+
+
+        
+    
+        // ১. সার্চ বার ওপেন/ক্লোজ করার ফাংশন
+    function toggleSearch() {
+        const searchBox = document.querySelector('.search-box');
+        searchBox.classList.toggle('active'); // বক্সটি ওপেন বা ক্লোজ করবে
+        
+        // ওপেন হলে কার্সর অটোমেটিক বক্সে বসে যাবে
+        if(searchBox.classList.contains('active')){
+            document.getElementById("search-box").focus();
+        }
+    }
+
+    // ২. প্রোডাক্ট ফিল্টার করার ফাংশন (Suggestion এর মতো কাজ করবে)
+    function filterProducts() {
+        let input = document.getElementById('search-box').value.toUpperCase();
+        let cards = document.getElementsByClassName('product-card');
+
+        for (let i = 0; i < cards.length; i++) {
+            let title = cards[i].querySelector(".product-name");
+            
+            if (title.innerText.toUpperCase().indexOf(input) > -1) {
+                cards[i].style.display = ""; // মিললে দেখাবে
+            } else {
+                cards[i].style.display = "none"; // না মিললে লুকাবে
+            }
+        }
+    }
+    
+        function toggleSearch() {
+        const searchBox = document.querySelector('.search-box');
+        searchBox.classList.toggle('active'); // ক্লাস অ্যাড/রিমুভ করবে
+        
+        if(searchBox.classList.contains('active')){
+            document.getElementById("search-box").focus();
+            document.getElementById("search-box").value = ""; // খোলার সময় আগের লেখা মুছে যাবে
+        }
+    }
+        // --- অর্ডার কনফার্ম করার ফাংশন ---
+    function checkout() {
+        // ১. যদি কার্ট খালি থাকে, তবে অর্ডার হবে না
+        if (cart.length === 0) {
+            alert("Your cart is empty! Please add some products first.");
+            return;
+        }
+
+        // ২. অর্ডার সফল হওয়ার মেসেজ
+        alert("🎉 Order Successful! Thank you for purchasing from Apurbo.Dev.");
+
+        // ৩. কার্ট খালি করে দেওয়া
+        cart = []; // সব ডিলিট
+        document.getElementById("cart-count").innerText = "0"; // কাউন্টার ০ করা
+        updateCartHTML(); // কার্ট লিস্ট আপডেট করা (খালি দেখাবে)
+        
+        // ৪. কার্ট সাইডবার বন্ধ করা
+        toggleCart();
+    }
+
+
+
+</script>
+
+</body>
+</html>

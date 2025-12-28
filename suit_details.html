@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Suit - Details</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- মেইন থিম (কিবোর্ড পেজের মতো) --- */
+        :root {
+            --primary-color: #2563eb;
+            --dark-bg: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --accent-color: #38bdf8;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* --- মেনু বার --- */
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            background-color: #111827; padding: 15px 5%;
+            border-bottom: 2px solid var(--primary-color);
+        }
+        .logo { font-size: 1.8rem; font-weight: 700; color: white; text-decoration: none; }
+        .logo span { color: var(--primary-color); }
+
+        /* --- প্রোডাক্ট ডিটেইলস --- */
+        .small-container { max-width: 1000px; margin: 50px auto; padding: 0 20px; }
+        .row { display: flex; align-items: center; flex-wrap: wrap; justify-content: space-around; }
+        
+        .col-2 { flex-basis: 45%; min-width: 300px; margin-bottom: 30px; }
+        
+        /* ছবি সুন্দর করার জন্য */
+        .col-2 img {
+            width: 100%;
+            border-radius: 15px;
+            border: 1px solid #334155;
+            background: var(--card-bg);
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .product-content h1 { font-size: 2.5rem; line-height: 1.2; margin-bottom: 15px; }
+        .product-content h4 { color: var(--accent-color); font-size: 2rem; margin-bottom: 20px; }
+
+        select {
+            display: block; padding: 10px; margin-top: 20px;
+            border: 1px solid #334155; background: var(--card-bg);
+            color: white; border-radius: 5px; outline: none;
+        }
+
+        input {
+            width: 60px; height: 40px; padding-left: 10px; font-size: 18px;
+            margin-right: 10px; border: 1px solid #334155;
+            border-radius: 5px; background: var(--card-bg); color: white; outline: none;
+        }
+
+        .btn {
+            display: inline-block; background: var(--primary-color); color: white;
+            padding: 12px 30px; margin: 20px 0; border-radius: 30px;
+            text-decoration: none; border: none; cursor: pointer; font-weight: bold;
+            transition: 0.3s;
+        }
+        .btn:hover { background: #1d4ed8; }
+
+        .product-details-text { margin-top: 30px; line-height: 1.6; color: #cbd5e1; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="logo">APURBO<span>.DEV</span></a>
+        <div style="color: white; font-size: 1.5rem;">
+            <i class="fas fa-shopping-cart"></i>
+        </div>
+    </nav>
+
+    <div class="small-container">
+        <div class="row">
+            
+            <div class="col-2">
+                <img src="https://i.ibb.co.com/jkxLG2Nq/3c.jpg" alt="Premium Suit">
+            </div>
+
+            <div class="col-2 product-content">
+                <p style="color: grey;">Home / Fashion</p>
+                <h1>Premium Slim Fit Suit</h1>
+                <h4>৳ 3,200</h4>
+                
+                <select>
+                    <option>Select Size</option>
+                    <option>Small (S)</option>
+                    <option>Medium (M)</option>
+                    <option>Large (L)</option>
+                    <option>Extra Large (XL)</option>
+                </select>
+
+                <br>
+                <div style="display: flex; align-items: center; margin-top: 20px;">
+                    <input type="number" value="1" min="1">
+                    <button class="btn">Add To Cart</button>
+                </div>
+
+                <h3 style="margin-top: 40px; border-bottom: 1px solid grey; padding-bottom: 10px;">Product Details <i class="fas fa-indent"></i></h3>
+                <p class="product-details-text">
+                    Look professional and sharp with our Premium Slim Fit Suit. Designed for modern developers and professionals.
+                    <br><br>
+                    • <strong>Material:</strong> High-quality Fabric blend<br>
+                    • <strong>Fit:</strong> Slim Fit / Modern Cut<br>
+                    • <strong>Color:</strong> Deep Grey / Black<br>
+                    • <strong>Occasion:</strong> Formal, Meetings, Events
+                </p>
+
+                <a href="index.html" style="color: var(--accent-color); text-decoration: none; display: block; margin-top: 20px;">
+                    <i class="fas fa-arrow-left"></i> Go Back to Shop
+                </a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
