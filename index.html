@@ -688,17 +688,25 @@
     }
 
     // --- ৫. আপডেটেড চেক লগইন স্ট্যাটাস (মেনু বাটন সহ) ---
+        // --- আপডেট করা চেক লগইন স্ট্যাটাস (আইকন ছাড়া শুধু নাম) ---
     function checkLoginStatus() {
         let userName = localStorage.getItem('currentUser');
         let loginButton = document.getElementById('login-btn');
-        let menuLogout = document.getElementById('menu-logout-btn'); // মেনুর লগআউট বাটন
+        let menuLogout = document.getElementById('menu-logout-btn');
 
         if (userName) {
             // ইউজার লগইন অবস্থায় থাকলে
             if (loginButton) {
-                loginButton.innerHTML = '<i class="fas fa-user"></i> ' + userName;
+                // 🔴 পরিবর্তন: আগে এখানে আইকন ছিল, এখন শুধু userName দিচ্ছি
+                loginButton.innerText = userName; 
+                
+                // নামটা যাতে সুন্দর দেখায় (একটু বোল্ড করে দিলাম)
+                loginButton.style.fontWeight = "bold";
+                loginButton.style.fontSize = "16px"; // সাইজ একটু বড় করলাম
+                
                 loginButton.href = "#"; 
             }
+            
             // মেনুতে লগআউট বাটনটি শো করবে
             if (menuLogout) {
                 menuLogout.style.display = "block";
