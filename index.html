@@ -12,7 +12,7 @@
     <script type="text/javascript">
        (function(){
           // এখানে তোমার Public Key টা বসাবে
-          emailjs.init("YOUR_PUBLIC_KEY");
+          emailjs.init("TEriOjdktc7saIdsm");
        })();
     </script>
 
@@ -630,40 +630,48 @@
     }
 
     // --- ৩. রেজিস্টার ফাংশন ---
+    
+    // --- ৩. নতুন রেজিস্টার ফাংশন (তোমার আইডি দিয়ে ফিক্স করা) ---
     function registerUser() {
         let user = document.getElementById("regUser").value;
         let pass = document.getElementById("regPass").value;
-        let email = document.getElementById("regEmail").value; 
 
-        if(user === "" || pass === "" || email === "") {
+        // খালি ঘর আছে কি না চেক করা
+        if(user === "" || pass === "") {
             alert("Please fill all fields!");
             return;
         }
 
+        // বাটন ডিজেবল করা (যাতে ইউজার বোঝে কাজ হচ্ছে)
         let regBtn = document.querySelector("#registerForm button");
         let originalText = regBtn.innerText;
         regBtn.innerText = "Sending...";
         regBtn.disabled = true;
 
         // EmailJS দিয়ে মেইল পাঠানো
+        // তোমার দেওয়া Service ID: service_gkqcuvl
+        // তোমার দেওয়া Template ID: template_8svpcra
         emailjs.send("service_gkqcuvl", "template_8svpcra", {
             user_name: user,
             user_pass: pass,
-            user_email: email
         })
         .then(function() {
+            // ১. সফল হলে এখানে আসবে
+            alert("Account Created Successfully! Info sent to Apurbo.");
+            
+            // ২. ডাটা ব্রাউজারে সেভ করা (লগইন করার জন্য)
             localStorage.setItem("storedUser", user);
             localStorage.setItem("storedPass", pass);
-            alert("Account Created Successfully! Check email & Please Login.");
+            
+            // ৩. লগইন পেজে নিয়ে যাওয়া
             showLogin(); 
             regBtn.innerText = originalText;
             regBtn.disabled = false;
+
         }, function(error) {
-            alert("Failed to send email. But saving account locally.");
+            // ৪. ভুল হলে বা মেইল না গেলে এখানে আসবে
+            alert("Failed to send email, check console for error.");
             console.log("FAILED...", error);
-            localStorage.setItem("storedUser", user);
-            localStorage.setItem("storedPass", pass);
-            showLogin();
             regBtn.innerText = originalText;
             regBtn.disabled = false;
         });
