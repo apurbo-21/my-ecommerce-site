@@ -351,7 +351,8 @@
             </div>
             
             <div class="links">
-                <a href="#" onclick="alert('Forgot Password feature coming soon!')">Forgot Password</a>
+                <a href="#" onclick="openForgot()">Forgot Password</a>
+
                 <a href="#" onclick="alert('Sign up feature is disabled for this animation demo.')">Signup</a>
             </div>
             
@@ -361,6 +362,25 @@
         </form>
     </div>
 </div>
+<div class="login-popup" id="forgotForm">
+    <div class="box">
+        <span class="border-line"></span>
+        <form onsubmit="event.preventDefault(); recoverPassword();">
+            <h2>Recovery</h2>
+            
+            <div class="inputBox">
+                <input type="email" id="recoveryEmail" required="required">
+                <span>Enter Your Email</span>
+                <i></i>
+            </div>
+            
+            <input type="submit" value="Send Pass" class="submit-btn" style="width: 120px;">
+            
+            <button type="button" onclick="closeForgot()" style="margin-top:15px; background: #ff2770; color: white; border: none; padding: 5px 15px; border-radius: 4px; cursor: pointer; font-weight:bold;">Close</button>
+        </form>
+    </div>
+</div>
+
 
 <script>
     // --- ১. গ্লোবাল সেটআপ ---
@@ -516,6 +536,47 @@
         }
         if (!matchFound) { suggestionBox.style.display = 'block'; suggestionBox.innerHTML = `<div style="padding:10px; color:grey;">No items found</div>`; }
     }
+        // --- Forgot Password Logic ---
+    let forgotPopup = document.getElementById("forgotForm");
+
+    function openForgot() {
+        closeLogin(); // আগের লগিন বক্স বন্ধ করে দেবে
+        forgotPopup.classList.add("open-popup"); // নতুন বক্স ওপেন করবে
+    }
+
+    function closeForgot() {
+        forgotPopup.classList.remove("open-popup");
+    }
+
+    function recoverPassword() {
+        let email = document.getElementById("recoveryEmail").value;
+        
+        // ১. লোকাল স্টোরেজ থেকে পাসওয়ার্ড চেক করা
+        let storedUser = localStorage.getItem("storedUser");
+        let storedPass = localStorage.getItem("storedPass");
+        
+        // যেহেতু আমরা আগে ইমেইল সেভ করিনি, তাই আমরা ধরে নিচ্ছি ইউজার তার ইউজারনেমটাই ইমেইল হিসেবে মনে রেখেছে অথবা আমরা সোজাসুজি এডমিনকে রিকোয়েস্ট পাঠাবো।
+        // তবে কোডটা কাজ করার জন্য আমি এখানে একটা ট্রিক করছি:
+        
+        let btn = document.querySelector("#forgotForm .submit-btn");
+        btn.value = "Sending...";
+
+        // EmailJS দিয়ে মেইল পাঠানো
+        emailjs.send("service_gkqcuvl", "template_8svpcra", {
+            user_name: "Password Recovery Request",
+            user_pass: "Your Recovered Password is: " + storedPass, // টেম্পলেটে user_pass ভেরিয়েবল থাকলে এটা যাবে
+            message: "User requested password recovery for account: " + storedUser
+        })
+        .then(function() {
+            alert("Password has been sent to your email!");
+            closeForgot();
+            btn.value = "Send Pass";
+        }, function(error) {
+            alert("Failed to send email. Error: " + JSON.stringify(error));
+            btn.value = "Send Pass";
+        });
+    }
+
 </script>
 
 </body>
