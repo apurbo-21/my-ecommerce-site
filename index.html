@@ -80,11 +80,12 @@
     .footer-bottom { text-align: center; padding: 20px; margin-top: 40px; border-top: 1px solid #334155; }
 
     /* =========================================
-       🔥🔥🔥 LOGIN ANIMATION & AUTOFILL FIX 🔥🔥🔥
+       🔥🔥🔥 LOGIN/SIGNUP DESIGN FIXED 🔥🔥🔥
        ========================================= */
     .login-popup { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); display: flex; justify-content: center; align-items: center; visibility: hidden; opacity: 0; transform: scale(0); transition: transform 0.4s ease, opacity 0.4s ease; z-index: 10000; }
     .login-popup.open-popup { visibility: visible; opacity: 1; transform: scale(1); }
     .box { position: relative; width: 380px; height: 480px; background: #1c1c1c; border-radius: 8px; overflow: hidden; display: flex; justify-content: center; align-items: center; }
+    
     .box::before { content: ''; position: absolute; top: -50%; left: -50%; width: 380px; height: 480px; background: linear-gradient(0deg, transparent, transparent, #45f3ff, #45f3ff, #ff2770); z-index: 1; transform-origin: bottom right; animation: animate 6s linear infinite; }
     .box::after { content: ''; position: absolute; top: -50%; left: -50%; width: 380px; height: 480px; background: linear-gradient(0deg, transparent, transparent, #45f3ff, #45f3ff, #ff2770); z-index: 1; transform-origin: bottom right; animation: animate 6s linear infinite; animation-delay: -3s; }
     @keyframes animate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -94,91 +95,60 @@
     
     .inputBox { position: relative; width: 100%; margin-top: 35px; }
     
-    /* 🔥 FIX: Text color white for inputs AND AUTOFILL FIX 🔥 */
+    /* 🔥 Input Style Fixed (Black Bg, White Text) 🔥 */
     .inputBox input {
-        position: relative; 
-        width: 100%; 
-        padding: 20px 40px 10px 10px; 
-        
-        /* এখানে ব্যাকগ্রাউন্ড কালো করে দিলাম যাতে ট্রান্সপারেন্ট হলে সমস্যা না হয় */
+        position: relative; width: 100%; padding: 20px 40px 10px 10px; 
         background: #1c1c1c !important; 
-        outline: none; 
-        border: none; 
-        
-        /* লেখা সাদা */
+        outline: none; border: none; 
         color: #ffffff !important; 
-        
         font-size: 1em; letter-spacing: 0.05em; transition: 0.5s; z-index: 10;
     }
 
-    /* 🔥🔥 ব্রাউজার অটোফিল ফিক্স (কালো বক্স + সাদা লেখা) 🔥🔥 */
+    /* 🔥 Autofill Fix (Stop White Box) 🔥 */
     .inputBox input:-webkit-autofill,
     .inputBox input:-webkit-autofill:hover, 
     .inputBox input:-webkit-autofill:focus, 
     .inputBox input:-webkit-autofill:active  {
-        /* শ্যাডো দিয়ে ব্যাকগ্রাউন্ড কালো করা হচ্ছে */
-        -webkit-box-shadow: 0 0 0 30px #1c1c1c inset !important; 
-        /* লেখা সাদা */
-        -webkit-text-fill-color: #ffffff !important; 
+        -webkit-box-shadow: 0 0 0 30px #1c1c1c inset !important;
+        -webkit-text-fill-color: #ffffff !important;
         transition: background-color 5000s ease-in-out 0s;
-        color: #ffffff !important;
     }
 
-    .inputBox span { position: absolute; left: 0; padding: 20px 0px 10px; pointer-events: none; color: #8f8f8f; transition: 0.5s; }
-    .inputBox input:valid ~ span, .inputBox input:focus ~ span { color: #fff; font-size: 0.75em; transform: translateY(-34px); }
+    /* 🔥 Label Fixed At Top Permanently 🔥 */
+    .inputBox span {
+        position: absolute; 
+        left: 0; 
+        padding: 20px 0px 10px; 
+        pointer-events: none;
+        color: #fff; 
+        font-size: 0.75em; 
+        transform: translateY(-34px); /* সব সময় উপরে ফিক্সড */
+    }
+    
     .inputBox .line-anim { position: absolute; left: 0; bottom: 0; width: 100%; height: 2px; background: #fff; border-radius: 4px; transition: 0.5s; pointer-events: none; }
-    .inputBox input:valid ~ .line-anim, .inputBox input:focus ~ .line-anim { height: 44px; }
+    .inputBox input:focus ~ .line-anim, .inputBox input:valid ~ .line-anim { height: 44px; }
     
-    /* 🔥 Eye Icon Style 🔥 */
-    .eye-btn {
-        position: absolute; right: 10px; top: 25px; color: #8f8f8f; 
-        cursor: pointer; z-index: 100; font-size: 18px; transition: 0.3s;
-    }
+    .eye-btn { position: absolute; right: 10px; top: 25px; color: #8f8f8f; cursor: pointer; z-index: 100; font-size: 18px; transition: 0.3s; }
     .eye-btn:hover { color: #fff; }
-
     .links { display: flex; justify-content: space-between; margin-top: 20px; }
-    .links a { margin: 10px 0; font-size: 0.75em; color: #8f8f8f; text-decoration: none; cursor: pointer; }
-    .links a:hover { color: #fff; }
-    
-    .submit-btn {
-        border: none; outline: none; padding: 9px 25px; background: #fff;
-        cursor: pointer; font-size: 0.9em; border-radius: 4px; font-weight: 600;
-        width: 100px; margin-top: 15px;
-    }
-    .submit-btn:active { opacity: 0.8; }
-    
-    .popup-close-icon {
-        position: absolute; top: 20px; right: 20px; color: #ff2770; 
-        font-size: 1.5rem; cursor: pointer; z-index: 100; transition: 0.3s;
-    }
-    .popup-close-icon:hover { transform: scale(1.2); color: red; }
-
+    .links a { font-size: 0.75em; color: #8f8f8f; text-decoration: none; }
+    .submit-btn { border: none; padding: 9px 25px; background: #fff; cursor: pointer; font-weight: 600; border-radius: 4px; margin-top: 15px; width: 100px; }
+    .popup-close-icon { position: absolute; top: 20px; right: 20px; color: #ff2770; font-size: 1.5rem; cursor: pointer; z-index: 100; }
     </style>
 </head>
 <body>
     
 <nav class="navbar">
     <div class="logo">APURBO<span>.DEV</span></div>
-    
     <div class="nav-icons">
         <div class="search-box">
-            <input class="search-txt" type="text" id="search-box" placeholder="Type to search..." onkeyup="showSuggestions()">
-            <a class="search-btn" href="#" onclick="toggleSearch()">
-                <i class="fas fa-search"></i>
-            </a>
+            <input class="search-txt" type="text" id="search-box" placeholder="Search..." onkeyup="showSuggestions()">
+            <a class="search-btn" href="#" onclick="toggleSearch()"><i class="fas fa-search"></i></a>
             <div id="suggestion-box"></div>
         </div>
-
         <a href="#" id="login-btn" onclick="openLogin()" style="color: white; text-decoration: none; font-weight: bold; font-size: 1rem;">Login</a>
-
-        <div class="cart-icon" onclick="toggleCart()">
-            <i class="fas fa-shopping-cart"></i>
-            <span id="cart-count">0</span>
-        </div>
-        
-        <div class="menu-bar" onclick="toggleMenu()">
-            <i class="fas fa-bars"></i>
-        </div>
+        <div class="cart-icon" onclick="toggleCart()"><i class="fas fa-shopping-cart"></i><span id="cart-count">0</span></div>
+        <div class="menu-bar" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
     </div>
 </nav>
 
@@ -193,40 +163,27 @@
     </a>
 </div>
 
-
 <div class="sidebar" id="cartSidebar">
-    <div class="cart-header">
-        <h3>My Cart</h3>
-        <i class="fas fa-times close-icon" onclick="toggleCart()"></i>
-    </div>
-    <div id="cart-items-container" style="padding: 20px; color: grey;">
-        Cart is empty!
-    </div>
+    <div class="cart-header"><h3>My Cart</h3><i class="fas fa-times close-icon" onclick="toggleCart()"></i></div>
+    <div id="cart-items-container" style="padding: 20px; color: grey;">Cart is empty!</div>
     <div class="cart-footer">
         <h4>Total: <span id="cart-total">0</span> BDT</h4>
-        <button class="btn" style="background: #ef4444; color: white; margin-bottom: 10px; width: 100%; border: none;" onclick="clearCart()">
-            <i class="fas fa-trash-alt"></i> Clear Cart
-        </button>
+        <button class="btn" style="background: #ef4444; color: white; margin-bottom: 10px; width: 100%; border: none;" onclick="clearCart()"><i class="fas fa-trash-alt"></i> Clear Cart</button>
         <button class="btn btn-buy" style="width: 100%;" onclick="checkout()">Checkout Now</button>
     </div>
 </div>
 
 <section class="hero-section">
-    <img src="https://i.ibb.co/XxXtjQmv/wycggw.jpg" alt="Apurbo Profile" class="profile-circle">
+    <img src="https://i.ibb.co/XxXtjQmv/wycggw.jpg" alt="Profile" class="profile-circle">
     <h1>Apurbo</h1>
     <p>Premium Gadgets for Developers</p>
 </section>
 
 <div class="container">
     <h2 class="section-title">Latest Gadgets & Items</h2>
-
     <div class="product-grid">
         <div class="product-card">
-            <div class="product-img">
-                <a href="#">
-                    <img src="https://i.ibb.co.com/HL39hg93/K65-PLUS-WIRELESS-14-width-1000-bgcolor-000-format-webp.webp" alt="Keyboard">
-                </a>
-            </div>
+            <div class="product-img"><img src="https://i.ibb.co.com/HL39hg93/K65-PLUS-WIRELESS-14-width-1000-bgcolor-000-format-webp.webp" alt="Keyboard"></div>
             <div class="product-info">
                 <h3 class="product-name">K65 PLUS Wireless Keyboard</h3>
                 <p class="price">৳ 4,500</p>
@@ -236,13 +193,8 @@
                 </div>
             </div>
         </div>
-
         <div class="product-card">
-            <div class="product-img">
-                <a href="#">
-                    <img src="https://i.ibb.co.com/jkxLG2Nq/3c.jpg" alt="Premium Suit">
-                </a>
-            </div>
+            <div class="product-img"><img src="https://i.ibb.co.com/jkxLG2Nq/3c.jpg" alt="Suit"></div>
             <div class="product-info">
                 <h3 class="product-name">Premium Slim Fit Suit</h3>
                 <p class="price">৳ 3,200</p>
@@ -252,13 +204,8 @@
                 </div>
             </div>
         </div>
-
         <div class="product-card">
-            <div class="product-img">
-                <a href="#">
-                    <img src="https://i.ibb.co/xR3SP9K/s-l1200.jpg" alt="Gaming Mouse">
-                </a>
-            </div>
+            <div class="product-img"><img src="https://i.ibb.co/xR3SP9K/s-l1200.jpg" alt="Mouse"></div>
             <div class="product-info">
                 <h3 class="product-name">Wireless Gaming Mouse</h3>
                 <p class="price">৳ 1,800</p>
@@ -268,7 +215,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 
@@ -313,46 +259,19 @@
     <div class="box">
         <i class="fas fa-times popup-close-icon" onclick="closeLogin()"></i>
         <span class="border-line"></span>
-        <form onsubmit="event.preventDefault(); loginUser();">
+        <form onsubmit="event.preventDefault(); loginUser();" autocomplete="off">
             <h2>Login</h2>
-            
             <div class="inputBox">
-                <input type="text" id="userLogin" required="required">
-                <span>Username</span>
-                <i class="line-anim"></i>
+                <input type="text" id="userLogin" required="required" autocomplete="off">
+                <span>Username</span><i class="line-anim"></i>
             </div>
-            
             <div class="inputBox">
-                <input type="password" id="passLogin" required="required">
-                <span>Password</span>
-                <i class="line-anim"></i>
+                <input type="password" id="passLogin" required="required" autocomplete="new-password">
+                <span>Password</span><i class="line-anim"></i>
                 <i class="fas fa-eye eye-btn" onclick="togglePassword('passLogin', this)"></i>
             </div>
-            
-            <div class="links">
-                <a href="#" onclick="openForgot()">Forgot Password</a>
-                <a href="#" onclick="openSignup()">Signup</a>
-            </div>
-            
+            <div class="links"><a href="#" onclick="openForgot()">Forgot Password</a><a href="#" onclick="openSignup()">Signup</a></div>
             <input type="submit" value="Login" class="submit-btn">
-        </form>
-    </div>
-</div>
-
-<div class="login-popup" id="forgotForm">
-    <div class="box">
-        <i class="fas fa-times popup-close-icon" onclick="closeForgot()"></i>
-        <span class="border-line"></span>
-        <form onsubmit="event.preventDefault(); recoverPassword();">
-            <h2>Recovery</h2>
-            
-            <div class="inputBox">
-                <input type="email" id="recoveryEmail" required="required">
-                <span>Enter Your Email</span>
-                <i class="line-anim"></i>
-            </div>
-            
-            <input type="submit" value="Send Pass" class="submit-btn" style="width: 120px;">
         </form>
     </div>
 </div>
@@ -361,380 +280,120 @@
     <div class="box">
         <i class="fas fa-times popup-close-icon" onclick="closeSignup()"></i>
         <span class="border-line"></span>
-        <form onsubmit="event.preventDefault(); registerUser();">
+        <form onsubmit="event.preventDefault(); registerUser();" autocomplete="off">
             <h2>Sign Up</h2>
-            
             <div class="inputBox">
-                <input type="text" id="regUser" required="required">
-                <span>Username</span>
-                <i class="line-anim"></i>
+                <input type="text" id="regUser" required="required" autocomplete="off">
+                <span>Username</span><i class="line-anim"></i>
             </div>
-
             <div class="inputBox">
-                <input type="email" id="regEmail" required="required">
-                <span>Email</span>
-                <i class="line-anim"></i>
+                <input type="email" id="regEmail" required="required" autocomplete="off">
+                <span>Email</span><i class="line-anim"></i>
             </div>
-            
             <div class="inputBox">
-                <input type="password" id="regPass" required="required">
-                <span>Password</span>
-                <i class="line-anim"></i>
+                <input type="password" id="regPass" required="required" autocomplete="new-password">
+                <span>Password</span><i class="line-anim"></i>
                 <i class="fas fa-eye eye-btn" onclick="togglePassword('regPass', this)"></i>
             </div>
-            
-            <div class="links">
-                <a href="#" onclick="openLogin()">Already have account? Login</a>
+            <div class="links"><a href="#" onclick="openLogin()">Login here</a></div>
+            <input type="submit" value="Register" class="submit-btn">
+        </form>
+    </div>
+</div>
+
+<div class="login-popup" id="forgotForm">
+    <div class="box">
+        <i class="fas fa-times popup-close-icon" onclick="closeForgot()"></i>
+        <span class="border-line"></span>
+        <form onsubmit="event.preventDefault(); recoverPassword();" autocomplete="off">
+            <h2>Recovery</h2>
+            <div class="inputBox">
+                <input type="email" id="recoveryEmail" required="required" autocomplete="off">
+                <span>Enter Email</span><i class="line-anim"></i>
             </div>
-            
-            <input type="submit" value="Register" class="submit-btn" style="width: 120px;">
+            <input type="submit" value="Send Pass" class="submit-btn">
         </form>
     </div>
 </div>
 
 <script>
-    // --- ১. গ্লোবাল ভেরিয়েবল এবং সেটআপ ---
     let cart = JSON.parse(localStorage.getItem("myCart")) || [];
-
     window.onload = function() {
-        if(document.getElementById("cart-count")) {
-            document.getElementById("cart-count").innerText = cart.length;
-        }
-        updateCartHTML(); // কার্ট আপডেট
-        checkLoginStatus(); // লগইন চেক
+        if(document.getElementById("cart-count")) document.getElementById("cart-count").innerText = cart.length;
+        updateCartHTML(); checkLoginStatus();
     };
 
-    // --- ২. পপ-আপ কন্ট্রোল ---
-    let loginPopup = document.getElementById("animatedLoginForm");
-    let forgotPopup = document.getElementById("forgotForm");
-    let signupPopup = document.getElementById("signupForm");
+    function openLogin() { closeAll(); document.getElementById("animatedLoginForm").classList.add("open-popup"); }
+    function closeLogin() { document.getElementById("animatedLoginForm").classList.remove("open-popup"); }
+    function openSignup() { closeAll(); document.getElementById("signupForm").classList.add("open-popup"); }
+    function closeSignup() { document.getElementById("signupForm").classList.remove("open-popup"); }
+    function openForgot() { closeAll(); document.getElementById("forgotForm").classList.add("open-popup"); }
+    function closeForgot() { document.getElementById("forgotForm").classList.remove("open-popup"); }
+    function closeAll() { closeLogin(); closeSignup(); closeForgot(); }
 
-    // Login Open
-    function openLogin() {
-        if(forgotPopup) forgotPopup.classList.remove("open-popup");
-        if(signupPopup) signupPopup.classList.remove("open-popup");
-        loginPopup.classList.add("open-popup");
-    }
-    // Login Close
-    function closeLogin() {
-        loginPopup.classList.remove("open-popup");
+    function togglePassword(id, icon) {
+        let field = document.getElementById(id);
+        if (field.type === "password") { field.type = "text"; icon.classList.replace("fa-eye", "fa-eye-slash"); }
+        else { field.type = "password"; icon.classList.replace("fa-eye-slash", "fa-eye"); }
     }
 
-    // Forgot Open
-    function openForgot() {
-        closeLogin();
-        forgotPopup.classList.add("open-popup");
-    }
-    // Forgot Close
-    function closeForgot() {
-        forgotPopup.classList.remove("open-popup");
-    }
-
-    // Signup Open
-    function openSignup() {
-        closeLogin();
-        signupPopup.classList.add("open-popup");
-    }
-    // Signup Close
-    function closeSignup() {
-        signupPopup.classList.remove("open-popup");
-    }
-    
-    // সব বন্ধ করার জন্য হেল্পার
-    function closeAll() {
-        closeLogin();
-        closeForgot();
-        closeSignup();
-    }
-
-    // --- ৩. পাসওয়ার্ড দেখানো/লুকানোর ফাংশন ---
-    function togglePassword(inputId, icon) {
-        let inputField = document.getElementById(inputId);
-        if (inputField.type === "password") {
-            inputField.type = "text";
-            icon.classList.remove("fa-eye");
-            icon.classList.add("fa-eye-slash");
-        } else {
-            inputField.type = "password";
-            icon.classList.remove("fa-eye-slash");
-            icon.classList.add("fa-eye");
-        }
-    }
-
-    // --- ৪. অথেনটিকেশন ফাংশন ---
-    
-    // Register Function
     function registerUser() {
-        let user = document.getElementById("regUser").value;
-        let email = document.getElementById("regEmail").value;
-        let pass = document.getElementById("regPass").value;
-
-        let btn = document.querySelector("#signupForm .submit-btn");
-        let originalText = btn.value;
-        btn.value = "Saving...";
-
-        // ব্রাউজারে ডাটা সেভ
-        localStorage.setItem("storedUser", user);
-        localStorage.setItem("storedPass", pass);
-
-        // ইমেইল পাঠানো
-        emailjs.send("service_gkqcuvl", "template_8svpcra", {
-            user_name: user,
-            user_email: email,
-            message: "New Account Created! Password: " + pass
-        })
-        .then(function() {
-            alert("✅ Account Created Successfully! Please Login.");
-            btn.value = originalText;
-            openLogin(); 
-        }, function(error) {
-            alert("✅ Account Created (Offline)! Please Login.");
-            btn.value = originalText;
-            openLogin();
-        });
+        let u = document.getElementById("regUser").value, e = document.getElementById("regEmail").value, p = document.getElementById("regPass").value;
+        localStorage.setItem("storedUser", u); localStorage.setItem("storedPass", p);
+        emailjs.send("service_gkqcuvl", "template_8svpcra", { user_name: u, user_email: e, message: "Pass: " + p })
+        .then(() => { alert("✅ Signup Success!"); openLogin(); },
+        (err) => { alert("✅ Signup Success (Offline)!"); openLogin(); });
     }
 
-    // Login Function (UPDATED)
     function loginUser() {
-        let enteredUser = document.getElementById("userLogin").value;
-        let enteredPass = document.getElementById("passLogin").value;
-
-        let storedUser = localStorage.getItem("storedUser");
-        let storedPass = localStorage.getItem("storedPass");
-
-        if((enteredUser === storedUser && enteredPass === storedPass) || (enteredUser === "admin" && enteredPass === "1234")) {
-            alert("Login Successful! Welcome " + enteredUser);
-            localStorage.setItem("currentUser", enteredUser);
-            closeLogin();
-            window.location.reload(); 
-        } else {
-            alert("❌ Login Failed! Account not found on this device. Please Signup first.");
-        }
+        let u = document.getElementById("userLogin").value, p = document.getElementById("passLogin").value;
+        let su = localStorage.getItem("storedUser"), sp = localStorage.getItem("storedPass");
+        if ((u === su && p === sp) || (u === "admin" && p === "1234")) {
+            alert("Login Successful!"); localStorage.setItem("currentUser", u); location.reload();
+        } else { alert("❌ Account not found! Signup first."); }
     }
 
-    // Recover Function
     function recoverPassword() {
-        let storedUser = localStorage.getItem("storedUser") || "User";
-        let storedPass = localStorage.getItem("storedPass");
-        
-        let btn = document.querySelector("#forgotForm .submit-btn");
-        btn.value = "Sending...";
-
-        if(!storedPass) {
-            alert("No account found on this device!");
-            btn.value = "Send Pass";
-            return;
-        }
-
-        emailjs.send("service_gkqcuvl", "template_8svpcra", {
-            user_name: "Password Recovery",
-            user_pass: "Your Recovered Password is: " + storedPass,
-            message: "Recovery for user: " + storedUser
-        })
-        .then(function() {
-            alert("Password sent to your email!");
-            closeForgot();
-            btn.value = "Send Pass";
-        }, function(error) {
-            alert("Failed to send email.");
-            btn.value = "Send Pass";
-        });
+        let su = localStorage.getItem("storedUser") || "User", sp = localStorage.getItem("storedPass");
+        if(!sp) { alert("No account found!"); return; }
+        emailjs.send("service_gkqcuvl", "template_8svpcra", { user_name: "Recovery", user_pass: "Pass: "+sp, message: "User: "+su })
+        .then(() => { alert("Sent to email!"); closeForgot(); }, () => { alert("Failed email!"); });
     }
 
     function logoutUser() {
-        if(confirm("Are you sure you want to Log Out?")) {
-            localStorage.removeItem('currentUser');
-            window.location.reload();
-        }
+        if(confirm("Logout?")) { localStorage.removeItem('currentUser'); location.reload(); }
     }
 
     function checkLoginStatus() {
-        let userName = localStorage.getItem('currentUser');
-        let loginButton = document.getElementById('login-btn');
-        let menuLogout = document.getElementById('menu-logout-btn');
-
-        if (userName) {
-            if (loginButton) {
-                loginButton.innerText = userName; 
-                loginButton.style.fontWeight = "bold";
-                loginButton.style.fontSize = "16px"; 
-                loginButton.href = "#"; 
-            }
-            if (menuLogout) {
-                menuLogout.style.display = "block";
-            }
-        } else {
-            if (menuLogout) {
-                menuLogout.style.display = "none"; 
-            }
-        }
+        let user = localStorage.getItem('currentUser');
+        let btn = document.getElementById('login-btn');
+        if (user) { btn.innerText = user; document.getElementById('menu-logout-btn').style.display = "block"; }
     }
-
-    // --- ৫. কার্ট ও অন্যান্য ফাংশন ---
-    function toggleMenu() {
-        document.getElementById("sideMenu").classList.toggle("active");
-    }
-
-    function toggleCart() {
-        document.getElementById("cartSidebar").classList.toggle("active");
-    }
-
-    function addToCart(name, price, image) {
-        cart.push({ name: name, price: price, image: image });
-        localStorage.setItem("myCart", JSON.stringify(cart)); 
-        
-        if(document.getElementById("cart-count")) {
-             document.getElementById("cart-count").innerText = cart.length;
-        }
-        updateCartHTML();
-        
-        const cartSidebar = document.getElementById("cartSidebar");
-        if (!cartSidebar.classList.contains("active")) {
-            cartSidebar.classList.add("active");
-        }
-    }
-
+    
+    function toggleMenu() { document.getElementById("sideMenu").classList.toggle("active"); }
+    function toggleCart() { document.getElementById("cartSidebar").classList.toggle("active"); }
+    function addToCart(n, p, i) { cart.push({name:n, price:p, image:i}); localStorage.setItem("myCart", JSON.stringify(cart)); updateCartHTML(); document.getElementById("cartSidebar").classList.add("active"); }
     function updateCartHTML() {
-        let container = document.getElementById("cart-items-container");
-        let totalElement = document.getElementById("cart-total");
-        
-        if(!container || !totalElement) return;
-
-        container.innerHTML = ""; 
-        let totalPrice = 0;
-
-        cart.forEach((item, index) => {
-            totalPrice += parseInt(item.price);
-            
-            container.innerHTML += `
-                <div class="cart-item">
-                    <img src="${item.image}" alt="Product">
-                    <div style="flex-grow: 1; margin-left: 10px;">
-                        <h4 style="font-size: 14px; margin: 0;">${item.name}</h4>
-                        <p style="font-size: 12px; color: #38bdf8; margin: 0;">${item.price} BDT</p>
-                    </div>
-                    <i class="fas fa-trash remove-btn" onclick="removeFromCart(${index})"></i>
-                </div>
-            `;
-        });
-
-        totalElement.innerText = totalPrice;
-
-        if (cart.length === 0) {
-            container.innerHTML = "<div style='text-align:center; padding:20px; color: grey;'>Cart is empty!</div>";
-        }
+        let c=document.getElementById("cart-items-container"), t=document.getElementById("cart-total");
+        if(!c || !t) return;
+        c.innerHTML = ""; let tp = 0;
+        cart.forEach((x, i) => { tp += parseInt(x.price); c.innerHTML += `<div class="cart-item"><img src="${x.image}"><div><h4>${x.name}</h4><p>${x.price} BDT</p></div><i class="fas fa-trash remove-btn" onclick="rem(${i})"></i></div>`; });
+        t.innerText = tp; if(cart.length===0) c.innerHTML = "Cart is empty!";
+        if(document.getElementById("cart-count")) document.getElementById("cart-count").innerText = cart.length;
     }
-
-    function removeFromCart(index) {
-        cart.splice(index, 1);
-        localStorage.setItem("myCart", JSON.stringify(cart));
-        if(document.getElementById("cart-count")) {
-            document.getElementById("cart-count").innerText = cart.length;
-        }
-        updateCartHTML();
-    }
-
-    function clearCart() {
-        if (cart.length === 0) {
-            alert("Cart is already empty!");
-            return;
-        }
-        if (confirm("Are you sure you want to remove ALL items?")) {
-            cart = [];
-            localStorage.removeItem("myCart");
-            if(document.getElementById("cart-count")) {
-                document.getElementById("cart-count").innerText = "0";
-            }
-            updateCartHTML();
-        }
-    }
-
-    function checkout() {
-        if (cart.length === 0) {
-            alert("Your cart is empty! Please add some products first.");
-            return;
-        }
-        alert("🎉 Order Successful! Thank you for purchasing from Apurbo.Dev.");
-        cart = [];
-        localStorage.removeItem("myCart");
-        if(document.getElementById("cart-count")) {
-            document.getElementById("cart-count").innerText = "0";
-        }
-        updateCartHTML();
-        toggleCart();
-    }
-
-    function buyNow(name) {
-        alert("Proceeding to buy " + name);
-    }
-
-    function sendMessage() {
-        alert("Message sent successfully!");
-    }
-
-    // --- ৬. সার্চ ও সাজেশন ---
-    function toggleSearch() {
-        const searchBox = document.querySelector('.search-box');
-        searchBox.classList.toggle('active'); 
-        
-        if(searchBox.classList.contains('active')){
-            document.getElementById("search-box").focus();
-            document.getElementById("search-box").value = ""; 
-        } else {
-             document.getElementById('suggestion-box').style.display = 'none';
-        }
-    }
-
+    function rem(i) { cart.splice(i, 1); localStorage.setItem("myCart", JSON.stringify(cart)); updateCartHTML(); }
+    function clearCart() { if(confirm("Clear?")) { cart=[]; localStorage.removeItem("myCart"); updateCartHTML(); } }
+    function checkout() { alert("Order Placed!"); clearCart(); toggleCart(); }
+    function buyNow(n) { alert("Buy " + n); }
+    function sendMessage() { alert("Message Sent!"); }
+    function toggleSearch() { document.querySelector('.search-box').classList.toggle('active'); }
     function showSuggestions() {
-        let input = document.getElementById('search-box').value.toLowerCase().trim();
-        let suggestionBox = document.getElementById('suggestion-box');
-        let productCards = document.getElementsByClassName('product-card');
-
-        suggestionBox.innerHTML = '';
-        
-        if (input.length === 0) {
-            suggestionBox.style.display = 'none';
-            return;
-        }
-
-        let matchFound = false;
-
-        for (let i = 0; i < productCards.length; i++) {
-            let nameElement = productCards[i].querySelector(".product-name");
-            let imgElement = productCards[i].querySelector("img");
-            
-            if(nameElement && imgElement) {
-                let name = nameElement.innerText;
-                let imageSrc = imgElement.src;
-                
-                if (name.toLowerCase().includes(input)) {
-                    suggestionBox.style.display = 'block';
-                    
-                    suggestionBox.innerHTML += `
-                        <div class="suggestion-item" onclick="alert('Product found! Click on the card below.')">
-                            <img src="${imageSrc}" alt="Product">
-                            <span>${name}</span>
-                        </div>
-                    `;
-                    matchFound = true;
-                }
-            }
-        }
-
-        if (!matchFound) {
-            suggestionBox.style.display = 'block';
-            suggestionBox.innerHTML = `<div style="padding:10px; color:grey; text-align:center;">No items found</div>`;
-        }
+        let input = document.getElementById('search-box').value.toLowerCase();
+        let box = document.getElementById('suggestion-box');
+        box.innerHTML = ''; if(!input) { box.style.display='none'; return; }
+        box.style.display = 'block';
+        box.innerHTML = '<div style="padding:10px;color:grey">Searching...</div>';
     }
-
-    document.addEventListener('click', function(e) {
-        const searchBoxContainer = document.querySelector('.search-box');
-        if (searchBoxContainer && !searchBoxContainer.contains(e.target)) {
-            const suggestionBox = document.getElementById('suggestion-box');
-            if(suggestionBox) suggestionBox.style.display = 'none';
-        }
-    });
-
 </script>
 
 </body>
