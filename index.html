@@ -128,7 +128,7 @@
     .footer-bottom { text-align: center; padding: 20px; margin-top: 40px; border-top: 1px solid #334155; }
 
     /* =========================================
-       🔥🔥🔥 LOGIN ANIMATION STYLES 🔥🔥🔥
+       🔥🔥🔥 LOGIN/SIGNUP ANIMATION STYLES 🔥🔥🔥
        ========================================= */
     .login-popup {
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -142,18 +142,18 @@
         visibility: visible; opacity: 1; transform: scale(1);
     }
     .box {
-        position: relative; width: 380px; height: 420px;
+        position: relative; width: 380px; height: 450px; 
         background: #1c1c1c; border-radius: 8px; overflow: hidden;
         display: flex; justify-content: center; align-items: center; 
     }
     /* ঘুরন্ত রঙিন বর্ডার */
     .box::before {
-        content: ''; position: absolute; top: -50%; left: -50%; width: 380px; height: 420px;
+        content: ''; position: absolute; top: -50%; left: -50%; width: 380px; height: 450px;
         background: linear-gradient(0deg, transparent, transparent, #45f3ff, #45f3ff, #ff2770);
         z-index: 1; transform-origin: bottom right; animation: animate 6s linear infinite;
     }
     .box::after {
-        content: ''; position: absolute; top: -50%; left: -50%; width: 380px; height: 420px;
+        content: ''; position: absolute; top: -50%; left: -50%; width: 380px; height: 450px;
         background: linear-gradient(0deg, transparent, transparent, #45f3ff, #45f3ff, #ff2770);
         z-index: 1; transform-origin: bottom right; animation: animate 6s linear infinite; animation-delay: -3s;
     }
@@ -162,11 +162,11 @@
         100% { transform: rotate(360deg); }
     }
     .box form {
-        position: absolute; inset: 4px; background: #222; padding: 50px 40px;
+        position: absolute; inset: 4px; background: #222; padding: 40px 40px;
         border-radius: 8px; z-index: 2; display: flex; flex-direction: column;
     }
     .box form h2 { color: #fff; font-weight: 500; text-align: center; letter-spacing: 0.1em; }
-    .inputBox { position: relative; width: 100%; margin-top: 35px; }
+    .inputBox { position: relative; width: 100%; margin-top: 30px; }
     .inputBox input {
         position: relative; width: 100%; padding: 20px 10px 10px; background: transparent;
         outline: none; border: none; box-shadow: none; color: #23242a; font-size: 1em;
@@ -186,17 +186,32 @@
     }
     .inputBox input:valid ~ i,
     .inputBox input:focus ~ i { height: 44px; }
-    .links { display: flex; justify-content: space-between; }
-    .links a { margin: 10px 0; font-size: 0.75em; color: #8f8f8f; text-decoration: none; }
-    .links a:hover, .links a:nth-child(2) { color: #fff; }
+    .links { display: flex; justify-content: space-between; margin-top: 20px; }
+    .links a { margin: 10px 0; font-size: 0.75em; color: #8f8f8f; text-decoration: none; cursor: pointer; }
+    .links a:hover { color: #fff; }
     
-    /* Login Button inside animation */
     .submit-btn {
         border: none; outline: none; padding: 9px 25px; background: #fff;
         cursor: pointer; font-size: 0.9em; border-radius: 4px; font-weight: 600;
         width: 100px; margin-top: 10px;
     }
     .submit-btn:active { opacity: 0.8; }
+    
+    /* 🔥 NEW CLOSE ICON STYLE 🔥 */
+    .popup-close-icon {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        color: #ff2770; /* লাল রং */
+        font-size: 1.5rem;
+        cursor: pointer;
+        z-index: 100;
+        transition: 0.3s;
+    }
+    .popup-close-icon:hover {
+        transform: scale(1.2);
+        color: red;
+    }
     
     </style>
 </head>
@@ -334,6 +349,8 @@
 
 <div class="login-popup" id="animatedLoginForm">
     <div class="box">
+        <i class="fas fa-times popup-close-icon" onclick="closeLogin()"></i>
+        
         <span class="border-line"></span>
         <form onsubmit="event.preventDefault(); loginUser();">
             <h2>Login</h2>
@@ -352,18 +369,18 @@
             
             <div class="links">
                 <a href="#" onclick="openForgot()">Forgot Password</a>
-
-                <a href="#" onclick="alert('Sign up feature is disabled for this animation demo.')">Signup</a>
+                <a href="#" onclick="openSignup()">Signup</a>
             </div>
             
             <input type="submit" value="Login" class="submit-btn">
-            
-            <button type="button" onclick="closeLogin()" style="margin-top:15px; background: #ff2770; color: white; border: none; padding: 5px 15px; border-radius: 4px; cursor: pointer; font-weight:bold;">Close</button>
         </form>
     </div>
 </div>
+
 <div class="login-popup" id="forgotForm">
     <div class="box">
+        <i class="fas fa-times popup-close-icon" onclick="closeForgot()"></i>
+
         <span class="border-line"></span>
         <form onsubmit="event.preventDefault(); recoverPassword();">
             <h2>Recovery</h2>
@@ -375,12 +392,44 @@
             </div>
             
             <input type="submit" value="Send Pass" class="submit-btn" style="width: 120px;">
-            
-            <button type="button" onclick="closeForgot()" style="margin-top:15px; background: #ff2770; color: white; border: none; padding: 5px 15px; border-radius: 4px; cursor: pointer; font-weight:bold;">Close</button>
         </form>
     </div>
 </div>
 
+<div class="login-popup" id="signupForm">
+    <div class="box">
+        <i class="fas fa-times popup-close-icon" onclick="closeSignup()"></i>
+
+        <span class="border-line"></span>
+        <form onsubmit="event.preventDefault(); registerUser();">
+            <h2>Sign Up</h2>
+            
+            <div class="inputBox">
+                <input type="text" id="regUser" required="required">
+                <span>Username</span>
+                <i></i>
+            </div>
+
+            <div class="inputBox">
+                <input type="email" id="regEmail" required="required">
+                <span>Email</span>
+                <i></i>
+            </div>
+            
+            <div class="inputBox">
+                <input type="password" id="regPass" required="required">
+                <span>Password</span>
+                <i></i>
+            </div>
+            
+            <div class="links">
+                <a href="#" onclick="openLogin()">Already have account? Login</a>
+            </div>
+            
+            <input type="submit" value="Register" class="submit-btn" style="width: 120px;">
+        </form>
+    </div>
+</div>
 
 <script>
     // --- ১. গ্লোবাল সেটআপ ---
@@ -391,23 +440,80 @@
         checkLoginStatus();
     };
 
-    // --- ২. লগইন ও অ্যানিমেশন কন্ট্রোল ---
+    // --- ২. পপ-আপ কন্ট্রোল ---
     let loginPopup = document.getElementById("animatedLoginForm");
+    let forgotPopup = document.getElementById("forgotForm");
+    let signupPopup = document.getElementById("signupForm");
 
+    // Login Open
     function openLogin() {
+        if(forgotPopup) forgotPopup.classList.remove("open-popup");
+        if(signupPopup) signupPopup.classList.remove("open-popup");
         loginPopup.classList.add("open-popup");
     }
-
+    // Login Close
     function closeLogin() {
         loginPopup.classList.remove("open-popup");
     }
 
-    // --- ৩. লগইন ফাংশন ---
+    // Forgot Open
+    function openForgot() {
+        closeLogin();
+        forgotPopup.classList.add("open-popup");
+    }
+    // Forgot Close
+    function closeForgot() {
+        forgotPopup.classList.remove("open-popup");
+    }
+
+    // Signup Open
+    function openSignup() {
+        closeLogin();
+        signupPopup.classList.add("open-popup");
+    }
+    // Signup Close
+    function closeSignup() {
+        signupPopup.classList.remove("open-popup");
+    }
+
+    // --- ৩. অথেনটিকেশন ফাংশন ---
+    
+    // Register Function
+    function registerUser() {
+        let user = document.getElementById("regUser").value;
+        let email = document.getElementById("regEmail").value;
+        let pass = document.getElementById("regPass").value;
+
+        let btn = document.querySelector("#signupForm .submit-btn");
+        let originalText = btn.value;
+        btn.value = "Saving...";
+
+        // ব্রাউজারে ডাটা সেভ
+        localStorage.setItem("storedUser", user);
+        localStorage.setItem("storedPass", pass);
+
+        // ইমেইল পাঠানো
+        emailjs.send("service_gkqcuvl", "template_8svpcra", {
+            user_name: user,
+            user_email: email,
+            message: "New Account Created! Password: " + pass
+        })
+        .then(function() {
+            alert("✅ Account Created Successfully! Please Login.");
+            btn.value = originalText;
+            openLogin(); 
+        }, function(error) {
+            alert("✅ Account Created (Offline)! Please Login.");
+            btn.value = originalText;
+            openLogin();
+        });
+    }
+
+    // Login Function
     function loginUser() {
         let enteredUser = document.getElementById("loginUser").value;
         let enteredPass = document.getElementById("loginPass").value;
 
-        // সিম্পল ডেমো লগইন চেক (বা আগের রেজিস্টার ডাটা)
         let storedUser = localStorage.getItem("storedUser");
         let storedPass = localStorage.getItem("storedPass");
 
@@ -419,6 +525,35 @@
         } else {
             alert("Wrong Username or Password! (Try registering first or use demo: admin/1234)");
         }
+    }
+
+    // Recover Function
+    function recoverPassword() {
+        let storedUser = localStorage.getItem("storedUser") || "User";
+        let storedPass = localStorage.getItem("storedPass");
+        
+        let btn = document.querySelector("#forgotForm .submit-btn");
+        btn.value = "Sending...";
+
+        if(!storedPass) {
+            alert("No account found on this device!");
+            btn.value = "Send Pass";
+            return;
+        }
+
+        emailjs.send("service_gkqcuvl", "template_8svpcra", {
+            user_name: "Password Recovery",
+            user_pass: "Your Recovered Password is: " + storedPass,
+            message: "Recovery for user: " + storedUser
+        })
+        .then(function() {
+            alert("Password sent to your email!");
+            closeForgot();
+            btn.value = "Send Pass";
+        }, function(error) {
+            alert("Failed to send email.");
+            btn.value = "Send Pass";
+        });
     }
 
     function logoutUser() {
@@ -536,47 +671,6 @@
         }
         if (!matchFound) { suggestionBox.style.display = 'block'; suggestionBox.innerHTML = `<div style="padding:10px; color:grey;">No items found</div>`; }
     }
-        // --- Forgot Password Logic ---
-    let forgotPopup = document.getElementById("forgotForm");
-
-    function openForgot() {
-        closeLogin(); // আগের লগিন বক্স বন্ধ করে দেবে
-        forgotPopup.classList.add("open-popup"); // নতুন বক্স ওপেন করবে
-    }
-
-    function closeForgot() {
-        forgotPopup.classList.remove("open-popup");
-    }
-
-    function recoverPassword() {
-        let email = document.getElementById("recoveryEmail").value;
-        
-        // ১. লোকাল স্টোরেজ থেকে পাসওয়ার্ড চেক করা
-        let storedUser = localStorage.getItem("storedUser");
-        let storedPass = localStorage.getItem("storedPass");
-        
-        // যেহেতু আমরা আগে ইমেইল সেভ করিনি, তাই আমরা ধরে নিচ্ছি ইউজার তার ইউজারনেমটাই ইমেইল হিসেবে মনে রেখেছে অথবা আমরা সোজাসুজি এডমিনকে রিকোয়েস্ট পাঠাবো।
-        // তবে কোডটা কাজ করার জন্য আমি এখানে একটা ট্রিক করছি:
-        
-        let btn = document.querySelector("#forgotForm .submit-btn");
-        btn.value = "Sending...";
-
-        // EmailJS দিয়ে মেইল পাঠানো
-        emailjs.send("service_gkqcuvl", "template_8svpcra", {
-            user_name: "Password Recovery Request",
-            user_pass: "Your Recovered Password is: " + storedPass, // টেম্পলেটে user_pass ভেরিয়েবল থাকলে এটা যাবে
-            message: "User requested password recovery for account: " + storedUser
-        })
-        .then(function() {
-            alert("Password has been sent to your email!");
-            closeForgot();
-            btn.value = "Send Pass";
-        }, function(error) {
-            alert("Failed to send email. Error: " + JSON.stringify(error));
-            btn.value = "Send Pass";
-        });
-    }
-
 </script>
 
 </body>
