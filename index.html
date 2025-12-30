@@ -405,19 +405,24 @@
     }
 
     function loginUser() {
-        let enteredUser = document.getElementById("loginUser").value;
-        let enteredPass = document.getElementById("loginPass").value;
-        let storedUser = localStorage.getItem("storedUser");
-        let storedPass = localStorage.getItem("storedPass");
+    let enteredUser = document.getElementById("loginUser").value;
+    let enteredPass = document.getElementById("loginPass").value;
+    
+    // Memory theke data ana
+    let storedUser = localStorage.getItem("storedUser");
+    let storedPass = localStorage.getItem("storedPass");
 
-        if((enteredUser === storedUser && enteredPass === storedPass) || (enteredUser === "admin" && enteredPass === "1234")) {
-            alert("Login Successful! Welcome " + enteredUser);
-            localStorage.setItem("currentUser", enteredUser);
-            closeLogin(); window.location.reload(); 
-        } else {
-            alert("❌ Login Failed! \n\nReason: Account not found on this device.\nPlease CLICK 'SIGNUP' to create an account first.");
-        }
+    // Dekha memory-te ki ache
+    alert("Memory-te ache: " + storedUser + " | Password: " + storedPass);
+
+    if((enteredUser === storedUser && enteredPass === storedPass) || (enteredUser === "admin" && enteredPass === "1234")) {
+        alert("Login Successful!");
+        localStorage.setItem("currentUser", enteredUser);
+        closeLogin(); window.location.reload(); 
+    } else {
+        alert("❌ Login Failed!");
     }
+}
 
     function recoverPassword() {
         let storedUser = localStorage.getItem("storedUser") || "User";
