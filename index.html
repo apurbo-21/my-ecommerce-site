@@ -7,6 +7,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     
+    
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+       (function(){
+          // এখানে তোমার Public Key টা বসাবে
+          emailjs.init("YOUR_PUBLIC_KEY");
+       })();
+    </script>
+
+    
     <style>
     /* --- বেসিক সেটআপ --- */
     :root {
@@ -352,6 +362,61 @@
         transform: scale(1.2);
         color: red;
     }
+    
+    /* --- লগইন মোডাল ডিজাইন --- */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* পেছনের কালো ঝাপসা ব্যাকগ্রাউন্ড */
+    display: none; /* শুরুতে লুকানো */
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+.modal-box {
+    background: #1e293b;
+    padding: 30px;
+    border-radius: 15px;
+    width: 350px;
+    text-align: center;
+    border: 1px solid #2563eb;
+    position: relative;
+    box-shadow: 0 0 20px rgba(37, 99, 235, 0.5);
+}
+
+.modal-input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    background: #0f172a;
+    border: 1px solid #334155;
+    color: white;
+    border-radius: 5px;
+    outline: none;
+}
+
+.switch-text {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #cbd5e1;
+}
+.switch-text span {
+    color: #38bdf8;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: #ef4444;
+}
+
     </style>
 </head>
 <body>
@@ -369,7 +434,7 @@
             <div id="suggestion-box"></div>
         </div>
 
-        <a href="login.html" id="login-btn" style="color: white; text-decoration: none; font-weight: bold; font-size: 1rem;">Login</a>
+        <a href="#" id="login-btn" onclick="openLogin()" style="color: white; text-decoration: none; font-weight: bold; font-size: 1rem;">Login</a>
 
         <div class="cart-icon" onclick="toggleCart()">
             <i class="fas fa-shopping-cart"></i>
@@ -509,11 +574,247 @@
 </footer>
 
 <script>
+    // --- ১. গ্লোবাল ভেরিয়েবল এবং সেটআপ ---
+    let cart = JSON.parse(localStorage.getItem("myCart")) || [];
+
+    // পেজ লোড হলে এই কাজগুলো হবে
+    window.onload = function() {
+        if(document.getElementById("cart-count")) {
+            document.getElementById("cart-count").innerText = cart.length;
+        }
+        updateCartHTML(); // কার্ট আপডেট
+        checkLoginStatus(); // লগইন চেক
+    };
+
+    // --- ২. লগইন ও রেজিস্টার সিস্টেম ---
+    
+    // মোডাল ওপেন করা
+    function openLogin() {
+        document.getElementById("loginModal").style.display = "flex";
+    }
+
+    // মোডাল বন্ধ করা
+    function closeLogin() {
+        document.getElementById("loginModal").style.display = "none";
+    }
+
+    // লগইন থেকে রেজিস্টারে যাওয়া
+    function showRegister() {
+        document.getElementById("loginForm").style.display = "none";
+        document.getElementById("registerForm").style.display = "block";
+    }
+
+    // রেজিস্টার থেকে লগইনে আসা
+    function showLogin() {
+        document.getElementById("registerForm").style.display = "none";
+        document.getElementById("loginForm").style.display = "block";
+    }
+
+    // --- ৩. রেজিস্টার ফাংশন (সংশোধিত) ---
+    function registerUser() {
+        // HTML এর id অনুযায়ী ভ্যালু নেওয়া হচ্ছে
+        let user = document.getElementById("regUser").value;
+        let pass = document.getElementById("regPass").value;
+        let email = document.getElementById("regEmail").value; 
+
+        // খালি ঘর চেক করা
+        if(user === "" || pass === "" || email === "") {
+            alert("Please fill all fields!");
+            return;
+        }
+
+        // বাটন লোডিং স্ট্যাটাস
+        let regBtn = document.querySelector("#registerForm button");
+        let originalText = regBtn.innerText;
+        regBtn.innerText = "Sending...";
+        regBtn.disabled = true;
+
+        // EmailJS দিয়ে মেইল পাঠানো
+        // 🔴 বিঃদ্রঃ তোমার সার্ভিস আইডি এবং টেমপ্লেট আইডি ঠিক আছে তো? না থাকলে চেক করে নিও।
+        emailjs.send("service_gkqcuvl", "template_8svpcra", {
+            user_name: user,
+            user_pass: pass,
+            user_email: email
+        })
+        .then(function() {
+            // ১. সফল হলে ডাটা সেভ হবে
+            localStorage.setItem("storedUser", user);
+            localStorage.setItem("storedPass", pass);
+            
+            // ২. অ্যালার্ট দেখাবে
+            alert("Account Created Successfully! Check email & Please Login.");
+            
+            // ৩. লগইন পেজে নিয়ে যাবে
+            showLogin(); 
+            
+            // ৪. বাটন ঠিক করা
+            regBtn.innerText = originalText;
+            regBtn.disabled = false;
+            
+        }, function(error) {
+            // ভুল হলে এখানে আসবে
+            alert("Failed to send email. But saving account locally.");
+            console.log("FAILED...", error);
+            
+            // মেইল না গেলেও অন্তত লোকাল স্টোরেজে সেভ করে ইউজারকে ঢুকতে দিচ্ছি
+            localStorage.setItem("storedUser", user);
+            localStorage.setItem("storedPass", pass);
+            showLogin();
+
+            regBtn.innerText = originalText;
+            regBtn.disabled = false;
+        });
+    }
+
+    // --- ৪. লগইন ফাংশন ---
+    function loginUser() {
+        let enteredUser = document.getElementById("loginUser").value;
+        let enteredPass = document.getElementById("loginPass").value;
+
+        let storedUser = localStorage.getItem("storedUser");
+        let storedPass = localStorage.getItem("storedPass");
+
+        if(enteredUser === storedUser && enteredPass === storedPass) {
+            alert("Login Successful!");
+            localStorage.setItem("currentUser", enteredUser);
+            closeLogin();
+            window.location.reload(); // পেজ রিলোড হয়ে নাম দেখাবে
+        } else {
+            alert("Wrong Username or Password!");
+        }
+    }
+
+    // লগইন স্ট্যাটাস চেক এবং নাম দেখানো
+    function checkLoginStatus() {
+        let userName = localStorage.getItem('currentUser');
+        let loginButton = document.getElementById('login-btn');
+
+        if (userName && loginButton) {
+            // আইকন সহ নাম দেখাবে
+            loginButton.innerHTML = '<i class="fas fa-user"></i> ' + userName;
+            loginButton.href = "#"; 
+            loginButton.onclick = function() {
+                if(confirm("Log out from " + userName + "?")) {
+                    localStorage.removeItem('currentUser');
+                    window.location.reload(); 
+                }
+            };
+        }
+    }
+
+    // --- ৫. নেভিগেশন ও মেনু ---
+    function toggleMenu() {
+        document.getElementById("sideMenu").classList.toggle("active");
+    }
+
+    function toggleCart() {
+        document.getElementById("cartSidebar").classList.toggle("active");
+    }
+
+    // --- ৬. কার্ট ম্যানেজমেন্ট ---
+    function addToCart(name, price, image) {
+        cart.push({ name: name, price: price, image: image });
+        localStorage.setItem("myCart", JSON.stringify(cart)); 
+        
+        if(document.getElementById("cart-count")) {
+             document.getElementById("cart-count").innerText = cart.length;
+        }
+        updateCartHTML();
+        
+        // কার্ট সাইডবার ওপেন হবে
+        const cartSidebar = document.getElementById("cartSidebar");
+        if (!cartSidebar.classList.contains("active")) {
+            cartSidebar.classList.add("active");
+        }
+    }
+
+    function updateCartHTML() {
+        let container = document.getElementById("cart-items-container");
+        let totalElement = document.getElementById("cart-total");
+        
+        if(!container || !totalElement) return; // যদি এলিমেন্ট না থাকে, এরর আটকাতে
+
+        container.innerHTML = ""; 
+        let totalPrice = 0;
+
+        cart.forEach((item, index) => {
+            totalPrice += parseInt(item.price);
+            
+            container.innerHTML += `
+                <div class="cart-item">
+                    <img src="${item.image}" alt="Product">
+                    <div style="flex-grow: 1; margin-left: 10px;">
+                        <h4 style="font-size: 14px; margin: 0;">${item.name}</h4>
+                        <p style="font-size: 12px; color: #38bdf8; margin: 0;">${item.price} BDT</p>
+                    </div>
+                    <i class="fas fa-trash remove-btn" onclick="removeFromCart(${index})"></i>
+                </div>
+            `;
+        });
+
+        totalElement.innerText = totalPrice;
+
+        if (cart.length === 0) {
+            container.innerHTML = "<div style='text-align:center; padding:20px; color: grey;'>Cart is empty!</div>";
+        }
+    }
+
+    function removeFromCart(index) {
+        cart.splice(index, 1);
+        localStorage.setItem("myCart", JSON.stringify(cart));
+        if(document.getElementById("cart-count")) {
+            document.getElementById("cart-count").innerText = cart.length;
+        }
+        updateCartHTML();
+    }
+
+    function clearCart() {
+        if (cart.length === 0) {
+            alert("Cart is already empty!");
+            return;
+        }
+        if (confirm("Are you sure you want to remove ALL items?")) {
+            cart = [];
+            localStorage.removeItem("myCart");
+            if(document.getElementById("cart-count")) {
+                document.getElementById("cart-count").innerText = "0";
+            }
+            updateCartHTML();
+        }
+    }
+
+    function checkout() {
+        if (cart.length === 0) {
+            alert("Your cart is empty! Please add some products first.");
+            return;
+        }
+        alert("🎉 Order Successful! Thank you for purchasing from Apurbo.Dev.");
+        cart = [];
+        localStorage.removeItem("myCart");
+        if(document.getElementById("cart-count")) {
+            document.getElementById("cart-count").innerText = "0";
+        }
+        updateCartHTML();
+        toggleCart();
+    }
+
     function buyNow(name) {
         alert("Proceeding to buy " + name);
     }
-    
-    // --- সার্চ সাজেশন ফাংশন ---
+
+    // --- ৭. সার্চ ও সাজেশন ---
+    function toggleSearch() {
+        const searchBox = document.querySelector('.search-box');
+        searchBox.classList.toggle('active'); 
+        
+        if(searchBox.classList.contains('active')){
+            document.getElementById("search-box").focus();
+            document.getElementById("search-box").value = ""; 
+        } else {
+             document.getElementById('suggestion-box').style.display = 'none';
+        }
+    }
+
     function showSuggestions() {
         let input = document.getElementById('search-box').value.toLowerCase().trim();
         let suggestionBox = document.getElementById('suggestion-box');
@@ -529,20 +830,24 @@
         let matchFound = false;
 
         for (let i = 0; i < productCards.length; i++) {
-            let name = productCards[i].querySelector(".product-name").innerText;
-            let imageSrc = productCards[i].querySelector("img").src;
-            let linkElement = productCards[i].querySelector("a");
-            let link = linkElement ? linkElement.href : "#"; 
-
-            if (name.toLowerCase().includes(input)) {
-                suggestionBox.style.display = 'block';
-                suggestionBox.innerHTML += `
-                    <a href="${link}" class="suggestion-item">
-                        <img src="${imageSrc}" alt="Product">
-                        <span>${name}</span>
-                    </a>
-                `;
-                matchFound = true;
+            let nameElement = productCards[i].querySelector(".product-name");
+            let imgElement = productCards[i].querySelector("img");
+            
+            if(nameElement && imgElement) {
+                let name = nameElement.innerText;
+                let imageSrc = imgElement.src;
+                
+                if (name.toLowerCase().includes(input)) {
+                    suggestionBox.style.display = 'block';
+                    
+                    suggestionBox.innerHTML += `
+                        <div class="suggestion-item" onclick="alert('Product found! Click on the card below.')">
+                            <img src="${imageSrc}" alt="Product">
+                            <span>${name}</span>
+                        </div>
+                    `;
+                    matchFound = true;
+                }
             }
         }
 
@@ -553,136 +858,43 @@
     }
 
     document.addEventListener('click', function(e) {
-        if (!document.querySelector('.search-box').contains(e.target)) {
-            document.getElementById('suggestion-box').style.display = 'none';
+        const searchBoxContainer = document.querySelector('.search-box');
+        if (searchBoxContainer && !searchBoxContainer.contains(e.target)) {
+            const suggestionBox = document.getElementById('suggestion-box');
+            if(suggestionBox) suggestionBox.style.display = 'none';
         }
     });
 
-    // --- সার্চ বক্স টগল ---
-    function toggleSearch() {
-        const searchBox = document.querySelector('.search-box');
-        searchBox.classList.toggle('active'); 
-        if(searchBox.classList.contains('active')){
-            document.getElementById("search-box").focus();
-            document.getElementById("search-box").value = ""; 
-        } else {
-             document.getElementById('suggestion-box').style.display = 'none';
-        }
-    }
-
+    // --- ৮. মেসেজ ফাংশন ---
     function sendMessage() {
         alert("Message sent successfully!");
     }
-
-    // ১. মেনু বের করার ফাংশন
-    function toggleMenu() {
-        document.getElementById("sideMenu").classList.toggle("active");
-    }
-
-    // ২. কার্ট বের করার ফাংশন
-    function toggleCart() {
-        document.getElementById("cartSidebar").classList.toggle("active");
-    }
-
-    // ৩. কার্টের হিসাব নিকাশ
-    // আগের কার্ট ডাটা লোড করা (মেমোরি থেকে)
-    let cart = JSON.parse(localStorage.getItem("myCart")) || [];
-    
-    // পেজ লোড হলে কার্ট আপডেট হবে
-    window.onload = function() {
-        document.getElementById("cart-count").innerText = cart.length;
-        updateCartHTML();
-        checkLoginStatus(); // লগইন স্ট্যাটাস চেক
-    };
-
-    function addToCart(name, price, image) {
-        cart.push({ name: name, price: price, image: image });
-        localStorage.setItem("myCart", JSON.stringify(cart)); // সেভ
-        document.getElementById("cart-count").innerText = cart.length;
-        updateCartHTML();
-        toggleCart();
-    }
-
-    function updateCartHTML() {
-        let container = document.getElementById("cart-items-container");
-        let totalElement = document.getElementById("cart-total");
-        container.innerHTML = ""; 
-        let totalPrice = 0;
-
-        cart.forEach((item, index) => {
-            totalPrice += parseInt(item.price);
-            container.innerHTML += `
-                <div class="cart-item">
-                    <img src="${item.image}" alt="Product">
-                    <div style="flex-grow: 1; margin-left: 10px;">
-                        <h4 style="font-size: 14px; margin: 0;">${item.name}</h4>
-                        <p style="font-size: 12px; color: #38bdf8; margin: 0;">${item.price} BDT</p>
-                    </div>
-                    <i class="fas fa-trash remove-btn" onclick="removeFromCart(${index})"></i>
-                </div>
-            `;
-        });
-
-        totalElement.innerText = totalPrice;
-        if (cart.length === 0) {
-            container.innerHTML = "<div style='text-align:center; padding:20px; color: grey;'>Cart is empty!</div>";
-        }
-    }
-
-    function removeFromCart(index) {
-        cart.splice(index, 1); 
-        localStorage.setItem("myCart", JSON.stringify(cart)); // আপডেট সেভ
-        document.getElementById("cart-count").innerText = cart.length; 
-        updateCartHTML(); 
-    }
-
-    function clearCart() {
-        if (cart.length === 0) {
-            alert("Cart is already empty!");
-            return;
-        }
-        if (confirm("Are you sure you want to remove ALL items?")) {
-            cart = []; 
-            localStorage.removeItem("myCart");
-            document.getElementById("cart-count").innerText = "0"; 
-            updateCartHTML(); 
-        }
-    }
-
-    function checkout() {
-        if (cart.length === 0) {
-            alert("Your cart is empty! Please add some products first.");
-            return;
-        }
-        alert("🎉 Order Successful! Thank you for purchasing from Apurbo.Dev.");
-        cart = []; 
-        localStorage.removeItem("myCart");
-        document.getElementById("cart-count").innerText = "0"; 
-        updateCartHTML(); 
-        toggleCart();
-    }
-
-    // --- ৪. লগইন চেক করার ফাংশন (নতুন যোগ করা হয়েছে) ---
-    function checkLoginStatus() {
-        let userName = localStorage.getItem('currentUser');
-        let loginButton = document.getElementById('login-btn');
-
-        if (userName && loginButton) {
-            // যদি লগইন করা থাকে, নাম দেখাবে
-            loginButton.innerHTML = '<i class="fas fa-user"></i> ' + userName;
-            loginButton.href = "#"; // লিংক ডিজেবল
-            
-            // ক্লিক করলে লগ-আউট অপশন আসবে
-            loginButton.onclick = function() {
-                if(confirm("Log out from " + userName + "?")) {
-                    localStorage.removeItem('currentUser');
-                    window.location.reload(); // পেজ রিফ্রেশ
-                }
-            };
-        }
-    }
-
 </script>
+
+
+<div class="modal-overlay" id="loginModal">
+    <div class="modal-box">
+        <i class="fas fa-times close-btn" onclick="closeLogin()"></i>
+
+        <div id="loginForm">
+            <h2>Welcome Back!</h2>
+            <input type="text" id="loginUser" placeholder="Username" class="modal-input">
+            <input type="password" id="loginPass" placeholder="Password" class="modal-input">
+            <button class="btn btn-buy" onclick="loginUser()" style="width: 100%;">Login</button>
+            <p class="switch-text">Don't have an account? <span onclick="showRegister()">Create Account</span></p>
+        </div>
+
+        <div id="registerForm" style="display: none;">
+            <h2>Create Account</h2>
+            <input type="text" id="regUser" placeholder="Choose Username" class="modal-input">
+            <input type="email" id="regEmail" placeholder="Email Address" class="modal-input">
+            <input type="password" id="regPass" placeholder="Password" class="modal-input">
+            <button class="btn btn-buy" onclick="registerUser()" style="width: 100%;">Register</button>
+            <p class="switch-text">Already have an account? <span onclick="showLogin()">Login here</span></p>
+        </div>
+    </div>
+</div>
+
 
 </body>
 </html>
