@@ -453,7 +453,13 @@
     <a href="#" onclick="toggleMenu()">Shop</a>
     <a href="#" onclick="toggleMenu()">Profile</a>
     <a href="#" onclick="toggleMenu()">Contact Us</a>
+    
+    <a href="#" id="menu-logout-btn" onclick="logoutUser()" style="display: none; color: #ff4757; margin-top: auto; padding-top: 20px; border-top: 1px solid #333;">
+    <i class="fas fa-sign-out-alt"></i> Log Out
+</a>
+
 </div>
+
 
 <div class="sidebar" id="cartSidebar">
     <div class="cart-header">
@@ -586,6 +592,14 @@
         checkLoginStatus(); // লগইন চেক
     };
 
+        // --- ১.৫ নতুন লগআউট ফাংশন ---
+    function logoutUser() {
+        if(confirm("Are you sure you want to Log Out?")) {
+            localStorage.removeItem('currentUser');
+            window.location.reload();
+        }
+    }
+
     // --- ২. লগইন ও রেজিস্টার সিস্টেম ---
     
     // মোডাল ওপেন করা
@@ -610,57 +624,41 @@
         document.getElementById("loginForm").style.display = "block";
     }
 
-    // --- ৩. রেজিস্টার ফাংশন (সংশোধিত) ---
+    // --- ৩. রেজিস্টার ফাংশন ---
     function registerUser() {
-        // HTML এর id অনুযায়ী ভ্যালু নেওয়া হচ্ছে
         let user = document.getElementById("regUser").value;
         let pass = document.getElementById("regPass").value;
         let email = document.getElementById("regEmail").value; 
 
-        // খালি ঘর চেক করা
         if(user === "" || pass === "" || email === "") {
             alert("Please fill all fields!");
             return;
         }
 
-        // বাটন লোডিং স্ট্যাটাস
         let regBtn = document.querySelector("#registerForm button");
         let originalText = regBtn.innerText;
         regBtn.innerText = "Sending...";
         regBtn.disabled = true;
 
         // EmailJS দিয়ে মেইল পাঠানো
-        // 🔴 বিঃদ্রঃ তোমার সার্ভিস আইডি এবং টেমপ্লেট আইডি ঠিক আছে তো? না থাকলে চেক করে নিও।
         emailjs.send("service_gkqcuvl", "template_8svpcra", {
             user_name: user,
             user_pass: pass,
             user_email: email
         })
         .then(function() {
-            // ১. সফল হলে ডাটা সেভ হবে
             localStorage.setItem("storedUser", user);
             localStorage.setItem("storedPass", pass);
-            
-            // ২. অ্যালার্ট দেখাবে
             alert("Account Created Successfully! Check email & Please Login.");
-            
-            // ৩. লগইন পেজে নিয়ে যাবে
             showLogin(); 
-            
-            // ৪. বাটন ঠিক করা
             regBtn.innerText = originalText;
             regBtn.disabled = false;
-            
         }, function(error) {
-            // ভুল হলে এখানে আসবে
             alert("Failed to send email. But saving account locally.");
             console.log("FAILED...", error);
-            
-            // মেইল না গেলেও অন্তত লোকাল স্টোরেজে সেভ করে ইউজারকে ঢুকতে দিচ্ছি
             localStorage.setItem("storedUser", user);
             localStorage.setItem("storedPass", pass);
             showLogin();
-
             regBtn.innerText = originalText;
             regBtn.disabled = false;
         });
@@ -678,31 +676,37 @@
             alert("Login Successful!");
             localStorage.setItem("currentUser", enteredUser);
             closeLogin();
-            window.location.reload(); // পেজ রিলোড হয়ে নাম দেখাবে
+            window.location.reload(); 
         } else {
             alert("Wrong Username or Password!");
         }
     }
 
-    // লগইন স্ট্যাটাস চেক এবং নাম দেখানো
+    // --- ৫. আপডেটেড চেক লগইন স্ট্যাটাস (মেনু বাটন সহ) ---
     function checkLoginStatus() {
         let userName = localStorage.getItem('currentUser');
         let loginButton = document.getElementById('login-btn');
+        let menuLogout = document.getElementById('menu-logout-btn'); // মেনুর লগআউট বাটন
 
-        if (userName && loginButton) {
-            // আইকন সহ নাম দেখাবে
-            loginButton.innerHTML = '<i class="fas fa-user"></i> ' + userName;
-            loginButton.href = "#"; 
-            loginButton.onclick = function() {
-                if(confirm("Log out from " + userName + "?")) {
-                    localStorage.removeItem('currentUser');
-                    window.location.reload(); 
-                }
-            };
+        if (userName) {
+            // ইউজার লগইন অবস্থায় থাকলে
+            if (loginButton) {
+                loginButton.innerHTML = '<i class="fas fa-user"></i> ' + userName;
+                loginButton.href = "#"; 
+            }
+            // মেনুতে লগআউট বাটনটি শো করবে
+            if (menuLogout) {
+                menuLogout.style.display = "block";
+            }
+        } else {
+            // ইউজার লগইন না থাকলে
+            if (menuLogout) {
+                menuLogout.style.display = "none"; 
+            }
         }
     }
 
-    // --- ৫. নেভিগেশন ও মেনু ---
+    // --- ৬. নেভিগেশন ও মেনু ---
     function toggleMenu() {
         document.getElementById("sideMenu").classList.toggle("active");
     }
@@ -711,7 +715,7 @@
         document.getElementById("cartSidebar").classList.toggle("active");
     }
 
-    // --- ৬. কার্ট ম্যানেজমেন্ট ---
+    // --- ৭. কার্ট ম্যানেজমেন্ট ---
     function addToCart(name, price, image) {
         cart.push({ name: name, price: price, image: image });
         localStorage.setItem("myCart", JSON.stringify(cart)); 
@@ -721,7 +725,6 @@
         }
         updateCartHTML();
         
-        // কার্ট সাইডবার ওপেন হবে
         const cartSidebar = document.getElementById("cartSidebar");
         if (!cartSidebar.classList.contains("active")) {
             cartSidebar.classList.add("active");
@@ -732,7 +735,7 @@
         let container = document.getElementById("cart-items-container");
         let totalElement = document.getElementById("cart-total");
         
-        if(!container || !totalElement) return; // যদি এলিমেন্ট না থাকে, এরর আটকাতে
+        if(!container || !totalElement) return;
 
         container.innerHTML = ""; 
         let totalPrice = 0;
@@ -802,7 +805,7 @@
         alert("Proceeding to buy " + name);
     }
 
-    // --- ৭. সার্চ ও সাজেশন ---
+    // --- ৮. সার্চ ও সাজেশন ---
     function toggleSearch() {
         const searchBox = document.querySelector('.search-box');
         searchBox.classList.toggle('active'); 
@@ -865,10 +868,11 @@
         }
     });
 
-    // --- ৮. মেসেজ ফাংশন ---
+    // --- ৯. মেসেজ ফাংশন ---
     function sendMessage() {
         alert("Message sent successfully!");
     }
+
 </script>
 
 
