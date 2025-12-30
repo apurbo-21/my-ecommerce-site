@@ -109,28 +109,17 @@
     .box form h2 { color: #fff; font-weight: 500; text-align: center; letter-spacing: 0.1em; }
     
     .inputBox { position: relative; width: 100%; margin-top: 30px; }
-    .inputBox input { position: relative; width: 100%; padding: 20px 35px 10px 10px; background: transparent; outline: none; border: none; box-shadow: none; color: #23242a; font-size: 1em; letter-spacing: 0.05em; transition: 0.5s; z-index: 10; }
+    .inputBox input { position: relative; width: 100%; padding: 20px 35px 10px 10px; background: transparent; outline: none; border: none; box-shadow: none; color: white; font-size: 1em; letter-spacing: 0.05em; transition: 0.5s; z-index: 10; }
     .inputBox span { position: absolute; left: 0; padding: 20px 0px 10px; pointer-events: none; color: #8f8f8f; font-size: 1em; letter-spacing: 0.05em; transition: 0.5s; }
     
     .inputBox input:valid ~ span,
     .inputBox input:focus ~ span { color: #fff; font-size: 0.75em; transform: translateY(-34px); }
     
-    /* Animation Line */
     .inputBox .line-anim { position: absolute; left: 0; bottom: 0; width: 100%; height: 2px; background: #fff; border-radius: 4px; overflow: hidden; transition: 0.5s; pointer-events: none; }
     .inputBox input:valid ~ .line-anim,
     .inputBox input:focus ~ .line-anim { height: 44px; }
     
-    /* 🔥 Password Show/Hide Icon Style 🔥 */
-    .eye-btn {
-        position: absolute;
-        right: 5px;
-        top: 25px;
-        color: #8f8f8f;
-        cursor: pointer;
-        z-index: 100;
-        font-size: 14px;
-        transition: 0.3s;
-    }
+    .eye-btn { position: absolute; right: 10px; top: 25px; color: #8f8f8f; cursor: pointer; z-index: 100; font-size: 16px; transition: 0.3s; }
     .eye-btn:hover { color: #fff; }
 
     .links { display: flex; justify-content: space-between; margin-top: 20px; }
@@ -266,20 +255,17 @@
         <span class="border-line"></span>
         <form onsubmit="event.preventDefault(); loginUser();">
             <h2>Login</h2>
-            
             <div class="inputBox">
-                <input type="text" id="loginUser" required="required">
+                <input type="text" id="userLogin" required="required">
                 <span>Username</span>
                 <i class="line-anim"></i>
             </div>
-            
             <div class="inputBox">
-                <input type="password" id="loginPass" required="required">
+                <input type="password" id="passLogin" required="required">
                 <span>Password</span>
                 <i class="line-anim"></i>
-                <i class="fas fa-eye eye-btn" onclick="togglePassword('loginPass', this)"></i>
+                <i class="fas fa-eye eye-btn" onclick="togglePassword('passLogin', this)"></i>
             </div>
-            
             <div class="links">
                 <a href="#" onclick="openForgot()">Forgot Password</a>
                 <a href="#" onclick="openSignup()">Signup</a>
@@ -311,29 +297,23 @@
         <span class="border-line"></span>
         <form onsubmit="event.preventDefault(); registerUser();">
             <h2>Sign Up</h2>
-            
             <div class="inputBox">
                 <input type="text" id="regUser" required="required">
                 <span>Username</span>
                 <i class="line-anim"></i>
             </div>
-
             <div class="inputBox">
                 <input type="email" id="regEmail" required="required">
                 <span>Email</span>
                 <i class="line-anim"></i>
             </div>
-            
             <div class="inputBox">
                 <input type="password" id="regPass" required="required">
                 <span>Password</span>
                 <i class="line-anim"></i>
                 <i class="fas fa-eye eye-btn" onclick="togglePassword('regPass', this)"></i>
             </div>
-            
-            <div class="links">
-                <a href="#" onclick="openLogin()">Already have account? Login</a>
-            </div>
+            <div class="links"><a href="#" onclick="openLogin()">Already have account? Login</a></div>
             <input type="submit" value="Register" class="submit-btn" style="width: 120px;">
         </form>
     </div>
@@ -359,14 +339,12 @@
         loginPopup.classList.add("open-popup");
     }
     function closeLogin() { loginPopup.classList.remove("open-popup"); }
-
     function openForgot() { closeLogin(); forgotPopup.classList.add("open-popup"); }
     function closeForgot() { forgotPopup.classList.remove("open-popup"); }
-
     function openSignup() { closeLogin(); signupPopup.classList.add("open-popup"); }
     function closeSignup() { signupPopup.classList.remove("open-popup"); }
 
-    // --- ৩. 🔥 পাসওয়ার্ড দেখানো/লুকানোর ফাংশন 🔥 ---
+    // --- ৩. পাসওয়ার্ড শো/হাইড ---
     function togglePassword(inputId, icon) {
         let inputField = document.getElementById(inputId);
         if (inputField.type === "password") {
@@ -385,7 +363,6 @@
         let user = document.getElementById("regUser").value;
         let email = document.getElementById("regEmail").value;
         let pass = document.getElementById("regPass").value;
-
         let btn = document.querySelector("#signupForm .submit-btn");
         let originalText = btn.value;
         btn.value = "Saving...";
@@ -405,48 +382,37 @@
     }
 
     function loginUser() {
-    let enteredUser = document.getElementById("loginUser").value;
-    let enteredPass = document.getElementById("loginPass").value;
-    
-    // Memory theke data ana
-    let storedUser = localStorage.getItem("storedUser");
-    let storedPass = localStorage.getItem("storedPass");
+        let enteredUser = document.getElementById("userLogin").value;
+        let enteredPass = document.getElementById("passLogin").value;
+        let storedUser = localStorage.getItem("storedUser");
+        let storedPass = localStorage.getItem("storedPass");
 
-    // Dekha memory-te ki ache
-    alert("Memory-te ache: " + storedUser + " | Password: " + storedPass);
-
-    if((enteredUser === storedUser && enteredPass === storedPass) || (enteredUser === "admin" && enteredPass === "1234")) {
-        alert("Login Successful!");
-        localStorage.setItem("currentUser", enteredUser);
-        closeLogin(); window.location.reload(); 
-    } else {
-        alert("❌ Login Failed!");
+        if((enteredUser === storedUser && enteredPass === storedPass) || (enteredUser === "admin" && enteredPass === "1234")) {
+            alert("Login Successful! Welcome " + enteredUser);
+            localStorage.setItem("currentUser", enteredUser);
+            closeLogin(); window.location.reload(); 
+        } else {
+            alert("❌ Login Failed! Account not found on this device. Please Signup first.");
+        }
     }
-}
 
     function recoverPassword() {
         let storedUser = localStorage.getItem("storedUser") || "User";
         let storedPass = localStorage.getItem("storedPass");
         let btn = document.querySelector("#forgotForm .submit-btn");
         btn.value = "Sending...";
-
-        if(!storedPass) {
-            alert("No account found on this device!");
-            btn.value = "Send Pass"; return;
-        }
+        if(!storedPass) { alert("No account found!"); btn.value = "Send Pass"; return; }
         emailjs.send("service_gkqcuvl", "template_8svpcra", {
             user_name: "Password Recovery", user_pass: "Recovered: " + storedPass, message: "Recovery for user: " + storedUser
         }).then(function() {
-            alert("Password sent to your email!"); closeForgot(); btn.value = "Send Pass";
+            alert("Password sent to email!"); closeForgot(); btn.value = "Send Pass";
         }, function(error) {
             alert("Failed to send email."); btn.value = "Send Pass";
         });
     }
 
     function logoutUser() {
-        if(confirm("Are you sure you want to Log Out?")) {
-            localStorage.removeItem('currentUser'); window.location.reload();
-        }
+        if(confirm("Are you sure?")) { localStorage.removeItem('currentUser'); window.location.reload(); }
     }
 
     function checkLoginStatus() {
@@ -454,24 +420,20 @@
         let loginButton = document.getElementById('login-btn');
         let menuLogout = document.getElementById('menu-logout-btn');
         if (userName) {
-            if (loginButton) { loginButton.innerText = userName; loginButton.style.fontWeight = "bold"; loginButton.style.fontSize = "16px"; loginButton.href = "#"; }
+            if (loginButton) { loginButton.innerText = userName; loginButton.style.fontWeight = "bold"; loginButton.style.fontSize = "16px"; }
             if (menuLogout) menuLogout.style.display = "block";
-        } else {
-            if (menuLogout) menuLogout.style.display = "none"; 
         }
     }
 
-    // --- ৫. অন্যান্য ফাংশন (কার্ট, সার্চ ইত্যাদি) ---
+    // --- ৫. অন্যান্য ফাংশন ---
     function toggleMenu() { document.getElementById("sideMenu").classList.toggle("active"); }
     function toggleCart() { document.getElementById("cartSidebar").classList.toggle("active"); }
-
     function addToCart(name, price, image) {
         cart.push({ name: name, price: price, image: image });
         localStorage.setItem("myCart", JSON.stringify(cart)); 
         if(document.getElementById("cart-count")) document.getElementById("cart-count").innerText = cart.length;
         updateCartHTML(); document.getElementById("cartSidebar").classList.add("active");
     }
-
     function updateCartHTML() {
         let container = document.getElementById("cart-items-container");
         let totalElement = document.getElementById("cart-total");
@@ -484,36 +446,12 @@
         totalElement.innerText = totalPrice;
         if (cart.length === 0) container.innerHTML = "<div style='text-align:center; padding:20px; color: grey;'>Cart is empty!</div>";
     }
-
-    function removeFromCart(index) {
-        cart.splice(index, 1); localStorage.setItem("myCart", JSON.stringify(cart)); updateCartHTML();
-        if(document.getElementById("cart-count")) document.getElementById("cart-count").innerText = cart.length;
-    }
-
-    function clearCart() {
-        if (cart.length === 0) return;
-        if (confirm("Remove ALL items?")) {
-            cart = []; localStorage.removeItem("myCart"); updateCartHTML();
-            if(document.getElementById("cart-count")) document.getElementById("cart-count").innerText = "0";
-        }
-    }
-
-    function checkout() {
-        if (cart.length === 0) { alert("Cart is empty!"); return; }
-        alert("🎉 Order Successful!"); cart = []; localStorage.removeItem("myCart"); updateCartHTML(); toggleCart();
-        if(document.getElementById("cart-count")) document.getElementById("cart-count").innerText = "0";
-    }
-
-    function buyNow(name) { alert("Proceeding to buy " + name); }
-    function sendMessage() { alert("Message sent successfully!"); }
-
-    function toggleSearch() {
-        const searchBox = document.querySelector('.search-box');
-        searchBox.classList.toggle('active'); 
-        if(searchBox.classList.contains('active')){ document.getElementById("search-box").focus(); document.getElementById("search-box").value = ""; } 
-        else { document.getElementById('suggestion-box').style.display = 'none'; }
-    }
-
+    function removeFromCart(index) { cart.splice(index, 1); localStorage.setItem("myCart", JSON.stringify(cart)); updateCartHTML(); if(document.getElementById("cart-count")) document.getElementById("cart-count").innerText = cart.length; }
+    function clearCart() { if (confirm("Remove ALL?")) { cart = []; localStorage.removeItem("myCart"); updateCartHTML(); if(document.getElementById("cart-count")) document.getElementById("cart-count").innerText = "0"; } }
+    function checkout() { alert("Order Successful!"); cart = []; localStorage.removeItem("myCart"); updateCartHTML(); toggleCart(); }
+    function buyNow(name) { alert("Buy " + name); }
+    function sendMessage() { alert("Message sent!"); }
+    function toggleSearch() { document.querySelector('.search-box').classList.toggle('active'); }
     function showSuggestions() {
         let input = document.getElementById('search-box').value.toLowerCase().trim();
         let suggestionBox = document.getElementById('suggestion-box');
@@ -526,7 +464,7 @@
             let imageSrc = productCards[i].querySelector("img").src;
             if (name.toLowerCase().includes(input)) {
                 suggestionBox.style.display = 'block';
-                suggestionBox.innerHTML += `<div class="suggestion-item" onclick="alert('Product found!')"><img src="${imageSrc}"><span>${name}</span></div>`;
+                suggestionBox.innerHTML += `<div class="suggestion-item"><img src="${imageSrc}"><span>${name}</span></div>`;
                 matchFound = true;
             }
         }
