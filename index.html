@@ -10,7 +10,7 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
        (function(){
-          emailjs.init("TEriOjdktc7saIdsm");
+          emailjs.init("TEriOjdktc7saIdsm"); // তোমার পাবলিক কী
        })();
     </script>
 
@@ -36,10 +36,26 @@
     /* --- SEARCH --- */
     .search-box { position: relative; display: flex; align-items: center; justify-content: center; }
     .search-btn { color: #ffffff !important; font-size: 1.4rem; background: transparent; border: none; cursor: pointer; transition: 0.3s; }
-    .search-txt { position: absolute; top: 50px; right: 0; width: 200px; padding: 10px; background: #1f2937; border: 2px solid var(--primary-color); border-radius: 10px; color: white; font-size: 14px; outline: none; opacity: 0; visibility: hidden; transform: translateY(-15px); transition: 0.4s ease; }
+    .search-txt { position: absolute; top: 50px; right: -110px; width: 200px; padding: 10px; background: #1f2937; border: 2px solid var(--primary-color); border-radius: 10px; color: white; font-size: 14px; outline: none; opacity: 0; visibility: hidden; transform: translateY(-15px); transition: 0.4s ease; }
     .search-box.active .search-txt { opacity: 1; visibility: visible; transform: translateY(0); }
-    #suggestion-box { position: absolute; top: 100px; right: 0; width: 250px; background: #1f2937; border: 1px solid #2563eb; border-radius: 10px; max-height: 300px; overflow-y: auto; display: none; z-index: 9999; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+    
+    /* সাজেশন বক্স ডিজাইন */
+    #suggestion-box { 
+        position: absolute; 
+        top: 100px; 
+        right: -150px; 
+        width: 250px; 
+        background: #1f2937; 
+        border: 1px solid #2563eb; 
+        border-radius: 10px; 
+        max-height: 300px; 
+        overflow-y: auto; 
+        display: none; 
+        z-index: 9999; 
+        box-shadow: 0 10px 20px rgba(0,0,0,0.5); 
+    }
     .suggestion-item { display: flex; align-items: center; padding: 10px; border-bottom: 1px solid #374151; cursor: pointer; color: white; transition: 0.2s; }
+    .suggestion-item:hover { background: #374151; }
     .suggestion-item img { width: 40px; height: 40px; object-fit: cover; border-radius: 5px; margin-right: 10px; border: 1px solid #2563eb; }
 
     /* --- CART & SIDEBAR --- */
@@ -94,37 +110,9 @@
     .box form h2 { color: #fff; font-weight: 500; text-align: center; letter-spacing: 0.1em; }
     
     .inputBox { position: relative; width: 100%; margin-top: 35px; }
-    
-    /* 🔥 Input Style Fixed (Black Bg, White Text) 🔥 */
-    .inputBox input {
-        position: relative; width: 100%; padding: 20px 40px 10px 10px; 
-        background: #1c1c1c !important; 
-        outline: none; border: none; 
-        color: #ffffff !important; 
-        font-size: 1em; letter-spacing: 0.05em; transition: 0.5s; z-index: 10;
-    }
-
-    /* 🔥 Autofill Fix (Stop White Box) 🔥 */
-    .inputBox input:-webkit-autofill,
-    .inputBox input:-webkit-autofill:hover, 
-    .inputBox input:-webkit-autofill:focus, 
-    .inputBox input:-webkit-autofill:active  {
-        -webkit-box-shadow: 0 0 0 30px #1c1c1c inset !important;
-        -webkit-text-fill-color: #ffffff !important;
-        transition: background-color 5000s ease-in-out 0s;
-    }
-
-    /* 🔥 Label Fixed At Top Permanently 🔥 */
-    .inputBox span {
-        position: absolute; 
-        left: 0; 
-        padding: 20px 0px 10px; 
-        pointer-events: none;
-        color: #fff; 
-        font-size: 0.75em; 
-        transform: translateY(-34px); /* সব সময় উপরে ফিক্সড */
-    }
-    
+    .inputBox input { position: relative; width: 100%; padding: 20px 40px 10px 10px; background: #1c1c1c !important; outline: none; border: none; color: #ffffff !important; font-size: 1em; letter-spacing: 0.05em; transition: 0.5s; z-index: 10; }
+    .inputBox input:-webkit-autofill, .inputBox input:-webkit-autofill:hover, .inputBox input:-webkit-autofill:focus, .inputBox input:-webkit-autofill:active  { -webkit-box-shadow: 0 0 0 30px #1c1c1c inset !important; -webkit-text-fill-color: #ffffff !important; transition: background-color 5000s ease-in-out 0s; }
+    .inputBox span { position: absolute; left: 0; padding: 20px 0px 10px; pointer-events: none; color: #fff; font-size: 0.75em; transform: translateY(-34px); }
     .inputBox .line-anim { position: absolute; left: 0; bottom: 0; width: 100%; height: 2px; background: #fff; border-radius: 4px; transition: 0.5s; pointer-events: none; }
     .inputBox input:focus ~ .line-anim, .inputBox input:valid ~ .line-anim { height: 44px; }
     
@@ -318,11 +306,22 @@
 
 <script>
     let cart = JSON.parse(localStorage.getItem("myCart")) || [];
+    
     window.onload = function() {
         if(document.getElementById("cart-count")) document.getElementById("cart-count").innerText = cart.length;
-        updateCartHTML(); checkLoginStatus();
+        updateCartHTML(); 
+        checkLoginStatus();
+        
+        // সার্চ বক্সের বাইরে ক্লিক করলে সাজেশন বন্ধ হবে
+        document.addEventListener('click', function(e) {
+            const searchBox = document.querySelector('.search-box');
+            if (!searchBox.contains(e.target)) {
+                document.getElementById('suggestion-box').style.display = 'none';
+            }
+        });
     };
 
+    // --- পপ-আপ কন্ট্রোল ---
     function openLogin() { closeAll(); document.getElementById("animatedLoginForm").classList.add("open-popup"); }
     function closeLogin() { document.getElementById("animatedLoginForm").classList.remove("open-popup"); }
     function openSignup() { closeAll(); document.getElementById("signupForm").classList.add("open-popup"); }
@@ -337,12 +336,15 @@
         else { field.type = "password"; icon.classList.replace("fa-eye-slash", "fa-eye"); }
     }
 
+    // --- অথেনটিকেশন এবং ইমেইল ---
     function registerUser() {
         let u = document.getElementById("regUser").value, e = document.getElementById("regEmail").value, p = document.getElementById("regPass").value;
         localStorage.setItem("storedUser", u); localStorage.setItem("storedPass", p);
+        
+        // তোমার দেওয়া সার্ভিস আইডি এবং টেমপ্লেট আইডি ব্যবহার করা হয়েছে
         emailjs.send("service_gkqcuvl", "template_8svpcra", { user_name: u, user_email: e, message: "Pass: " + p })
-        .then(() => { alert("✅ Signup Success!"); openLogin(); },
-        (err) => { alert("✅ Signup Success (Offline)!"); openLogin(); });
+        .then(() => { alert("✅ Signup Success! Check Email."); openLogin(); },
+        (err) => { alert("✅ Signup Success (Local Only)!"); openLogin(); });
     }
 
     function loginUser() {
@@ -367,35 +369,96 @@
     function checkLoginStatus() {
         let user = localStorage.getItem('currentUser');
         let btn = document.getElementById('login-btn');
-        if (user) { btn.innerText = user; document.getElementById('menu-logout-btn').style.display = "block"; }
+        if (user) { 
+            btn.innerHTML = '<i class="fas fa-user"></i> ' + user; 
+            btn.href = "#";
+            document.getElementById('menu-logout-btn').style.display = "block"; 
+        }
     }
     
+    // --- মেনু ও কার্ট ---
     function toggleMenu() { document.getElementById("sideMenu").classList.toggle("active"); }
     function toggleCart() { document.getElementById("cartSidebar").classList.toggle("active"); }
-    function addToCart(n, p, i) { cart.push({name:n, price:p, image:i}); localStorage.setItem("myCart", JSON.stringify(cart)); updateCartHTML(); document.getElementById("cartSidebar").classList.add("active"); }
+    
+    function addToCart(n, p, i) { 
+        cart.push({name:n, price:p, image:i}); 
+        localStorage.setItem("myCart", JSON.stringify(cart)); 
+        updateCartHTML(); 
+        document.getElementById("cartSidebar").classList.add("active"); 
+    }
+
     function updateCartHTML() {
         let c=document.getElementById("cart-items-container"), t=document.getElementById("cart-total");
         if(!c || !t) return;
         c.innerHTML = ""; let tp = 0;
-        cart.forEach((x, i) => { tp += parseInt(x.price); c.innerHTML += `<div class="cart-item"><img src="${x.image}"><div><h4>${x.name}</h4><p>${x.price} BDT</p></div><i class="fas fa-trash remove-btn" onclick="rem(${i})"></i></div>`; });
+        cart.forEach((x, i) => { 
+            tp += parseInt(x.price); 
+            c.innerHTML += `<div class="cart-item"><img src="${x.image}"><div><h4>${x.name}</h4><p>${x.price} BDT</p></div><i class="fas fa-trash remove-btn" onclick="rem(${i})"></i></div>`; 
+        });
         t.innerText = tp; if(cart.length===0) c.innerHTML = "Cart is empty!";
         if(document.getElementById("cart-count")) document.getElementById("cart-count").innerText = cart.length;
     }
+
     function rem(i) { cart.splice(i, 1); localStorage.setItem("myCart", JSON.stringify(cart)); updateCartHTML(); }
     function clearCart() { if(confirm("Clear?")) { cart=[]; localStorage.removeItem("myCart"); updateCartHTML(); } }
     function checkout() { alert("Order Placed!"); clearCart(); toggleCart(); }
     function buyNow(n) { alert("Buy " + n); }
     function sendMessage() { alert("Message Sent!"); }
-    function toggleSearch() { document.querySelector('.search-box').classList.toggle('active'); }
+
+    // --- সার্চ এবং সাজেশন (FIXED) ---
+    function toggleSearch() { 
+        const searchBox = document.querySelector('.search-box');
+        searchBox.classList.toggle('active'); 
+        if(searchBox.classList.contains('active')){
+            document.getElementById("search-box").focus();
+            document.getElementById("search-box").value = ""; 
+        } else {
+             document.getElementById('suggestion-box').style.display = 'none';
+        }
+    }
+
     function showSuggestions() {
-        let input = document.getElementById('search-box').value.toLowerCase();
-        let box = document.getElementById('suggestion-box');
-        box.innerHTML = ''; if(!input) { box.style.display='none'; return; }
-        box.style.display = 'block';
-        box.innerHTML = '<div style="padding:10px;color:grey">Searching...</div>';
+        let input = document.getElementById('search-box').value.toLowerCase().trim();
+        let suggestionBox = document.getElementById('suggestion-box');
+        let productCards = document.getElementsByClassName('product-card');
+
+        suggestionBox.innerHTML = '';
+        
+        if (input.length === 0) {
+            suggestionBox.style.display = 'none';
+            return;
+        }
+
+        let matchFound = false;
+
+        // প্রোডাক্ট খোঁজা হচ্ছে
+        for (let i = 0; i < productCards.length; i++) {
+            let nameElement = productCards[i].querySelector(".product-name");
+            let imgElement = productCards[i].querySelector("img");
+            
+            if(nameElement && imgElement) {
+                let name = nameElement.innerText;
+                let imageSrc = imgElement.src;
+                
+                if (name.toLowerCase().includes(input)) {
+                    suggestionBox.style.display = 'block';
+                    suggestionBox.innerHTML += `
+                        <div class="suggestion-item" onclick="alert('Found: ${name}')">
+                            <img src="${imageSrc}" alt="Product">
+                            <span>${name}</span>
+                        </div>
+                    `;
+                    matchFound = true;
+                }
+            }
+        }
+
+        if (!matchFound) {
+            suggestionBox.style.display = 'block';
+            suggestionBox.innerHTML = `<div style="padding:10px; color:grey; text-align:center;">No items found</div>`;
+        }
     }
 </script>
 
 </body>
 </html>
-
