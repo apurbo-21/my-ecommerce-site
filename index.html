@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apurbo - Web Developer & Shop</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+    
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+</head>
+<body>
+    
+<nav class="navbar">
+    <div class="logo">APURBO<span>.DEV</span></div>
+    <div class="nav-icons">
+        <div class="search-box">
+            <input class="search-txt" type="text" id="search-box" placeholder="Search..." onkeyup="showSuggestions()">
+            <a class="search-btn" href="#" onclick="toggleSearch()"><i class="fas fa-search"></i></a>
+            <div id="suggestion-box"></div>
+        </div>
+        <a href="#" id="login-btn" onclick="openLogin()" style="color: white; text-decoration: none; font-weight: bold; font-size: 1rem;">Login</a>
+        <div class="cart-icon" onclick="toggleCart()"><i class="fas fa-shopping-cart"></i><span id="cart-count">0</span></div>
+        <div class="menu-bar" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
+    </div>
+</nav>
+
+<div class="sidebar" id="sideMenu">
+    <i class="fas fa-times close-icon" onclick="toggleMenu()"></i>
+    <a href="#" onclick="toggleMenu()">Home</a>
+    <a href="#" onclick="toggleMenu()">Shop</a>
+    <a href="#" onclick="toggleMenu()">Profile</a>
+    <a href="#" onclick="toggleMenu()">Contact Us</a>
+    <a href="#" id="menu-logout-btn" onclick="logoutUser()" style="display: none; color: #ff4757; margin-top: auto; padding-top: 20px; border-top: 1px solid #333;">
+        <i class="fas fa-sign-out-alt"></i> Log Out
+    </a>
+</div>
+
+<div class="sidebar" id="cartSidebar">
+    <div class="cart-header"><h3>My Cart</h3><i class="fas fa-times close-icon" onclick="toggleCart()"></i></div>
+    <div id="cart-items-container" style="padding: 20px; color: grey;">Cart is empty!</div>
+    <div class="cart-footer">
+        <h4>Total: <span id="cart-total">0</span> BDT</h4>
+        <button class="btn" style="background: #ef4444; color: white; margin-bottom: 10px; width: 100%; border: none;" onclick="clearCart()"><i class="fas fa-trash-alt"></i> Clear Cart</button>
+        <button class="btn btn-buy" style="width: 100%;" onclick="checkout()">Checkout Now</button>
+    </div>
+</div>
+
+<section class="hero-section">
+    <img src="https://i.ibb.co/XxXtjQmv/wycggw.jpg" alt="Profile" class="profile-circle">
+    <h1>Apurbo</h1>
+    <p>Premium Gadgets for Developers</p>
+</section>
+
+<div class="container">
+    <h2 class="section-title">Latest Gadgets & Items</h2>
+    <div class="product-grid">
+        <div class="product-card">
+            <div class="product-img"><img src="https://i.ibb.co.com/HL39hg93/K65-PLUS-WIRELESS-14-width-1000-bgcolor-000-format-webp.webp" alt="Keyboard"></div>
+            <div class="product-info">
+                <h3 class="product-name">K65 PLUS Wireless Keyboard</h3>
+                <p class="price">৳ 4,500</p>
+                <div class="btn-container">
+                    <button class="btn btn-buy" onclick="buyNow('K65 Keyboard')">Buy Now</button>
+                    <button class="btn btn-cart" onclick="addToCart('K65 Keyboard', 4500, 'https://i.ibb.co.com/HL39hg93/K65-PLUS-WIRELESS-14-width-1000-bgcolor-000-format-webp.webp')">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+        <div class="product-card">
+            <div class="product-img"><img src="https://i.ibb.co.com/jkxLG2Nq/3c.jpg" alt="Suit"></div>
+            <div class="product-info">
+                <h3 class="product-name">Premium Slim Fit Suit</h3>
+                <p class="price">৳ 3,200</p>
+                <div class="btn-container">
+                    <button class="btn btn-buy" onclick="buyNow('Premium Suit')">Buy Now</button>
+                    <button class="btn btn-cart" onclick="addToCart('Premium Suit', 3200, 'https://i.ibb.co.com/jkxLG2Nq/3c.jpg')">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+        <div class="product-card">
+            <div class="product-img"><img src="https://i.ibb.co/xR3SP9K/s-l1200.jpg" alt="Mouse"></div>
+            <div class="product-info">
+                <h3 class="product-name">Wireless Gaming Mouse</h3>
+                <p class="price">৳ 1,800</p>
+                <div class="btn-container">
+                    <button class="btn btn-buy" onclick="buyNow('Gaming Mouse')">Buy Now</button>
+                    <button class="btn btn-cart" onclick="addToCart('Gaming Mouse', 1800, 'https://i.ibb.co/xR3SP9K/s-l1200.jpg')">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="contact-section">
+    <h2 class="section-title">Send us a Message</h2>
+    <div class="contact-form">
+        <input type="text" placeholder="Your Name" class="contact-input">
+        <input type="email" placeholder="Your Email" class="contact-input">
+        <textarea rows="5" placeholder="Write your message here..." class="contact-input"></textarea>
+        <button class="btn btn-buy" onclick="sendMessage()">Send Message</button>
+    </div>
+</section>
+
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-col">
+            <h3>Apurbo<span>.Dev</span></h3>
+            <p>You can choose your best gadgets and fashion store in BD.</p>
+        </div>
+        <div class="footer-col">
+            <h3>Quick Links</h3>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Shop</a></li>
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h3>Contact Us</h3>
+            <p><i class="fas fa-map-marker-alt"></i> Joydebpur Bus stand</p>
+            <p><i class="fas fa-phone"></i> 01326567948</p>
+            <p><i class="fas fa-envelope"></i> mofassirhossain21@gmail.com</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2025 Apurbo.Dev | All rights reserved.</p>
+    </div>
+</footer>
+
+<div class="login-popup" id="animatedLoginForm">
+    <div class="box">
+        <i class="fas fa-times popup-close-icon" onclick="closeLogin()"></i>
+        <form onsubmit="event.preventDefault(); loginUser();" autocomplete="off">
+            <h2>Login</h2>
+            <div class="inputBox">
+                <input type="text" id="userLogin" required="required">
+                <span>Username</span><i class="line-anim"></i>
+            </div>
+            <div class="inputBox">
+                <input type="password" id="passLogin" required="required">
+                <span>Password</span><i class="line-anim"></i>
+                <i class="fas fa-eye eye-btn" onclick="togglePassword('passLogin', this)"></i>
+            </div>
+            <div class="links"><a href="#" onclick="openForgot()">Forgot Password</a><a href="#" onclick="openSignup()">Signup</a></div>
+            <input type="submit" value="Login" class="submit-btn">
+        </form>
+    </div>
+</div>
+
+<div class="login-popup" id="signupForm">
+    <div class="box">
+        <i class="fas fa-times popup-close-icon" onclick="closeSignup()"></i>
+        <form onsubmit="event.preventDefault(); registerUser();" autocomplete="off">
+            <h2>Sign Up</h2>
+            <div class="inputBox">
+                <input type="text" id="regUser" required="required">
+                <span>Username</span><i class="line-anim"></i>
+            </div>
+            <div class="inputBox">
+                <input type="email" id="regEmail" required="required">
+                <span>Email</span><i class="line-anim"></i>
+            </div>
+            <div class="inputBox">
+                <input type="password" id="regPass" required="required">
+                <span>Password</span><i class="line-anim"></i>
+                <i class="fas fa-eye eye-btn" onclick="togglePassword('regPass', this)"></i>
+            </div>
+            <div class="links"><a href="#" onclick="openLogin()">Login here</a></div>
+            <input type="submit" value="Register" class="submit-btn">
+        </form>
+    </div>
+</div>
+
+<div class="login-popup" id="forgotForm">
+    <div class="box">
+        <i class="fas fa-times popup-close-icon" onclick="closeForgot()"></i>
+        <form onsubmit="event.preventDefault(); recoverPassword();" autocomplete="off">
+            <h2>Recovery</h2>
+            <div class="inputBox">
+                <input type="email" id="recoveryEmail" required="required">
+                <span>Enter Email</span><i class="line-anim"></i>
+            </div>
+            <input type="submit" value="Send Pass" class="submit-btn">
+        </form>
+    </div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
