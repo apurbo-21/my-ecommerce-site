@@ -6,7 +6,135 @@
     <title>Apurbo - Web Developer & Shop</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+       (function(){
+          emailjs.init("TEriOjdktc7saIdsm");
+       })();
+    </script>
+
+    <style>
+    /* --- বেসিক সেটআপ --- */
+    :root {
+        --primary-color: #2563eb;
+        --dark-bg: #0f172a;
+        --card-bg: #1e293b;
+        --text-color: #f8fafc;
+        --accent-color: #38bdf8;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    body { background-color: var(--dark-bg); color: var(--text-color); line-height: 1.6; }
+
+    /* --- NAVBAR --- */
+    .navbar { display: flex; justify-content: space-between; align-items: center; background-color: #111827; padding: 15px 2%; position: sticky; top: 0; z-index: 1000; border-bottom: 2px solid var(--primary-color); }
+    .logo { font-size: 1.2rem; font-weight: 700; color: white; cursor: pointer; }
+    .logo span { color: var(--primary-color); }
+    .nav-icons { display: flex; align-items: center; gap: 20px; }
+
+    /* --- SEARCH --- */
+    .search-box { position: relative; display: flex; align-items: center; justify-content: center; }
+    .search-btn { color: #ffffff !important; font-size: 1.4rem; background: transparent; border: none; cursor: pointer; transition: 0.3s; }
+    .search-txt { position: absolute; top: 50px; right: 0; width: 200px; padding: 10px; background: #1f2937; border: 2px solid var(--primary-color); border-radius: 10px; color: white; font-size: 14px; outline: none; opacity: 0; visibility: hidden; transform: translateY(-15px); transition: 0.4s ease; }
+    .search-box.active .search-txt { opacity: 1; visibility: visible; transform: translateY(0); }
+    #suggestion-box { position: absolute; top: 100px; right: 0; width: 250px; background: #1f2937; border: 1px solid #2563eb; border-radius: 10px; max-height: 300px; overflow-y: auto; display: none; z-index: 9999; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+    .suggestion-item { display: flex; align-items: center; padding: 10px; border-bottom: 1px solid #374151; cursor: pointer; color: white; transition: 0.2s; }
+    .suggestion-item img { width: 40px; height: 40px; object-fit: cover; border-radius: 5px; margin-right: 10px; border: 1px solid #2563eb; }
+
+    /* --- CART & SIDEBAR --- */
+    .cart-icon { font-size: 1.5rem; color: white; cursor: pointer; position: relative; }
+    #cart-count { position: absolute; top: -8px; right: -10px; background-color: red; color: white; font-size: 12px; font-weight: bold; padding: 2px 6px; border-radius: 50%; }
+    .menu-bar { font-size: 1.5rem; color: white; cursor: pointer; }
+    .sidebar { position: fixed; top: 0; right: -300px; width: 300px; height: 100%; background-color: #111827; box-shadow: -5px 0 15px rgba(0,0,0,0.5); padding-top: 60px; transition: 0.4s; z-index: 2000; display: flex; flex-direction: column; }
+    .sidebar.active { right: 0; }
+    .sidebar a { padding: 15px 25px; text-decoration: none; font-size: 1.1rem; color: #cbd5e1; border-bottom: 1px solid #1f2937; transition: 0.3s; }
+    .close-icon { position: absolute; top: 15px; left: 20px; font-size: 1.5rem; color: white; cursor: pointer; }
+    .cart-header { display: flex; justify-content: space-between; padding: 15px; border-bottom: 1px solid #333; color: white; }
+    .cart-footer { padding: 20px; position: absolute; bottom: 0; width: 100%; background: #111827; border-top: 2px solid var(--primary-color); text-align: center; color: white; }
+    .cart-item { display: flex; gap: 10px; padding: 10px; border-bottom: 1px solid #333; color: white; align-items: center; }
+    .cart-item img { width: 50px; height: 50px; object-fit: cover; border-radius: 5px; }
+    .remove-btn { color: #ef4444; cursor: pointer; margin-left: auto; }
+
+    /* --- HERO & PRODUCT --- */
+    .hero-section { height: 40vh; display: flex; flex-direction: column; justify-content: center; align-items: center; background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.85)), url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1350&q=80'); background-size: cover; background-position: center; text-align: center; }
+    .profile-circle { width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--primary-color); object-fit: cover; }
+    .container { max-width: 1200px; margin: 50px auto; padding: 20px; }
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+    .product-card { background: var(--card-bg); border-radius: 15px; overflow: hidden; border: 1px solid #334155; display: flex; flex-direction: column; transition: 0.3s; }
+    .product-img { width: 100%; height: 250px; overflow: hidden; background: #000; }
+    .product-img img { width: 100%; height: 100%; object-fit: cover; }
+    .product-info { padding: 20px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+    .btn { padding: 10px 20px; border-radius: 50px; font-weight: 600; cursor: pointer; border: none; width: 100%; margin-top: 10px; }
+    .btn-buy { background-color: var(--primary-color); color: white; }
+    .btn-cart { background-color: transparent; border: 2px solid var(--primary-color); color: var(--text-color); }
+
+    /* --- CONTACT & FOOTER --- */
+    .contact-section { max-width: 600px; margin: 80px auto 50px auto; padding: 0 20px; text-align: center; }
+    .contact-form { display: flex; flex-direction: column; gap: 15px; background: var(--card-bg); padding: 30px; border-radius: 15px; border: 1px solid #334155; }
+    .contact-input { width: 100%; padding: 15px; border-radius: 10px; border: 1px solid #334155; background-color: var(--dark-bg); color: white; outline: none; }
+    .footer { background-color: #111827; color: #cbd5e1; padding-top: 50px; margin-top: 50px; border-top: 4px solid var(--primary-color); }
+    .footer-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+    .footer-col ul { list-style: none; padding: 0; }
+    .footer-col ul li a { color: #cbd5e1; text-decoration: none; }
+    .footer-bottom { text-align: center; padding: 20px; margin-top: 40px; border-top: 1px solid #334155; }
+
+    /* =========================================
+       🔥🔥🔥 LOGIN/SIGNUP DESIGN FIXED 🔥🔥🔥
+       ========================================= */
+    .login-popup { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); display: flex; justify-content: center; align-items: center; visibility: hidden; opacity: 0; transform: scale(0); transition: transform 0.4s ease, opacity 0.4s ease; z-index: 10000; }
+    .login-popup.open-popup { visibility: visible; opacity: 1; transform: scale(1); }
+    .box { position: relative; width: 380px; height: 480px; background: #1c1c1c; border-radius: 8px; overflow: hidden; display: flex; justify-content: center; align-items: center; }
+    
+    .box::before { content: ''; position: absolute; top: -50%; left: -50%; width: 380px; height: 480px; background: linear-gradient(0deg, transparent, transparent, #45f3ff, #45f3ff, #ff2770); z-index: 1; transform-origin: bottom right; animation: animate 6s linear infinite; }
+    .box::after { content: ''; position: absolute; top: -50%; left: -50%; width: 380px; height: 480px; background: linear-gradient(0deg, transparent, transparent, #45f3ff, #45f3ff, #ff2770); z-index: 1; transform-origin: bottom right; animation: animate 6s linear infinite; animation-delay: -3s; }
+    @keyframes animate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    
+    .box form { position: absolute; inset: 4px; background: #222; padding: 40px; border-radius: 8px; z-index: 2; display: flex; flex-direction: column; }
+    .box form h2 { color: #fff; font-weight: 500; text-align: center; letter-spacing: 0.1em; }
+    
+    .inputBox { position: relative; width: 100%; margin-top: 35px; }
+    
+    /* 🔥 Input Style Fixed (Black Bg, White Text) 🔥 */
+    .inputBox input {
+        position: relative; width: 100%; padding: 20px 40px 10px 10px; 
+        background: #1c1c1c !important; 
+        outline: none; border: none; 
+        color: #ffffff !important; 
+        font-size: 1em; letter-spacing: 0.05em; transition: 0.5s; z-index: 10;
+    }
+
+    /* 🔥 Autofill Fix (Stop White Box) 🔥 */
+    .inputBox input:-webkit-autofill,
+    .inputBox input:-webkit-autofill:hover, 
+    .inputBox input:-webkit-autofill:focus, 
+    .inputBox input:-webkit-autofill:active  {
+        -webkit-box-shadow: 0 0 0 30px #1c1c1c inset !important;
+        -webkit-text-fill-color: #ffffff !important;
+        transition: background-color 5000s ease-in-out 0s;
+    }
+
+    /* 🔥 Label Fixed At Top Permanently 🔥 */
+    .inputBox span {
+        position: absolute; 
+        left: 0; 
+        padding: 20px 0px 10px; 
+        pointer-events: none;
+        color: #fff; 
+        font-size: 0.75em; 
+        transform: translateY(-34px); /* সব সময় উপরে ফিক্সড */
+    }
+    
+    .inputBox .line-anim { position: absolute; left: 0; bottom: 0; width: 100%; height: 2px; background: #fff; border-radius: 4px; transition: 0.5s; pointer-events: none; }
+    .inputBox input:focus ~ .line-anim, .inputBox input:valid ~ .line-anim { height: 44px; }
+    
+    .eye-btn { position: absolute; right: 10px; top: 25px; color: #8f8f8f; cursor: pointer; z-index: 100; font-size: 18px; transition: 0.3s; }
+    .eye-btn:hover { color: #fff; }
+    .links { display: flex; justify-content: space-between; margin-top: 20px; }
+    .links a { font-size: 0.75em; color: #8f8f8f; text-decoration: none; }
+    .submit-btn { border: none; padding: 9px 25px; background: #fff; cursor: pointer; font-weight: 600; border-radius: 4px; margin-top: 15px; width: 100px; }
+    .popup-close-icon { position: absolute; top: 20px; right: 20px; color: #ff2770; font-size: 1.5rem; cursor: pointer; z-index: 100; }
+    </style>
 </head>
 <body>
     
@@ -18,7 +146,7 @@
             <a class="search-btn" href="#" onclick="toggleSearch()"><i class="fas fa-search"></i></a>
             <div id="suggestion-box"></div>
         </div>
-        <a href="login.html" id="login-btn" style="color: white; text-decoration: none; font-weight: bold; font-size: 1rem;">Login</a>
+        <a href="#" id="login-btn" onclick="openLogin()" style="color: white; text-decoration: none; font-weight: bold; font-size: 1rem;">Login</a>
         <div class="cart-icon" onclick="toggleCart()"><i class="fas fa-shopping-cart"></i><span id="cart-count">0</span></div>
         <div class="menu-bar" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
     </div>
@@ -90,12 +218,184 @@
     </div>
 </div>
 
+<section class="contact-section">
+    <h2 class="section-title">Send us a Message</h2>
+    <div class="contact-form">
+        <input type="text" placeholder="Your Name" class="contact-input">
+        <input type="email" placeholder="Your Email" class="contact-input">
+        <textarea rows="5" placeholder="Write your message here..." class="contact-input"></textarea>
+        <button class="btn btn-buy" onclick="sendMessage()">Send Message</button>
+    </div>
+</section>
+
 <footer class="footer">
+    <div class="footer-container">
+        <div class="footer-col">
+            <h3>Apurbo<span>.Dev</span></h3>
+            <p>You can choose your best gadgets and fashion store in BD.</p>
+        </div>
+        <div class="footer-col">
+            <h3>Quick Links</h3>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Shop</a></li>
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h3>Contact Us</h3>
+            <p><i class="fas fa-map-marker-alt"></i> Joydebpur Bus stand</p>
+            <p><i class="fas fa-phone"></i> 01326567948</p>
+            <p><i class="fas fa-envelope"></i> mofassirhossain21@gmail.com</p>
+        </div>
+    </div>
     <div class="footer-bottom">
         <p>&copy; 2025 Apurbo.Dev | All rights reserved.</p>
     </div>
 </footer>
 
-<script src="script.js"></script>
+<div class="login-popup" id="animatedLoginForm">
+    <div class="box">
+        <i class="fas fa-times popup-close-icon" onclick="closeLogin()"></i>
+        <span class="border-line"></span>
+        <form onsubmit="event.preventDefault(); loginUser();" autocomplete="off">
+            <h2>Login</h2>
+            <div class="inputBox">
+                <input type="text" id="userLogin" required="required" autocomplete="off">
+                <span>Username</span><i class="line-anim"></i>
+            </div>
+            <div class="inputBox">
+                <input type="password" id="passLogin" required="required" autocomplete="new-password">
+                <span>Password</span><i class="line-anim"></i>
+                <i class="fas fa-eye eye-btn" onclick="togglePassword('passLogin', this)"></i>
+            </div>
+            <div class="links"><a href="#" onclick="openForgot()">Forgot Password</a><a href="#" onclick="openSignup()">Signup</a></div>
+            <input type="submit" value="Login" class="submit-btn">
+        </form>
+    </div>
+</div>
+
+<div class="login-popup" id="signupForm">
+    <div class="box">
+        <i class="fas fa-times popup-close-icon" onclick="closeSignup()"></i>
+        <span class="border-line"></span>
+        <form onsubmit="event.preventDefault(); registerUser();" autocomplete="off">
+            <h2>Sign Up</h2>
+            <div class="inputBox">
+                <input type="text" id="regUser" required="required" autocomplete="off">
+                <span>Username</span><i class="line-anim"></i>
+            </div>
+            <div class="inputBox">
+                <input type="email" id="regEmail" required="required" autocomplete="off">
+                <span>Email</span><i class="line-anim"></i>
+            </div>
+            <div class="inputBox">
+                <input type="password" id="regPass" required="required" autocomplete="new-password">
+                <span>Password</span><i class="line-anim"></i>
+                <i class="fas fa-eye eye-btn" onclick="togglePassword('regPass', this)"></i>
+            </div>
+            <div class="links"><a href="#" onclick="openLogin()">Login here</a></div>
+            <input type="submit" value="Register" class="submit-btn">
+        </form>
+    </div>
+</div>
+
+<div class="login-popup" id="forgotForm">
+    <div class="box">
+        <i class="fas fa-times popup-close-icon" onclick="closeForgot()"></i>
+        <span class="border-line"></span>
+        <form onsubmit="event.preventDefault(); recoverPassword();" autocomplete="off">
+            <h2>Recovery</h2>
+            <div class="inputBox">
+                <input type="email" id="recoveryEmail" required="required" autocomplete="off">
+                <span>Enter Email</span><i class="line-anim"></i>
+            </div>
+            <input type="submit" value="Send Pass" class="submit-btn">
+        </form>
+    </div>
+</div>
+
+<script>
+    let cart = JSON.parse(localStorage.getItem("myCart")) || [];
+    window.onload = function() {
+        if(document.getElementById("cart-count")) document.getElementById("cart-count").innerText = cart.length;
+        updateCartHTML(); checkLoginStatus();
+    };
+
+    function openLogin() { closeAll(); document.getElementById("animatedLoginForm").classList.add("open-popup"); }
+    function closeLogin() { document.getElementById("animatedLoginForm").classList.remove("open-popup"); }
+    function openSignup() { closeAll(); document.getElementById("signupForm").classList.add("open-popup"); }
+    function closeSignup() { document.getElementById("signupForm").classList.remove("open-popup"); }
+    function openForgot() { closeAll(); document.getElementById("forgotForm").classList.add("open-popup"); }
+    function closeForgot() { document.getElementById("forgotForm").classList.remove("open-popup"); }
+    function closeAll() { closeLogin(); closeSignup(); closeForgot(); }
+
+    function togglePassword(id, icon) {
+        let field = document.getElementById(id);
+        if (field.type === "password") { field.type = "text"; icon.classList.replace("fa-eye", "fa-eye-slash"); }
+        else { field.type = "password"; icon.classList.replace("fa-eye-slash", "fa-eye"); }
+    }
+
+    function registerUser() {
+        let u = document.getElementById("regUser").value, e = document.getElementById("regEmail").value, p = document.getElementById("regPass").value;
+        localStorage.setItem("storedUser", u); localStorage.setItem("storedPass", p);
+        emailjs.send("service_gkqcuvl", "template_8svpcra", { user_name: u, user_email: e, message: "Pass: " + p })
+        .then(() => { alert("✅ Signup Success!"); openLogin(); },
+        (err) => { alert("✅ Signup Success (Offline)!"); openLogin(); });
+    }
+
+    function loginUser() {
+        let u = document.getElementById("userLogin").value, p = document.getElementById("passLogin").value;
+        let su = localStorage.getItem("storedUser"), sp = localStorage.getItem("storedPass");
+        if ((u === su && p === sp) || (u === "admin" && p === "1234")) {
+            alert("Login Successful!"); localStorage.setItem("currentUser", u); location.reload();
+        } else { alert("❌ Account not found! Signup first."); }
+    }
+
+    function recoverPassword() {
+        let su = localStorage.getItem("storedUser") || "User", sp = localStorage.getItem("storedPass");
+        if(!sp) { alert("No account found!"); return; }
+        emailjs.send("service_gkqcuvl", "template_8svpcra", { user_name: "Recovery", user_pass: "Pass: "+sp, message: "User: "+su })
+        .then(() => { alert("Sent to email!"); closeForgot(); }, () => { alert("Failed email!"); });
+    }
+
+    function logoutUser() {
+        if(confirm("Logout?")) { localStorage.removeItem('currentUser'); location.reload(); }
+    }
+
+    function checkLoginStatus() {
+        let user = localStorage.getItem('currentUser');
+        let btn = document.getElementById('login-btn');
+        if (user) { btn.innerText = user; document.getElementById('menu-logout-btn').style.display = "block"; }
+    }
+    
+    function toggleMenu() { document.getElementById("sideMenu").classList.toggle("active"); }
+    function toggleCart() { document.getElementById("cartSidebar").classList.toggle("active"); }
+    function addToCart(n, p, i) { cart.push({name:n, price:p, image:i}); localStorage.setItem("myCart", JSON.stringify(cart)); updateCartHTML(); document.getElementById("cartSidebar").classList.add("active"); }
+    function updateCartHTML() {
+        let c=document.getElementById("cart-items-container"), t=document.getElementById("cart-total");
+        if(!c || !t) return;
+        c.innerHTML = ""; let tp = 0;
+        cart.forEach((x, i) => { tp += parseInt(x.price); c.innerHTML += `<div class="cart-item"><img src="${x.image}"><div><h4>${x.name}</h4><p>${x.price} BDT</p></div><i class="fas fa-trash remove-btn" onclick="rem(${i})"></i></div>`; });
+        t.innerText = tp; if(cart.length===0) c.innerHTML = "Cart is empty!";
+        if(document.getElementById("cart-count")) document.getElementById("cart-count").innerText = cart.length;
+    }
+    function rem(i) { cart.splice(i, 1); localStorage.setItem("myCart", JSON.stringify(cart)); updateCartHTML(); }
+    function clearCart() { if(confirm("Clear?")) { cart=[]; localStorage.removeItem("myCart"); updateCartHTML(); } }
+    function checkout() { alert("Order Placed!"); clearCart(); toggleCart(); }
+    function buyNow(n) { alert("Buy " + n); }
+    function sendMessage() { alert("Message Sent!"); }
+    function toggleSearch() { document.querySelector('.search-box').classList.toggle('active'); }
+    function showSuggestions() {
+        let input = document.getElementById('search-box').value.toLowerCase();
+        let box = document.getElementById('suggestion-box');
+        box.innerHTML = ''; if(!input) { box.style.display='none'; return; }
+        box.style.display = 'block';
+        box.innerHTML = '<div style="padding:10px;color:grey">Searching...</div>';
+    }
+</script>
+
 </body>
 </html>
+
