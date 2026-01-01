@@ -10,114 +10,205 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
        (function(){
-          emailjs.init("TEriOjdktc7saIdsm"); // তোমার পাবলিক কী
+          emailjs.init("TEriOjdktc7saIdsm"); 
        })();
     </script>
 
     <style>
-    /* --- বেসিক সেটআপ --- */
+    /* --- ১. কালার ভেরিয়েবল --- */
     :root {
         --primary-color: #2563eb;
-        --dark-bg: #0f172a;
-        --card-bg: #1e293b;
-        --text-color: #f8fafc;
+        --dark-bg: #0f172a;       
+        --card-bg: #1e293b;       
+        --text-color: #f8fafc;    
         --accent-color: #38bdf8;
+        --border-color: #334155;
+        --love-color: #e11d48;
+    }
+
+    .light-mode {
+        --dark-bg: #ffffff;       
+        --card-bg: #f1f5f9;       
+        --text-color: #1e293b;    
+        --accent-color: #0284c7;  
+        --border-color: #e2e8f0;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-    body { background-color: var(--dark-bg); color: var(--text-color); line-height: 1.6; }
+    body { background-color: var(--dark-bg); color: var(--text-color); line-height: 1.6; transition: background-color 0.3s, color 0.3s; }
 
     /* --- NAVBAR --- */
-    .navbar { display: flex; justify-content: space-between; align-items: center; background-color: #111827; padding: 15px 2%; position: sticky; top: 0; z-index: 1000; border-bottom: 2px solid var(--primary-color); }
-    .logo { font-size: 1.2rem; font-weight: 700; color: white; cursor: pointer; }
+    .navbar { display: flex; justify-content: space-between; align-items: center; background-color: var(--card-bg); padding: 15px 2%; position: sticky; top: 0; z-index: 1000; border-bottom: 2px solid var(--primary-color); transition: background-color 0.3s; }
+    .logo { font-size: 1.2rem; font-weight: 700; color: var(--text-color); cursor: pointer; }
     .logo span { color: var(--primary-color); }
     .nav-icons { display: flex; align-items: center; gap: 20px; }
+    .theme-btn { cursor: pointer; font-size: 1.2rem; color: var(--text-color); transition: 0.3s; }
+    .theme-btn:hover { color: var(--primary-color); transform: rotate(180deg); }
 
     /* --- SEARCH --- */
     .search-box { position: relative; display: flex; align-items: center; justify-content: center; }
-    .search-btn { color: #ffffff !important; font-size: 1.4rem; background: transparent; border: none; cursor: pointer; transition: 0.3s; }
-    .search-txt { position: absolute; top: 50px; right: -110px; width: 200px; padding: 10px; background: #1f2937; border: 2px solid var(--primary-color); border-radius: 10px; color: white; font-size: 14px; outline: none; opacity: 0; visibility: hidden; transform: translateY(-15px); transition: 0.4s ease; }
+    .search-btn { color: var(--text-color) !important; font-size: 1.4rem; background: transparent; border: none; cursor: pointer; transition: 0.3s; }
+    .search-txt { position: absolute; top: 50px; right: -10px; width: 200px; padding: 10px; background: var(--card-bg); border: 2px solid var(--primary-color); border-radius: 10px; color: var(--text-color); font-size: 14px; outline: none; opacity: 0; visibility: hidden; transform: translateY(-15px); transition: 0.4s ease; }
     .search-box.active .search-txt { opacity: 1; visibility: visible; transform: translateY(0); }
-    
-    /* সাজেশন বক্স ডিজাইন */
-    #suggestion-box { 
-        position: absolute; 
-        top: 100px; 
-        right: -150px; 
-        width: 250px; 
-        background: #1f2937; 
-        border: 1px solid #2563eb; 
-        border-radius: 10px; 
-        max-height: 300px; 
-        overflow-y: auto; 
-        display: none; 
-        z-index: 9999; 
-        box-shadow: 0 10px 20px rgba(0,0,0,0.5); 
-    }
-    .suggestion-item { display: flex; align-items: center; padding: 10px; border-bottom: 1px solid #374151; cursor: pointer; color: white; transition: 0.2s; }
-    .suggestion-item:hover { background: #374151; }
-    .suggestion-item img { width: 40px; height: 40px; object-fit: cover; border-radius: 5px; margin-right: 10px; border: 1px solid #2563eb; }
+    #suggestion-box { position: absolute; top: 100px; right: -10px; width: 250px; background: var(--card-bg); border: 1px solid var(--primary-color); border-radius: 10px; max-height: 300px; overflow-y: auto; display: none; z-index: 9999; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+    .suggestion-item { display: flex; align-items: center; padding: 10px; border-bottom: 1px solid var(--border-color); cursor: pointer; color: var(--text-color); transition: 0.2s; }
+    .suggestion-item:hover { background: rgba(37, 99, 235, 0.1); }
+    .suggestion-item img { width: 40px; height: 40px; object-fit: cover; border-radius: 5px; margin-right: 10px; border: 1px solid var(--primary-color); }
 
-    /* --- CART & SIDEBAR --- */
-    .cart-icon { font-size: 1.5rem; color: white; cursor: pointer; position: relative; }
-    #cart-count { position: absolute; top: -8px; right: -10px; background-color: red; color: white; font-size: 12px; font-weight: bold; padding: 2px 6px; border-radius: 50%; }
-    .menu-bar { font-size: 1.5rem; color: white; cursor: pointer; }
-    .sidebar { position: fixed; top: 0; right: -300px; width: 300px; height: 100%; background-color: #111827; box-shadow: -5px 0 15px rgba(0,0,0,0.5); padding-top: 60px; transition: 0.4s; z-index: 2000; display: flex; flex-direction: column; }
+    /* --- ICONS --- */
+    .icon-wrapper { position: relative; cursor: pointer; font-size: 1.5rem; color: var(--text-color); transition: 0.3s; }
+    .icon-wrapper:hover { transform: scale(1.1); color: var(--primary-color); }
+    .badge { position: absolute; top: -8px; right: -10px; background-color: red; color: white; font-size: 12px; font-weight: bold; padding: 2px 6px; border-radius: 50%; }
+    .menu-bar { font-size: 1.5rem; color: var(--text-color); cursor: pointer; }
+    
+    /* --- SIDEBAR --- */
+    .sidebar { position: fixed; top: 0; right: -320px; width: 320px; height: 100%; background-color: var(--card-bg); box-shadow: -5px 0 15px rgba(0,0,0,0.5); padding-top: 60px; transition: 0.4s; z-index: 2000; display: flex; flex-direction: column; }
     .sidebar.active { right: 0; }
-    .sidebar a { padding: 15px 25px; text-decoration: none; font-size: 1.1rem; color: #cbd5e1; border-bottom: 1px solid #1f2937; transition: 0.3s; }
-    .close-icon { position: absolute; top: 15px; left: 20px; font-size: 1.5rem; color: white; cursor: pointer; }
-    .cart-header { display: flex; justify-content: space-between; padding: 15px; border-bottom: 1px solid #333; color: white; }
-    .cart-footer { padding: 20px; position: absolute; bottom: 0; width: 100%; background: #111827; border-top: 2px solid var(--primary-color); text-align: center; color: white; }
-    .cart-item { display: flex; gap: 10px; padding: 10px; border-bottom: 1px solid #333; color: white; align-items: center; }
+    .sidebar a { padding: 15px 25px; text-decoration: none; font-size: 1.1rem; color: var(--text-color); border-bottom: 1px solid var(--border-color); transition: 0.3s; }
+    .sidebar a:hover { color: var(--primary-color); padding-left: 35px; }
+    .close-icon { position: absolute; top: 15px; left: 20px; font-size: 1.5rem; color: var(--text-color); cursor: pointer; }
+    .sidebar-header { display: flex; justify-content: space-between; padding: 15px; border-bottom: 1px solid var(--border-color); color: var(--text-color); align-items: center; padding-right: 20px;}
+    .sidebar-footer { padding: 20px; position: absolute; bottom: 0; width: 100%; background: var(--card-bg); border-top: 2px solid var(--primary-color); text-align: center; color: var(--text-color); }
+    .cart-item { display: flex; gap: 10px; padding: 10px; border-bottom: 1px solid var(--border-color); color: var(--text-color); align-items: center; }
     .cart-item img { width: 50px; height: 50px; object-fit: cover; border-radius: 5px; }
-    .remove-btn { color: #ef4444; cursor: pointer; margin-left: auto; }
+    .remove-btn { color: #ef4444; cursor: pointer; margin-left: auto; font-size: 1.1rem; padding: 5px; }
+    .move-btn { color: var(--primary-color); cursor: pointer; margin-right: 10px; font-size: 1.1rem; padding: 5px;}
 
     /* --- HERO & PRODUCT --- */
-    .hero-section { height: 40vh; display: flex; flex-direction: column; justify-content: center; align-items: center; background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.85)), url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1350&q=80'); background-size: cover; background-position: center; text-align: center; }
+    .hero-section { height: 40vh; display: flex; flex-direction: column; justify-content: center; align-items: center; background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.85)), url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1350&q=80'); background-size: cover; background-position: center; text-align: center; color: white; }
     .profile-circle { width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--primary-color); object-fit: cover; }
     .container { max-width: 1200px; margin: 50px auto; padding: 20px; }
     .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
-    .product-card { background: var(--card-bg); border-radius: 15px; overflow: hidden; border: 1px solid #334155; display: flex; flex-direction: column; transition: 0.3s; }
-    .product-img { width: 100%; height: 250px; overflow: hidden; background: #000; }
-    .product-img img { width: 100%; height: 100%; object-fit: cover; }
+    
+    .product-card { background: var(--card-bg); border-radius: 15px; overflow: hidden; border: 1px solid var(--border-color); display: flex; flex-direction: column; transition: 0.3s; position: relative; }
+    .product-card:hover { transform: translateY(-10px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+    
+    /* Product Image Clickable */
+    .product-img { width: 100%; height: 250px; overflow: hidden; background: #000; position: relative; cursor: pointer; }
+    .product-img img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
+    .product-img:hover img { transform: scale(1.1); }
+
+    /* ❤️ Wishlist Button (Toggle Effect) ❤️ */
+    .wish-btn-overlay { 
+        position: absolute; top: 10px; right: 10px; 
+        background: rgba(255, 255, 255, 0.8); 
+        width: 35px; height: 35px; border-radius: 50%; 
+        display: flex; justify-content: center; align-items: center; 
+        cursor: pointer; color: #ccc; transition: 0.3s; 
+        box-shadow: 0 2px 5px rgba(0,0,0,0.3); z-index: 10; 
+    }
+        /* --- PRODUCT BADGE (NEW/SALE) --- */
+    .product-badge {
+        position: absolute;
+        top: 10px;
+        left: 10px; /* বাম কোণায় থাকবে */
+        padding: 5px 10px;
+        font-size: 12px;
+        font-weight: bold;
+        color: white;
+        border-radius: 4px;
+        z-index: 10;
+        text-transform: uppercase;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    }
+    .badge-new { background-color: #10b981; } /* সবুজ রঙ */
+    .badge-sale { background-color: #ef4444; } /* লাল রঙ */
+
+    /* --- COUPON INPUT STYLE --- */
+    .coupon-box {
+        display: flex;
+        gap: 5px;
+        margin-bottom: 15px;
+    }
+    .coupon-input {
+        width: 70%;
+        padding: 8px;
+        border: 1px solid var(--border-color);
+        border-radius: 5px;
+        background: var(--dark-bg);
+        color: var(--text-color);
+        outline: none;
+    }
+    .coupon-btn {
+        width: 30%;
+        background: var(--accent-color);
+        border: none;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .wish-btn-overlay:hover { transform: scale(1.1); }
+    .wish-btn-overlay.active { color: var(--love-color); background: white; box-shadow: 0 0 10px var(--love-color); }
+
     .product-info { padding: 20px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+    .product-name { color: var(--text-color); font-weight: 600; margin-bottom: 10px; cursor: pointer; }
+    .product-name:hover { color: var(--primary-color); }
+    .price { color: var(--accent-color); font-size: 1.4rem; font-weight: 700; margin-bottom: 15px; }
+
     .btn { padding: 10px 20px; border-radius: 50px; font-weight: 600; cursor: pointer; border: none; width: 100%; margin-top: 10px; }
     .btn-buy { background-color: var(--primary-color); color: white; }
     .btn-cart { background-color: transparent; border: 2px solid var(--primary-color); color: var(--text-color); }
+    .btn-cart:hover { background-color: var(--primary-color); color: white; }
 
-    /* --- CONTACT & FOOTER --- */
+    /* ========================================= */
+    /* --- ✨ PRODUCT DETAILS MODAL (POPUP) --- */
+    /* ========================================= */
+    .modal-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background-color: rgba(0,0,0,0.85); z-index: 9999;
+        display: none; /* Initially hidden */
+        justify-content: center; align-items: center;
+        opacity: 0; transition: opacity 0.3s ease;
+    }
+    .modal-overlay.open { display: flex; opacity: 1; }
+
+    .modal-box {
+        background: var(--card-bg); width: 90%; max-width: 900px;
+        border-radius: 15px; padding: 20px; position: relative;
+        display: flex; gap: 30px; flex-wrap: wrap;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        transform: scale(0.8); transition: transform 0.3s ease;
+        max-height: 90vh; overflow-y: auto;
+    }
+    .modal-overlay.open .modal-box { transform: scale(1); }
+
+    .modal-close-btn {
+        position: absolute; top: 15px; right: 20px;
+        font-size: 1.5rem; color: var(--text-color);
+        cursor: pointer; z-index: 100; transition: 0.3s;
+    }
+    .modal-close-btn:hover { color: #ef4444; transform: rotate(90deg); }
+
+    .modal-img-wrapper { flex: 1; min-width: 300px; }
+    .modal-img-wrapper img { width: 100%; border-radius: 10px; border: 2px solid var(--primary-color); }
+
+    .modal-info-wrapper { flex: 1; min-width: 300px; display: flex; flex-direction: column; justify-content: center; }
+    .modal-title { font-size: 2rem; color: var(--primary-color); margin-bottom: 10px; }
+    .modal-price { font-size: 1.8rem; color: #10b981; font-weight: bold; margin-bottom: 20px; }
+    .modal-desc { color: var(--text-color); opacity: 0.9; margin-bottom: 30px; line-height: 1.6; }
+
+    /* --- FOOTER & FORMS --- */
     .contact-section { max-width: 600px; margin: 80px auto 50px auto; padding: 0 20px; text-align: center; }
-    .contact-form { display: flex; flex-direction: column; gap: 15px; background: var(--card-bg); padding: 30px; border-radius: 15px; border: 1px solid #334155; }
-    .contact-input { width: 100%; padding: 15px; border-radius: 10px; border: 1px solid #334155; background-color: var(--dark-bg); color: white; outline: none; }
-    .footer { background-color: #111827; color: #cbd5e1; padding-top: 50px; margin-top: 50px; border-top: 4px solid var(--primary-color); }
+    .contact-form { display: flex; flex-direction: column; gap: 15px; background: var(--card-bg); padding: 30px; border-radius: 15px; border: 1px solid var(--border-color); }
+    .contact-input { width: 100%; padding: 15px; border-radius: 10px; border: 1px solid var(--border-color); background-color: var(--dark-bg); color: var(--text-color); outline: none; }
+    .footer { background-color: var(--card-bg); color: var(--text-color); padding-top: 50px; margin-top: 50px; border-top: 4px solid var(--primary-color); }
     .footer-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
     .footer-col ul { list-style: none; padding: 0; }
-    .footer-col ul li a { color: #cbd5e1; text-decoration: none; }
-    .footer-bottom { text-align: center; padding: 20px; margin-top: 40px; border-top: 1px solid #334155; }
+    .footer-col ul li a { color: var(--text-color); text-decoration: none; opacity: 0.8; }
+    .footer-bottom { text-align: center; padding: 20px; margin-top: 40px; border-top: 1px solid var(--border-color); }
 
-    /* =========================================
-       🔥🔥🔥 LOGIN/SIGNUP DESIGN FIXED 🔥🔥🔥
-       ========================================= */
+    /* --- LOGIN POPUP --- */
     .login-popup { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); display: flex; justify-content: center; align-items: center; visibility: hidden; opacity: 0; transform: scale(0); transition: transform 0.4s ease, opacity 0.4s ease; z-index: 10000; }
     .login-popup.open-popup { visibility: visible; opacity: 1; transform: scale(1); }
     .box { position: relative; width: 380px; height: 480px; background: #1c1c1c; border-radius: 8px; overflow: hidden; display: flex; justify-content: center; align-items: center; }
-    
-    .box::before { content: ''; position: absolute; top: -50%; left: -50%; width: 380px; height: 480px; background: linear-gradient(0deg, transparent, transparent, #45f3ff, #45f3ff, #ff2770); z-index: 1; transform-origin: bottom right; animation: animate 6s linear infinite; }
-    .box::after { content: ''; position: absolute; top: -50%; left: -50%; width: 380px; height: 480px; background: linear-gradient(0deg, transparent, transparent, #45f3ff, #45f3ff, #ff2770); z-index: 1; transform-origin: bottom right; animation: animate 6s linear infinite; animation-delay: -3s; }
-    @keyframes animate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    
     .box form { position: absolute; inset: 4px; background: #222; padding: 40px; border-radius: 8px; z-index: 2; display: flex; flex-direction: column; }
     .box form h2 { color: #fff; font-weight: 500; text-align: center; letter-spacing: 0.1em; }
-    
     .inputBox { position: relative; width: 100%; margin-top: 35px; }
     .inputBox input { position: relative; width: 100%; padding: 20px 40px 10px 10px; background: #1c1c1c !important; outline: none; border: none; color: #ffffff !important; font-size: 1em; letter-spacing: 0.05em; transition: 0.5s; z-index: 10; }
-    .inputBox input:-webkit-autofill, .inputBox input:-webkit-autofill:hover, .inputBox input:-webkit-autofill:focus, .inputBox input:-webkit-autofill:active  { -webkit-box-shadow: 0 0 0 30px #1c1c1c inset !important; -webkit-text-fill-color: #ffffff !important; transition: background-color 5000s ease-in-out 0s; }
     .inputBox span { position: absolute; left: 0; padding: 20px 0px 10px; pointer-events: none; color: #fff; font-size: 0.75em; transform: translateY(-34px); }
-    .inputBox .line-anim { position: absolute; left: 0; bottom: 0; width: 100%; height: 2px; background: #fff; border-radius: 4px; transition: 0.5s; pointer-events: none; }
-    .inputBox input:focus ~ .line-anim, .inputBox input:valid ~ .line-anim { height: 44px; }
-    
-    .eye-btn { position: absolute; right: 10px; top: 25px; color: #8f8f8f; cursor: pointer; z-index: 100; font-size: 18px; transition: 0.3s; }
-    .eye-btn:hover { color: #fff; }
     .links { display: flex; justify-content: space-between; margin-top: 20px; }
     .links a { font-size: 0.75em; color: #8f8f8f; text-decoration: none; }
     .submit-btn { border: none; padding: 9px 25px; background: #fff; cursor: pointer; font-weight: 600; border-radius: 4px; margin-top: 15px; width: 100px; }
@@ -129,13 +220,26 @@
 <nav class="navbar">
     <div class="logo">APURBO<span>.DEV</span></div>
     <div class="nav-icons">
+        <i class="fas fa-sun theme-btn" id="theme-icon" onclick="toggleTheme()" title="Switch Theme"></i>
+
         <div class="search-box">
             <input class="search-txt" type="text" id="search-box" placeholder="Search..." onkeyup="showSuggestions()">
             <a class="search-btn" href="#" onclick="toggleSearch()"><i class="fas fa-search"></i></a>
             <div id="suggestion-box"></div>
         </div>
-        <a href="#" id="login-btn" onclick="openLogin()" style="color: white; text-decoration: none; font-weight: bold; font-size: 1rem;">Login</a>
-        <div class="cart-icon" onclick="toggleCart()"><i class="fas fa-shopping-cart"></i><span id="cart-count">0</span></div>
+        
+        <a href="#" id="login-btn" onclick="openLogin()" style="color: var(--text-color); text-decoration: none; font-weight: bold; font-size: 1rem;">Login</a>
+        
+        <div class="icon-wrapper" onclick="toggleWishlist()" title="Wishlist">
+            <i class="fas fa-heart"></i>
+            <span id="wishlist-count" class="badge">0</span>
+        </div>
+
+        <div class="icon-wrapper" onclick="toggleCart()" title="Cart">
+            <i class="fas fa-shopping-cart"></i>
+            <span id="cart-count" class="badge">0</span>
+        </div>
+        
         <div class="menu-bar" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
     </div>
 </nav>
@@ -146,19 +250,42 @@
     <a href="#" onclick="toggleMenu()">Shop</a>
     <a href="#" onclick="toggleMenu()">Profile</a>
     <a href="#" onclick="toggleMenu()">Contact Us</a>
-    <a href="#" id="menu-logout-btn" onclick="logoutUser()" style="display: none; color: #ff4757; margin-top: auto; padding-top: 20px; border-top: 1px solid #333;">
+    <a href="#" id="menu-logout-btn" onclick="logoutUser()" style="display: none; color: #ff4757; margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border-color);">
         <i class="fas fa-sign-out-alt"></i> Log Out
     </a>
 </div>
 
 <div class="sidebar" id="cartSidebar">
-    <div class="cart-header"><h3>My Cart</h3><i class="fas fa-times close-icon" onclick="toggleCart()"></i></div>
+    <div class="sidebar-header"><h3>My Cart</h3><i class="fas fa-times close-icon" onclick="toggleCart()"></i></div>
     <div id="cart-items-container" style="padding: 20px; color: grey;">Cart is empty!</div>
-    <div class="cart-footer">
-        <h4>Total: <span id="cart-total">0</span> BDT</h4>
+    
+    <div class="sidebar-footer">
+        <div class="coupon-box">
+            <input type="text" id="coupon-code" placeholder="Code: SAVE20" class="coupon-input">
+            <button onclick="applyCoupon()" class="coupon-btn">Apply</button>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+            <span>Subtotal:</span>
+            <span><span id="cart-subtotal">0</span> BDT</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 15px; color: #10b981;">
+            <span>Discount:</span>
+            <span>- <span id="cart-discount">0</span> BDT</span>
+        </div>
+        <h4 style="border-top: 1px solid var(--border-color); padding-top: 10px; display: flex; justify-content: space-between;">
+            Total: <span><span id="cart-total">0</span> BDT</span>
+        </h4>
+
         <button class="btn" style="background: #ef4444; color: white; margin-bottom: 10px; width: 100%; border: none;" onclick="clearCart()"><i class="fas fa-trash-alt"></i> Clear Cart</button>
         <button class="btn btn-buy" style="width: 100%;" onclick="checkout()">Checkout Now</button>
     </div>
+</div> 
+
+
+
+<div class="sidebar" id="wishlistSidebar">
+    <div class="sidebar-header"><h3>My Wishlist ❤️</h3><i class="fas fa-times close-icon" onclick="toggleWishlist()"></i></div>
+    <div id="wishlist-items-container" style="padding: 20px; color: grey;">No saved items!</div>
 </div>
 
 <section class="hero-section">
@@ -168,12 +295,21 @@
 </section>
 
 <div class="container">
-    <h2 class="section-title">Latest Gadgets & Items</h2>
+    <h2 class="section-title" style="color: var(--text-color);">Latest Gadgets & Items</h2>
     <div class="product-grid">
+        
         <div class="product-card">
-            <div class="product-img"><img src="https://i.ibb.co.com/HL39hg93/K65-PLUS-WIRELESS-14-width-1000-bgcolor-000-format-webp.webp" alt="Keyboard"></div>
+            <div class="product-img" onclick="openDetails('K65 PLUS Wireless Keyboard', 4500, 'https://i.ibb.co.com/HL39hg93/K65-PLUS-WIRELESS-14-width-1000-bgcolor-000-format-webp.webp', 'This is the best 75% wireless keyboard for developers. It features hot-swappable switches, sound dampening foam, and a long-lasting battery.')">
+                <img src="https://i.ibb.co.com/HL39hg93/K65-PLUS-WIRELESS-14-width-1000-bgcolor-000-format-webp.webp" alt="Keyboard">
+                
+                <div class="wish-btn-overlay" 
+                     data-name="K65 Keyboard"
+                     onclick="event.stopPropagation(); toggleHeart('K65 Keyboard', 4500, 'https://i.ibb.co.com/HL39hg93/K65-PLUS-WIRELESS-14-width-1000-bgcolor-000-format-webp.webp', this)">
+                    <i class="fas fa-heart"></i>
+                </div>
+            </div>
             <div class="product-info">
-                <h3 class="product-name">K65 PLUS Wireless Keyboard</h3>
+                <h3 class="product-name" onclick="openDetails('K65 PLUS Wireless Keyboard', 4500, 'https://i.ibb.co.com/HL39hg93/K65-PLUS-WIRELESS-14-width-1000-bgcolor-000-format-webp.webp', 'This is the best 75% wireless keyboard for developers. It features hot-swappable switches, sound dampening foam, and a long-lasting battery.')">K65 PLUS Wireless Keyboard</h3>
                 <p class="price">৳ 4,500</p>
                 <div class="btn-container">
                     <button class="btn btn-buy" onclick="buyNow('K65 Keyboard')">Buy Now</button>
@@ -181,10 +317,21 @@
                 </div>
             </div>
         </div>
+
         <div class="product-card">
-            <div class="product-img"><img src="https://i.ibb.co.com/jkxLG2Nq/3c.jpg" alt="Suit"></div>
+            <div class="product-img" onclick="openDetails('Premium Slim Fit Suit', 3200, 'https://i.ibb.co.com/jkxLG2Nq/3c.jpg', 'High-quality fabric slim fit suit perfect for formal interviews and office wear. Stylish, comfortable, and durable material.')">
+                <span class="product-badge badge-new">New</span>
+
+                <img src="https://i.ibb.co.com/jkxLG2Nq/3c.jpg" alt="Suit">
+                
+                <div class="wish-btn-overlay" 
+                     data-name="Premium Suit"
+                     onclick="event.stopPropagation(); toggleHeart('Premium Suit', 3200, 'https://i.ibb.co.com/jkxLG2Nq/3c.jpg', this)">
+                    <i class="fas fa-heart"></i>
+                </div>
+            </div>
             <div class="product-info">
-                <h3 class="product-name">Premium Slim Fit Suit</h3>
+                <h3 class="product-name" onclick="openDetails('Premium Slim Fit Suit', 3200, 'https://i.ibb.co.com/jkxLG2Nq/3c.jpg', 'High-quality fabric slim fit suit perfect for formal interviews and office wear. Stylish, comfortable, and durable material.')">Premium Slim Fit Suit</h3>
                 <p class="price">৳ 3,200</p>
                 <div class="btn-container">
                     <button class="btn btn-buy" onclick="buyNow('Premium Suit')">Buy Now</button>
@@ -192,10 +339,21 @@
                 </div>
             </div>
         </div>
+
         <div class="product-card">
-            <div class="product-img"><img src="https://i.ibb.co/xR3SP9K/s-l1200.jpg" alt="Mouse"></div>
+            <div class="product-img" onclick="openDetails('Wireless Gaming Mouse', 1800, 'https://i.ibb.co/xR3SP9K/s-l1200.jpg', 'Ultra-fast response time, RGB lighting, and ergonomic design for long gaming sessions. Adjustable DPI and programmable buttons.')">
+               <span class="product-badge badge-sale">-20% OFF</span>
+
+                <img src="https://i.ibb.co/xR3SP9K/s-l1200.jpg" alt="Mouse">
+                
+                <div class="wish-btn-overlay" 
+                     data-name="Gaming Mouse"
+                     onclick="event.stopPropagation(); toggleHeart('Gaming Mouse', 1800, 'https://i.ibb.co/xR3SP9K/s-l1200.jpg', this)">
+                    <i class="fas fa-heart"></i>
+                </div>
+            </div>
             <div class="product-info">
-                <h3 class="product-name">Wireless Gaming Mouse</h3>
+                <h3 class="product-name" onclick="openDetails('Wireless Gaming Mouse', 1800, 'https://i.ibb.co/xR3SP9K/s-l1200.jpg', 'Ultra-fast response time, RGB lighting, and ergonomic design for long gaming sessions. Adjustable DPI and programmable buttons.')">Wireless Gaming Mouse</h3>
                 <p class="price">৳ 1,800</p>
                 <div class="btn-container">
                     <button class="btn btn-buy" onclick="buyNow('Gaming Mouse')">Buy Now</button>
@@ -207,7 +365,7 @@
 </div>
 
 <section class="contact-section">
-    <h2 class="section-title">Send us a Message</h2>
+    <h2 class="section-title" style="color: var(--text-color);">Send us a Message</h2>
     <div class="contact-form">
         <input type="text" placeholder="Your Name" class="contact-input">
         <input type="email" placeholder="Your Email" class="contact-input">
@@ -243,142 +401,214 @@
     </div>
 </footer>
 
+<div id="product-modal-overlay" class="modal-overlay" onclick="closeDetails(event)">
+    <div class="modal-box" onclick="event.stopPropagation()">
+        <i class="fas fa-times modal-close-btn" onclick="closeDetailsBtn()"></i>
+        
+        <div class="modal-img-wrapper">
+            <img id="modal-img" src="" alt="Product Detail">
+        </div>
+        
+        <div class="modal-info-wrapper">
+            <h2 id="modal-name" class="modal-title">Product Name</h2>
+            <p id="modal-price" class="modal-price">0 BDT</p>
+            <p id="modal-desc" class="modal-desc">Description goes here...</p>
+            
+            <div style="display: flex; gap: 15px; width: 100%;">
+                <button class="btn btn-buy" onclick="alert('Proceeding to Checkout!')">Buy Now</button>
+                <button class="btn btn-cart" onclick="addToCartFromModal()">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="login-popup" id="animatedLoginForm">
     <div class="box">
         <i class="fas fa-times popup-close-icon" onclick="closeLogin()"></i>
-        <span class="border-line"></span>
         <form onsubmit="event.preventDefault(); loginUser();" autocomplete="off">
             <h2>Login</h2>
-            <div class="inputBox">
-                <input type="text" id="userLogin" required="required" autocomplete="off">
-                <span>Username</span><i class="line-anim"></i>
-            </div>
-            <div class="inputBox">
-                <input type="password" id="passLogin" required="required" autocomplete="new-password">
-                <span>Password</span><i class="line-anim"></i>
-                <i class="fas fa-eye eye-btn" onclick="togglePassword('passLogin', this)"></i>
-            </div>
+            <div class="inputBox"><input type="text" id="userLogin" required><span>Username</span></div>
+            <div class="inputBox"><input type="password" id="passLogin" required><span>Password</span></div>
             <div class="links"><a href="#" onclick="openForgot()">Forgot Password</a><a href="#" onclick="openSignup()">Signup</a></div>
             <input type="submit" value="Login" class="submit-btn">
         </form>
     </div>
 </div>
-
 <div class="login-popup" id="signupForm">
     <div class="box">
         <i class="fas fa-times popup-close-icon" onclick="closeSignup()"></i>
-        <span class="border-line"></span>
         <form onsubmit="event.preventDefault(); registerUser();" autocomplete="off">
             <h2>Sign Up</h2>
-            <div class="inputBox">
-                <input type="text" id="regUser" required="required" autocomplete="off">
-                <span>Username</span><i class="line-anim"></i>
-            </div>
-            <div class="inputBox">
-                <input type="email" id="regEmail" required="required" autocomplete="off">
-                <span>Email</span><i class="line-anim"></i>
-            </div>
-            <div class="inputBox">
-                <input type="password" id="regPass" required="required" autocomplete="new-password">
-                <span>Password</span><i class="line-anim"></i>
-                <i class="fas fa-eye eye-btn" onclick="togglePassword('regPass', this)"></i>
-            </div>
+            <div class="inputBox"><input type="text" id="regUser" required><span>Username</span></div>
+            <div class="inputBox"><input type="email" id="regEmail" required><span>Email</span></div>
+            <div class="inputBox"><input type="password" id="regPass" required><span>Password</span></div>
             <div class="links"><a href="#" onclick="openLogin()">Login here</a></div>
             <input type="submit" value="Register" class="submit-btn">
         </form>
     </div>
 </div>
-
 <div class="login-popup" id="forgotForm">
     <div class="box">
         <i class="fas fa-times popup-close-icon" onclick="closeForgot()"></i>
-        <span class="border-line"></span>
         <form onsubmit="event.preventDefault(); recoverPassword();" autocomplete="off">
             <h2>Recovery</h2>
-            <div class="inputBox">
-                <input type="email" id="recoveryEmail" required="required" autocomplete="off">
-                <span>Enter Email</span><i class="line-anim"></i>
-            </div>
+            <div class="inputBox"><input type="email" id="recoveryEmail" required><span>Enter Email</span></div>
             <input type="submit" value="Send Pass" class="submit-btn">
         </form>
     </div>
 </div>
 
 <script>
+    // --- Data Management ---
     let cart = JSON.parse(localStorage.getItem("myCart")) || [];
-    
+    let discount = 0; // ডিসকাউন্ট ভ্যালু স্টোর করার জন্য
+
+    let wishlist = JSON.parse(localStorage.getItem("myWishlist")) || [];
+    let currentModalProduct = {};
+
     window.onload = function() {
-        if(document.getElementById("cart-count")) document.getElementById("cart-count").innerText = cart.length;
-        updateCartHTML(); 
+        updateCartHTML();
+        updateWishlistHTML();
+        syncHeartIcons(); 
         checkLoginStatus();
         
-        // সার্চ বক্সের বাইরে ক্লিক করলে সাজেশন বন্ধ হবে
+        // Theme Load
+        if(localStorage.getItem("theme") === "light") {
+            document.body.classList.add("light-mode");
+            document.getElementById("theme-icon").classList.replace("fa-sun", "fa-moon");
+        }
+
+        // Search Click Outside
         document.addEventListener('click', function(e) {
-            const searchBox = document.querySelector('.search-box');
-            if (!searchBox.contains(e.target)) {
+            if (!document.querySelector('.search-box').contains(e.target)) {
                 document.getElementById('suggestion-box').style.display = 'none';
             }
         });
     };
 
-    // --- পপ-আপ কন্ট্রোল ---
-    function openLogin() { closeAll(); document.getElementById("animatedLoginForm").classList.add("open-popup"); }
-    function closeLogin() { document.getElementById("animatedLoginForm").classList.remove("open-popup"); }
-    function openSignup() { closeAll(); document.getElementById("signupForm").classList.add("open-popup"); }
-    function closeSignup() { document.getElementById("signupForm").classList.remove("open-popup"); }
-    function openForgot() { closeAll(); document.getElementById("forgotForm").classList.add("open-popup"); }
-    function closeForgot() { document.getElementById("forgotForm").classList.remove("open-popup"); }
-    function closeAll() { closeLogin(); closeSignup(); closeForgot(); }
-
-    function togglePassword(id, icon) {
-        let field = document.getElementById(id);
-        if (field.type === "password") { field.type = "text"; icon.classList.replace("fa-eye", "fa-eye-slash"); }
-        else { field.type = "password"; icon.classList.replace("fa-eye-slash", "fa-eye"); }
-    }
-
-    // --- অথেনটিকেশন এবং ইমেইল ---
-    function registerUser() {
-        let u = document.getElementById("regUser").value, e = document.getElementById("regEmail").value, p = document.getElementById("regPass").value;
-        localStorage.setItem("storedUser", u); localStorage.setItem("storedPass", p);
+    // --- MODAL FUNCTIONS (POPUP) ---
+    function openDetails(name, price, img, desc) {
+        // Set Data
+        document.getElementById("modal-name").innerText = name;
+        document.getElementById("modal-price").innerText = "৳ " + price;
+        document.getElementById("modal-img").src = img;
+        document.getElementById("modal-desc").innerText = desc;
         
-        // তোমার দেওয়া সার্ভিস আইডি এবং টেমপ্লেট আইডি ব্যবহার করা হয়েছে
-        emailjs.send("service_gkqcuvl", "template_8svpcra", { user_name: u, user_email: e, message: "Pass: " + p })
-        .then(() => { alert("✅ Signup Success! Check Email."); openLogin(); },
-        (err) => { alert("✅ Signup Success (Local Only)!"); openLogin(); });
+        // Save for Add to Cart
+        currentModalProduct = { name: name, price: price, image: img };
+
+        // Show Modal with Animation
+        const modal = document.getElementById("product-modal-overlay");
+        modal.style.display = "flex";
+        // Small delay to allow CSS transition to work
+        setTimeout(() => { modal.classList.add("open"); }, 10);
+        
+        document.body.style.overflow = "hidden"; // Prevent background scroll
     }
 
-    function loginUser() {
-        let u = document.getElementById("userLogin").value, p = document.getElementById("passLogin").value;
-        let su = localStorage.getItem("storedUser"), sp = localStorage.getItem("storedPass");
-        if ((u === su && p === sp) || (u === "admin" && p === "1234")) {
-            alert("Login Successful!"); localStorage.setItem("currentUser", u); location.reload();
-        } else { alert("❌ Account not found! Signup first."); }
-    }
-
-    function recoverPassword() {
-        let su = localStorage.getItem("storedUser") || "User", sp = localStorage.getItem("storedPass");
-        if(!sp) { alert("No account found!"); return; }
-        emailjs.send("service_gkqcuvl", "template_8svpcra", { user_name: "Recovery", user_pass: "Pass: "+sp, message: "User: "+su })
-        .then(() => { alert("Sent to email!"); closeForgot(); }, () => { alert("Failed email!"); });
-    }
-
-    function logoutUser() {
-        if(confirm("Logout?")) { localStorage.removeItem('currentUser'); location.reload(); }
-    }
-
-    function checkLoginStatus() {
-        let user = localStorage.getItem('currentUser');
-        let btn = document.getElementById('login-btn');
-        if (user) { 
-            btn.innerHTML = '<i class="fas fa-user"></i> ' + user; 
-            btn.href = "#";
-            document.getElementById('menu-logout-btn').style.display = "block"; 
+    // Close when clicking outside the box
+    function closeDetails(event) {
+        if(event.target.id === "product-modal-overlay") {
+            closeDetailsBtn();
         }
     }
-    
-    // --- মেনু ও কার্ট ---
-    function toggleMenu() { document.getElementById("sideMenu").classList.toggle("active"); }
-    function toggleCart() { document.getElementById("cartSidebar").classList.toggle("active"); }
+
+    // Close Button Function
+    function closeDetailsBtn() {
+        const modal = document.getElementById("product-modal-overlay");
+        modal.classList.remove("open");
+        setTimeout(() => { modal.style.display = "none"; }, 300); // Wait for animation
+        document.body.style.overflow = "auto";
+    }
+
+    function addToCartFromModal() {
+        addToCart(currentModalProduct.name, currentModalProduct.price, currentModalProduct.image);
+        alert("Added to cart from Details view!");
+        closeDetailsBtn();
+    }
+
+    // --- Wishlist Logic ---
+    function toggleHeart(name, price, img, btn) {
+        event.stopPropagation(); 
+        const index = wishlist.findIndex(item => item.name === name);
+
+        if(index !== -1) {
+            wishlist.splice(index, 1);
+            btn.classList.remove("active"); 
+        } else {
+            wishlist.push({name: name, price: price, image: img});
+            btn.classList.add("active"); 
+        }
+        localStorage.setItem("myWishlist", JSON.stringify(wishlist));
+        updateWishlistHTML();
+    }
+
+    function syncHeartIcons() {
+        const btns = document.querySelectorAll(".wish-btn-overlay");
+        btns.forEach(btn => {
+            const pName = btn.getAttribute("data-name"); 
+            if(wishlist.some(item => item.name === pName)) {
+                btn.classList.add("active");
+            }
+        });
+    }
+
+    function toggleWishlist() {
+        document.getElementById("wishlistSidebar").classList.toggle("active");
+        document.getElementById("sideMenu").classList.remove("active");
+        document.getElementById("cartSidebar").classList.remove("active");
+    }
+
+    function updateWishlistHTML() {
+        let container = document.getElementById("wishlist-items-container");
+        document.getElementById("wishlist-count").innerText = wishlist.length;
+        container.innerHTML = "";
+        
+        if(wishlist.length === 0) { 
+            container.innerHTML = "<div style='text-align:center; padding:20px; color: grey;'>No saved items!</div>"; 
+            return; 
+        }
+
+        wishlist.forEach((item, index) => {
+            container.innerHTML += `
+                <div class="cart-item">
+                    <img src="${item.image}">
+                    <div style="flex-grow:1; margin-left:10px;">
+                        <h4 style="font-size:14px; margin:0;">${item.name}</h4>
+                        <p style="font-size:12px; color:var(--accent-color); margin:0;">${item.price} BDT</p>
+                    </div>
+                    <i class="fas fa-cart-plus move-btn" title="Move to Cart" onclick="moveToCartFromWish(${index})"></i>
+                    <i class="fas fa-trash remove-btn" onclick="removeFromWishlist(${index})"></i>
+                </div>
+            `;
+        });
+    }
+
+    function removeFromWishlist(index) {
+        let removedItem = wishlist[index];
+        wishlist.splice(index, 1);
+        localStorage.setItem("myWishlist", JSON.stringify(wishlist));
+        updateWishlistHTML();
+        
+        const btns = document.querySelectorAll(".wish-btn-overlay");
+        btns.forEach(btn => {
+            if(btn.getAttribute("data-name") === removedItem.name) {
+                btn.classList.remove("active");
+            }
+        });
+    }
+
+    function moveToCartFromWish(index) {
+        let item = wishlist[index];
+        addToCart(item.name, item.price, item.image);
+        removeFromWishlist(index);
+    }
+
+    // --- Cart Functions ---
+    function toggleCart() { 
+        document.getElementById("cartSidebar").classList.toggle("active"); 
+        document.getElementById("wishlistSidebar").classList.remove("active");
+    }
     
     function addToCart(n, p, i) { 
         cart.push({name:n, price:p, image:i}); 
@@ -387,76 +617,166 @@
         document.getElementById("cartSidebar").classList.add("active"); 
     }
 
-    function updateCartHTML() {
-        let c=document.getElementById("cart-items-container"), t=document.getElementById("cart-total");
-        if(!c || !t) return;
-        c.innerHTML = ""; let tp = 0;
+        function updateCartHTML() {
+        let c = document.getElementById("cart-items-container");
+        let subTotalEl = document.getElementById("cart-subtotal");
+        let discountEl = document.getElementById("cart-discount");
+        let totalEl = document.getElementById("cart-total");
+        
+        if(!c || !totalEl) return;
+        
+        c.innerHTML = ""; 
+        let subTotal = 0;
+
         cart.forEach((x, i) => { 
-            tp += parseInt(x.price); 
+            subTotal += parseInt(x.price); 
             c.innerHTML += `<div class="cart-item"><img src="${x.image}"><div><h4>${x.name}</h4><p>${x.price} BDT</p></div><i class="fas fa-trash remove-btn" onclick="rem(${i})"></i></div>`; 
         });
-        t.innerText = tp; if(cart.length===0) c.innerHTML = "Cart is empty!";
-        if(document.getElementById("cart-count")) document.getElementById("cart-count").innerText = cart.length;
+
+        // ক্যালকুলেশন
+        let finalTotal = subTotal - discount;
+        if(finalTotal < 0) finalTotal = 0;
+
+        // HTML আপডেট
+        subTotalEl.innerText = subTotal;
+        discountEl.innerText = discount;
+        totalEl.innerText = finalTotal;
+        
+        document.getElementById("cart-count").innerText = cart.length;
+        if(cart.length === 0) {
+            c.innerHTML = "<div style='text-align:center; padding:20px; color: grey;'>Cart is empty!</div>";
+            discount = 0; // কার্ট খালি হলে ডিসকাউন্ট রিসেট
+            discountEl.innerText = 0;
+            totalEl.innerText = 0;
+        }
     }
+    function applyCoupon() {
+        let codeInput = document.getElementById("coupon-code").value.trim().toUpperCase();
+        let subTotal = parseInt(document.getElementById("cart-subtotal").innerText);
+
+        if(subTotal === 0) {
+            alert("Cart is empty!");
+            return;
+        }
+
+        if (codeInput === "SAVE20") {
+            // ২০% ডিসকাউন্ট লজিক
+            discount = Math.round(subTotal * 0.20); 
+            alert("Coupon Applied! You saved " + discount + " BDT");
+            updateCartHTML(); // আবার আপডেট কল করো যাতে নতুন প্রাইস দেখায়
+        } else {
+            alert("Invalid Coupon Code ❌");
+            discount = 0;
+            updateCartHTML();
+        }
+    }
+
 
     function rem(i) { cart.splice(i, 1); localStorage.setItem("myCart", JSON.stringify(cart)); updateCartHTML(); }
     function clearCart() { if(confirm("Clear?")) { cart=[]; localStorage.removeItem("myCart"); updateCartHTML(); } }
     function checkout() { alert("Order Placed!"); clearCart(); toggleCart(); }
-    function buyNow(n) { alert("Buy " + n); }
-    function sendMessage() { alert("Message Sent!"); }
 
-    // --- সার্চ এবং সাজেশন (FIXED) ---
-    function toggleSearch() { 
-        const searchBox = document.querySelector('.search-box');
-        searchBox.classList.toggle('active'); 
-        if(searchBox.classList.contains('active')){
-            document.getElementById("search-box").focus();
-            document.getElementById("search-box").value = ""; 
+    // --- Other Functions ---
+    function toggleTheme() {
+        document.body.classList.toggle("light-mode");
+        let icon = document.getElementById("theme-icon");
+        if(document.body.classList.contains("light-mode")) {
+            icon.classList.replace("fa-sun", "fa-moon"); localStorage.setItem("theme", "light");
         } else {
-             document.getElementById('suggestion-box').style.display = 'none';
+            icon.classList.replace("fa-moon", "fa-sun"); localStorage.setItem("theme", "dark");
         }
     }
+    
+    function toggleMenu() { document.getElementById("sideMenu").classList.toggle("active"); }
+    function buyNow(n) { alert("Buy " + n); }
+    function sendMessage() { alert("Message Sent!"); }
+    
+    // Auth & Search
+    function openLogin() { closeAll(); document.getElementById("animatedLoginForm").classList.add("open-popup"); }
+    function closeLogin() { document.getElementById("animatedLoginForm").classList.remove("open-popup"); }
+    function openSignup() { closeAll(); document.getElementById("signupForm").classList.add("open-popup"); }
+    function closeSignup() { document.getElementById("signupForm").classList.remove("open-popup"); }
+    function openForgot() { closeAll(); document.getElementById("forgotForm").classList.add("open-popup"); }
+    function closeForgot() { document.getElementById("forgotForm").classList.remove("open-popup"); }
+    function closeAll() { closeLogin(); closeSignup(); closeForgot(); }
 
-    function showSuggestions() {
-        let input = document.getElementById('search-box').value.toLowerCase().trim();
-        let suggestionBox = document.getElementById('suggestion-box');
-        let productCards = document.getElementsByClassName('product-card');
+        function registerUser() {
+        let u = document.getElementById("regUser").value;
+        let e = document.getElementById("regEmail").value;
+        let p = document.getElementById("regPass").value;
 
-        suggestionBox.innerHTML = '';
-        
-        if (input.length === 0) {
-            suggestionBox.style.display = 'none';
+        // ভ্যালিডেশন লজিক (Validation Logic)
+        if (!e.includes("@")) {
+            alert("⚠️ Invalid Email! Must contain '@'");
+            return;
+        }
+        if (p.length < 6) {
+            alert("⚠️ Password too weak! Must be at least 6 characters.");
             return;
         }
 
-        let matchFound = false;
+        localStorage.setItem("storedUser", u); 
+        localStorage.setItem("storedPass", p);
+        
+        // সফল হলে ইমেইল সেন্ড
+        emailjs.send("service_gkqcuvl", "template_8svpcra", { user_name: u, user_email: e, message: "Pass: " + p })
+        .then(() => { alert("✅ Signup Success!"); openLogin(); }, 
+              () => { alert("✅ Signup Success (Local Only)!"); openLogin(); });
+    }
 
-        // প্রোডাক্ট খোঁজা হচ্ছে
-        for (let i = 0; i < productCards.length; i++) {
-            let nameElement = productCards[i].querySelector(".product-name");
-            let imgElement = productCards[i].querySelector("img");
+    function loginUser() {
+        let u = document.getElementById("userLogin").value, p = document.getElementById("passLogin").value;
+        let su = localStorage.getItem("storedUser"), sp = localStorage.getItem("storedPass");
+        if ((u === su && p === sp) || (u === "admin" && p === "1234")) {
+            alert("Login Successful!"); localStorage.setItem("currentUser", u); location.reload();
+        } else { alert("❌ Account not found!"); }
+    }
+    function recoverPassword() {
+        let su = localStorage.getItem("storedUser"), sp = localStorage.getItem("storedPass");
+        if(!sp) { alert("No account found!"); return; }
+        emailjs.send("service_gkqcuvl", "template_8svpcra", { user_name: "Recovery", user_pass: "Pass: "+sp, message: "User: "+su })
+        .then(() => { alert("Sent to email!"); closeForgot(); }, () => { alert("Failed!"); });
+    }
+    function logoutUser() { if(confirm("Logout?")) { localStorage.removeItem('currentUser'); location.reload(); } }
+        function checkLoginStatus() {
+        let user = localStorage.getItem('currentUser');
+        if (user) { 
+            let btn = document.getElementById('login-btn');
             
-            if(nameElement && imgElement) {
-                let name = nameElement.innerText;
-                let imageSrc = imgElement.src;
-                
-                if (name.toLowerCase().includes(input)) {
-                    suggestionBox.style.display = 'block';
-                    suggestionBox.innerHTML += `
-                        <div class="suggestion-item" onclick="alert('Found: ${name}')">
-                            <img src="${imageSrc}" alt="Product">
-                            <span>${name}</span>
-                        </div>
-                    `;
-                    matchFound = true;
-                }
+            // সময় অনুযায়ী গ্রিটিং লজিক
+            const hour = new Date().getHours();
+            let greeting = "Welcome";
+            
+            if (hour >= 5 && hour < 12) greeting = "Good Morning ☀️";
+            else if (hour >= 12 && hour < 17) greeting = "Good Afternoon 🌤️";
+            else if (hour >= 17 && hour < 21) greeting = "Good Evening 🌙";
+            else greeting = "Good Night 🌌";
+
+            // বাটনে নাম এবং গ্রিটিং দেখানো
+            btn.innerHTML = `<i class="fas fa-user"></i> ${greeting}, ${user}`; 
+            btn.href = "#";
+            document.getElementById('menu-logout-btn').style.display = "block"; 
+        }
+    }
+
+    function toggleSearch() { 
+        const sb = document.querySelector('.search-box'); sb.classList.toggle('active'); 
+        if(sb.classList.contains('active')) { document.getElementById("search-box").focus(); document.getElementById("search-box").value=""; }
+        else document.getElementById('suggestion-box').style.display = 'none';
+    }
+    function showSuggestions() {
+        let input = document.getElementById('search-box').value.toLowerCase().trim();
+        let box = document.getElementById('suggestion-box'); box.innerHTML = '';
+        if (!input) { box.style.display = 'none'; return; }
+        let cards = document.getElementsByClassName('product-card'), found=false;
+        for (let i = 0; i < cards.length; i++) {
+            let n = cards[i].querySelector(".product-name").innerText, img = cards[i].querySelector("img").src;
+            if (n.toLowerCase().includes(input)) {
+                box.style.display = 'block'; found=true;
+                box.innerHTML += `<div class="suggestion-item" onclick="alert('Found: ${n}')"><img src="${img}"><span>${n}</span></div>`;
             }
         }
-
-        if (!matchFound) {
-            suggestionBox.style.display = 'block';
-            suggestionBox.innerHTML = `<div style="padding:10px; color:grey; text-align:center;">No items found</div>`;
-        }
+        if (!found) { box.style.display = 'block'; box.innerHTML = `<div style="padding:10px; color:var(--text-color); text-align:center;">No items found</div>`; }
     }
 </script>
 
