@@ -74,15 +74,28 @@
 
     /* --- NAVBAR --- */
     .navbar { display: flex; justify-content: space-between; align-items: center; background-color: var(--card-bg); padding: 15px 2%; position: sticky; top: 0; z-index: 1000; border-bottom: 2px solid var(--primary-color); transition: background-color 0.3s; }
-    .logo { font-size: 1.2rem; font-weight: 700; color: var(--text-color); cursor: pointer; }
+    .logo { font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-color); 
+            cursor: pointer;
+            transform: translateX(-2px);
+            transform: translateY(-15px);
+            }
     .logo span { color: var(--primary-color); }
     .nav-icons { display: flex; align-items: center; gap: 20px; }
-    .theme-btn { cursor: pointer; font-size: 1.2rem; color: var(--text-color); transition: 0.3s; }
+    .theme-btn { cursor: pointer;
+    position: relative;
+    right: -15px;
+     font-size: 1.2rem; color: var(--text-color); transition: 0.3s; }
     .theme-btn:hover { color: var(--primary-color); transform: rotate(180deg); }
 
     /* --- SEARCH --- */
     .search-box { position: relative; display: flex; align-items: center; justify-content: center; }
-    .search-btn { color: var(--text-color) !important; font-size: 1.4rem; background: transparent; border: none; cursor: pointer; transition: 0.3s; }
+    .search-btn { color: var(--text-color) !important; font-size: 1.4rem; background: transparent; border: none; cursor: pointer; transition: 0.3s;
+    position: relative;
+    right:-10px;
+    top:  1.2px;
+     }
     .search-txt { position: absolute; top: 50px; right: -10px; width: 200px; padding: 10px; background: var(--card-bg); border: 2px solid var(--primary-color); border-radius: 10px; color: var(--text-color); font-size: 14px; outline: none; opacity: 0; visibility: hidden; transform: translateY(-15px); transition: 0.4s ease; }
     .search-box.active .search-txt { opacity: 1; visibility: visible; transform: translateY(0); }
     #suggestion-box { position: absolute; top: 100px; right: -10px; width: 250px; background: var(--card-bg); border: 1px solid var(--primary-color); border-radius: 10px; max-height: 300px; overflow-y: auto; display: none; z-index: 9999; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
@@ -91,10 +104,15 @@
     .suggestion-item img { width: 40px; height: 40px; object-fit: cover; border-radius: 5px; margin-right: 10px; border: 1px solid var(--primary-color); }
 
     /* --- ICONS --- */
-    .icon-wrapper { position: relative; cursor: pointer; font-size: 1.5rem; color: var(--text-color); transition: 0.3s; }
+    .icon-wrapper { position: relative;
+     right: 100px;
+     cursor: pointer; font-size: 1.5rem; color: var(--text-color); transition: 0.3s; }
     .icon-wrapper:hover { transform: scale(1.1); color: var(--primary-color); }
     .badge { position: absolute; top: -8px; right: -10px; background-color: red; color: white; font-size: 12px; font-weight: bold; padding: 2px 6px; border-radius: 50%; }
-    .menu-bar { font-size: 1.5rem; color: var(--text-color); cursor: pointer; }
+    .menu-bar { font-size: 1.5rem; color: var(--text-color); cursor: pointer;
+   position:relative;
+   right:80px;
+    }
     
     /* --- SIDEBAR --- */
     .sidebar { position: fixed; top: 0; right: -320px; width: 320px; height: 100%; background-color: var(--card-bg); box-shadow: -5px 0 15px rgba(0,0,0,0.5); padding-top: 60px; transition: 0.4s; z-index: 2000; display: flex; flex-direction: column; }
@@ -285,9 +303,10 @@
     <a href="#" onclick="toggleMenu()">Shop</a>
     <a href="#" onclick="toggleMenu()">Profile</a>
     <a href="#" onclick="toggleMenu()">Contact Us</a>
-    <a href="#" id="menu-logout-btn" onclick="logoutUser()" style="display: none; color: #ff4757; margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border-color);">
-        <i class="fas fa-sign-out-alt"></i> Log Out
-    </a>
+    <a href="#" id="menu-logout-btn" onclick="logoutUser()" style="display: none; color: #ff4757; margin-top: 330px; padding-top: 20px; border-top: 1px solid var(--border-color);">
+    <i class="fas fa-sign-out-alt"></i> Log Out
+</a>
+
 </div>
 
 <div class="sidebar" id="cartSidebar">
@@ -492,6 +511,17 @@
         </form>
     </div>
 </div>
+<div class="login-popup" id="greetingModal">
+    <div class="box">
+        <div style="position: absolute; inset: 4px; background: #222; padding: 40px; border-radius: 8px; z-index: 2; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+            <i class="fas fa-smile-beam" style="font-size: 3rem; color: #2563eb; margin-bottom: 20px;"></i>
+            <h2 id="greet-text" style="color: white; margin-bottom: 10px; font-size: 1.8rem;">Welcome</h2>
+            <p style="color: #ccc; margin-bottom: 30px;">We are happy to see you!</p>
+            <button class="btn btn-buy" onclick="closeGreeting()" style="width: 150px;">Let's Shop 🚀</button>
+        </div>
+    </div>
+</div>
+
 
 <script>
     // --- Data Management ---
@@ -759,13 +789,23 @@
               () => { alert("✅ Signup Success (Local Only)!"); openLogin(); });
     }
 
-    function loginUser() {
-        let u = document.getElementById("userLogin").value, p = document.getElementById("passLogin").value;
-        let su = localStorage.getItem("storedUser"), sp = localStorage.getItem("storedPass");
+       function loginUser() {
+        let u = document.getElementById("userLogin").value;
+        let p = document.getElementById("passLogin").value;
+        let su = localStorage.getItem("storedUser");
+        let sp = localStorage.getItem("storedPass");
+
         if ((u === su && p === sp) || (u === "admin" && p === "1234")) {
-            alert("Login Successful!"); localStorage.setItem("currentUser", u); location.reload();
-        } else { alert("❌ Account not found!"); }
+            // লগইন সফল
+            localStorage.setItem("currentUser", u);
+            closeLogin(); // লগইন ফর্ম বন্ধ
+            showGreetingPopup(u); // গ্রিটিং পপ-আপ ওপেন
+            checkLoginStatus(); // মেনু আপডেট
+        } else { 
+            alert("❌ Wrong Username or Password!"); 
+        }
     }
+
     function recoverPassword() {
         let su = localStorage.getItem("storedUser"), sp = localStorage.getItem("storedPass");
         if(!sp) { alert("No account found!"); return; }
@@ -773,27 +813,53 @@
         .then(() => { alert("Sent to email!"); closeForgot(); }, () => { alert("Failed!"); });
     }
     function logoutUser() { if(confirm("Logout?")) { localStorage.removeItem('currentUser'); location.reload(); } }
-        function checkLoginStatus() {
+           function checkLoginStatus() {
         let user = localStorage.getItem('currentUser');
         if (user) { 
             let btn = document.getElementById('login-btn');
             
-            // সময় অনুযায়ী গ্রিটিং লজিক
-            const hour = new Date().getHours();
-            let greeting = "Welcome";
+            // ১. আইকন ছাড়া শুধু নাম
+            btn.innerHTML = user; 
             
-            if (hour >= 5 && hour < 12) greeting = "Good Morning ☀️";
-            else if (hour >= 12 && hour < 17) greeting = "Good Afternoon 🌤️";
-            else if (hour >= 17 && hour < 21) greeting = "Good Evening 🌙";
-            else greeting = "Good Night 🌌";
+            // ২. মার্জিন ছাড়া নাম সরানোর কোড
+            btn.style.position = "relative"; 
+            btn.style.left = "-205px";
+            btn.style.right="px";
+             // ডানে সরাতে চাইলে এই সংখ্যা বাড়ান (যেমন: 20px, 30px)
+            // btn.style.right = "50px"; // বামে সরাতে চাইলে উপরের লাইন কেটে এই লাইনটি ব্যবহার করুন
+            btn.style.top ="20px";
+            
 
-            // বাটনে নাম এবং গ্রিটিং দেখানো
-            btn.innerHTML = `<i class="fas fa-user"></i> ${greeting}, ${user}`; 
+            // ৩. স্টাইল এবং লিংক
+            btn.style.fontWeight = "bold"; 
             btn.href = "#";
             document.getElementById('menu-logout-btn').style.display = "block"; 
         }
     }
 
+      // --- NEW GREETING POPUP LOGIC ---
+    function showGreetingPopup(user) {
+        const hour = new Date().getHours();
+        let greeting = "Welcome";
+        
+        if (hour >= 5 && hour < 12) greeting = "Good Morning ☀️";
+        else if (hour >= 12 && hour < 17) greeting = "Good Afternoon 🌤️";
+        else if (hour >= 17 && hour < 21) greeting = "Good Evening 🌙";
+        else greeting = "Hello 🌌";
+
+        // টেক্সট সেট করা
+        document.getElementById("greet-text").innerHTML = `${greeting}, <br> <span style="color: #38bdf8;">${user}</span>`;
+        
+        // পপ-আপ ওপেন করা
+        document.getElementById("greetingModal").classList.add("open-popup");
+    }
+
+    function closeGreeting() {
+        document.getElementById("greetingModal").classList.remove("open-popup");
+        // পপ-আপ বন্ধ করে পেজ রিফ্রেশ দিতে চাইলে নিচের লাইনটি রাখতে পারো, না চাইলে কেটে দিও
+        // location.reload(); 
+    }
+ 
     function toggleSearch() { 
         const sb = document.querySelector('.search-box'); sb.classList.toggle('active'); 
         if(sb.classList.contains('active')) { document.getElementById("search-box").focus(); document.getElementById("search-box").value=""; }
