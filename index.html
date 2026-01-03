@@ -104,12 +104,16 @@
     .suggestion-item img { width: 40px; height: 40px; object-fit: cover; border-radius: 5px; margin-right: 10px; border: 1px solid var(--primary-color); }
 
     /* --- ICONS --- */
-    .icon-wrapper { position: relative
-     right: 100px;
+    .icon-wrapper { 
+    position: relative;
+     right: 50px;
      cursor: pointer; font-size: 1.5rem; color: var(--text-color); transition: 0.3s; }
     .icon-wrapper:hover { transform: scale(1.1); color: var(--primary-color); }
     .badge { position: absolute; top: -8px; right: -10px; background-color: red; color: white; font-size: 12px; font-weight: bold; padding: 2px 6px; border-radius: 50%; }
-    .menu-bar { font-size: 1.5rem; color: var(--text-color); cursor: pointer; }
+    .menu-bar { font-size: 1.5rem; color: var(--text-color); cursor: pointer;
+    position:absolute;
+    right:20px;
+     }
     
     /* --- SIDEBAR --- */
     .sidebar { position: fixed; top: 0; right: -320px; width: 320px; height: 100%; background-color: var(--card-bg); box-shadow: -5px 0 15px rgba(0,0,0,0.5); padding-top: 60px; transition: 0.4s; z-index: 2000; display: flex; flex-direction: column; }
@@ -251,7 +255,16 @@
     .footer-bottom { text-align: center; padding: 20px; margin-top: 40px; border-top: 1px solid var(--border-color); }
 
     /* --- LOGIN POPUP --- */
-    .login-popup { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); display: flex; justify-content: center; align-items: center; visibility: hidden; opacity: 0; transform: scale(0); transition: transform 0.4s ease, opacity 0.4s ease; z-index: 10000; }
+    
+   #login-btn {
+    position: relative; 
+    right:200px;
+    top:18px;
+     /* এটি বাটনটিকে বাম দিকে সরিয়ে আনবে */
+}
+
+
+    .login-popup { position: fixed; top: 0; left: 0px; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); display: flex; justify-content: center; align-items: center; visibility: hidden; opacity: 0; transform: scale(0); transition: transform 0.4s ease, opacity 0.4s ease; z-index: 10000; }
     .login-popup.open-popup { visibility: visible; opacity: 1; transform: scale(1); }
     .box { position: relative; width: 380px; height: 480px; background: #1c1c1c; border-radius: 8px; overflow: hidden; display: flex; justify-content: center; align-items: center; }
     .box form { position: absolute; inset: 4px; background: #222; padding: 40px; border-radius: 8px; z-index: 2; display: flex; flex-direction: column; }
