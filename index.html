@@ -20,6 +20,17 @@
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
     }
+    
+    
+    /* এটি আপনার সিএসএস-এ নতুন করে লিখে দিন */
+body.user-logged-in #login-btn {
+    position: relative;
+    left: -20px;  
+    color: var(--accent-color);
+    font-weight: bold;
+    display: inline-block;
+}
+
 
     .box::before {
         content: '';
@@ -74,10 +85,16 @@
 
     /* --- NAVBAR --- */
     .navbar { display: flex; justify-content: space-between; align-items: center; background-color: var(--card-bg); padding: 15px 2%; position: sticky; top: 0; z-index: 1000; border-bottom: 2px solid var(--primary-color); transition: background-color 0.3s; }
-    .logo { font-size: 1.2rem;
+    .logo { margin-top:-10px;
+    position :relative;
+    top:-13px;
+            
+    
+            font-size: 1.2rem;
             font-weight: 700;
             color: var(--text-color); 
             cursor: pointer;
+            
             
             }
     .logo span { color: var(--primary-color); }
@@ -277,12 +294,16 @@
     /* --- LOGIN POPUP --- */
     
    #login-btn {
+   position:absolute ;
+   
+   right: 285px;
+   top: 37px;
     
      /* এটি বাটনটিকে বাম দিকে সরিয়ে আনবে */
 }
 
 
-    .login-popup { position: fixed; top: 0; left: 0px; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); display: flex; justify-content: center; align-items: center; visibility: hidden; opacity: 0; transform: scale(0); transition: transform 0.4s ease, opacity 0.4s ease; z-index: 10000; }
+    .login-popup { position: fixed; top: 0; right: 0px; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); display: flex; justify-content: center; align-items: center; visibility: hidden; opacity: 0; transform: scale(0); transition: transform 0.4s ease, opacity 0.4s ease; z-index: 10000; }
     .login-popup.open-popup { visibility: visible; opacity: 1; transform: scale(1); }
     .box { position: relative; width: 380px; height: 480px; background: #1c1c1c; border-radius: 8px; overflow: hidden; display: flex; justify-content: center; align-items: center; }
     .box form { position: absolute; inset: 4px; background: #222; padding: 40px; border-radius: 8px; z-index: 2; display: flex; flex-direction: column; }
