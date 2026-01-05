@@ -15,50 +15,26 @@
     </script>
 
     <style>
-            /* --- LOGIN BOX ANIMATION --- */
+    /* ========================================= */
+    /* --- 🎨 তোমার অরিজিনাল সেটিংস --- */
+    /* ========================================= */
+    
+    /* --- LOGIN BOX ANIMATION --- */
     @keyframes animate {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
     }
-    
-    
-    /* এটি আপনার সিএসএস-এ নতুন করে লিখে দিন */
-body.user-logged-in #login-btn {
-    position: relative;
-    left: 20px;  
-    color: var(--accent-color);
-    font-weight: bold;
-    display: inline-block;
-}
-
 
     .box::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 380px;
-        height: 480px;
-        /* নীল রঙের অ্যানিমেশন */
+        content: ''; position: absolute; top: -50%; left: -50%; width: 380px; height: 480px;
         background: linear-gradient(0deg, transparent, transparent, #2563eb, #2563eb, #2563eb);
-        z-index: 1;
-        transform-origin: bottom right;
-        animation: animate 6s linear infinite;
+        z-index: 1; transform-origin: bottom right; animation: animate 6s linear infinite;
     }
 
     .box::after {
-        content: '';
-        position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 380px;
-        height: 480px;
-        /* লাল/গোলাপী রঙের অ্যানিমেশন */
+        content: ''; position: absolute; top: -50%; left: -50%; width: 380px; height: 480px;
         background: linear-gradient(0deg, transparent, transparent, #e11d48, #e11d48, #e11d48);
-        z-index: 1;
-        transform-origin: bottom right;
-        animation: animate 6s linear infinite;
-        animation-delay: -3s;
+        z-index: 1; transform-origin: bottom right; animation: animate 6s linear infinite; animation-delay: -3s;
     }
 
     /* --- ১. কালার ভেরিয়েবল --- */
@@ -84,42 +60,48 @@ body.user-logged-in #login-btn {
     body { background-color: var(--dark-bg); color: var(--text-color); line-height: 1.6; transition: background-color 0.3s, color 0.3s; }
 
     /* --- NAVBAR --- */
-    .navbar { display: flex; justify-content: space-between; align-items: center; background-color: var(--card-bg); padding: 15px 2%; position: sticky; top: 0; z-index: 1000; border-bottom: 2px solid var(--primary-color); transition: background-color 0.3s; }
-    .logo { margin-top:-10px;
-    position :relative;
-    top:-13px;
-            
-    
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--text-color); 
-            cursor: pointer;
-            
-            
-            }
+    .navbar { 
+        display: flex; justify-content: space-between; align-items: center; 
+        background-color: var(--card-bg); padding: 15px 2%; 
+        position: sticky; top: 0; z-index: 1000; 
+        border-bottom: 2px solid var(--primary-color); transition: background-color 0.3s; 
+    }
+
+    /* তোমার ম্যানুয়াল লোগো সেটিংস (অপরিবর্তিত) */
+    .logo { 
+        margin-top: -10px;
+        position: relative;
+        top: -13px;
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--text-color); 
+        cursor: pointer;
+    }
     .logo span { color: var(--primary-color); }
    
-.nav-icons {
-    display: flex;
-    align-items: center;
-    gap: 12px; /* আইকনগুলোর মাঝখানের দূরত্ব */
-}
-.menu-bar {
-    order: 10 !important; /* বড় নম্বর মানেই এটি সবার ডানে থাকবে */
-    margin-left: 5px;    /* চাইলে আইকন থেকে সামান্য গ্যাপ দিতে পারেন */
-}
-    .theme-btn { cursor: pointer;
+    .nav-icons {
+        display: flex;
+        align-items: center;
+        gap: 12px; 
+    }
+
+    .menu-bar {
+        order: 10 !important; 
+        margin-left: 5px;    
+        cursor: pointer; font-size: 1.5rem; color: var(--text-color);
+    }
     
-     font-size: 1.2rem; color: var(--text-color); transition: 0.3s; }
+    .theme-btn { 
+        cursor: pointer; font-size: 1.2rem; color: var(--text-color); transition: 0.3s; 
+    }
     .theme-btn:hover { color: var(--primary-color); transform: rotate(180deg); }
 
     /* --- SEARCH --- */
     .search-box { position: relative; display: flex; align-items: center; justify-content: center; }
-    .search-btn { color: var(--text-color) !important; font-size: 1.4rem; background: transparent; border: none; cursor: pointer; transition: 0.3s;
-    
-     }
+    .search-btn { color: var(--text-color) !important; font-size: 1.4rem; background: transparent; border: none; cursor: pointer; transition: 0.3s; }
     .search-txt { position: absolute; top: 50px; right: -10px; width: 200px; padding: 10px; background: var(--card-bg); border: 2px solid var(--primary-color); border-radius: 10px; color: var(--text-color); font-size: 14px; outline: none; opacity: 0; visibility: hidden; transform: translateY(-15px); transition: 0.4s ease; }
     .search-box.active .search-txt { opacity: 1; visibility: visible; transform: translateY(0); }
+    
     #suggestion-box { position: absolute; top: 100px; right: -10px; width: 250px; background: var(--card-bg); border: 1px solid var(--primary-color); border-radius: 10px; max-height: 300px; overflow-y: auto; display: none; z-index: 9999; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
     .suggestion-item { display: flex; align-items: center; padding: 10px; border-bottom: 1px solid var(--border-color); cursor: pointer; color: var(--text-color); transition: 0.2s; }
     .suggestion-item:hover { background: rgba(37, 99, 235, 0.1); }
@@ -127,31 +109,51 @@ body.user-logged-in #login-btn {
 
     /* --- ICONS --- */
     .icon-wrapper { 
-    position:relative;
-    display:flex;
-    align-item:center;
-    justify-content: center;
-    order: 3;
-    
-     cursor: pointer; font-size: 1.5rem; color: var(--text-color); transition: 0.3s; }
-     
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        order: 3;
+        cursor: pointer; font-size: 1.5rem; color: var(--text-color); transition: 0.3s; 
+    }
      
     .icon-wrapper:hover { transform: scale(1.1); color: var(--primary-color); }
     
     .badge {
-    position: absolute;
-    top: -5px;
-    right: -8px;
-    background-color: #ef4444;
-    color: white;
-    font-size: 10px;
-    font-weight: bold;
-    padding: 2px 5px;
-    border-radius: 50%;
-    min-width: 18px;
-    text-align: center;
-    /* display: none; এটা জাভাস্ক্রিপ্ট দিয়ে নিয়ন্ত্রণ হবে */
-}
+        position: absolute; top: -5px; right: -8px;
+        background-color: #ef4444; color: white;
+        font-size: 10px; font-weight: bold; padding: 2px 5px;
+        border-radius: 50%; min-width: 18px; text-align: center;
+    }
+
+    /* ========================================= */
+    /* --- 🔧 THE LOGIN BUTTON FIX --- */
+    /* ========================================= */
+
+    /* ১. লগইন করার আগে (তোমার ম্যানুয়াল পজিশন) */
+    #login-btn {
+        position: absolute;
+        right: 285px;  /* তোমার দেওয়া মান */
+        top: 37px;     /* তোমার দেওয়া মান */
+        color: var(--text-color);
+        text-decoration: none;
+        font-weight: 600;
+        white-space: nowrap; /* লেখা ভাঙবে না */
+    }
+
+    /* ২. লগইন করার পরে (একই পজিশন থাকবে, নড়বে না) */
+    body.user-logged-in #login-btn {
+        position: absolute !important; /* জোর করে পজিশন ঠিক রাখা */
+        right: 285px !important;       /* ঠিক আগের জায়গাতেই থাকবে */
+        top: 37px !important;          /* ঠিক আগের জায়গাতেই থাকবে */
+        
+        color: var(--accent-color);    /* নাম হাইলাইট কালার */
+        font-weight: bold;
+        display: block;                /* বাটন হিসেবে দেখাবে */
+    }
+
+    /* ========================================= */
+
     /* --- SIDEBAR --- */
     .sidebar { position: fixed; top: 0; right: -320px; width: 320px; height: 100%; background-color: var(--card-bg); box-shadow: -5px 0 15px rgba(0,0,0,0.5); padding-top: 60px; transition: 0.4s; z-index: 2000; display: flex; flex-direction: column; }
     .sidebar.active { right: 0; }
@@ -173,115 +175,46 @@ body.user-logged-in #login-btn {
     
     .product-card { background: var(--card-bg); border-radius: 15px; overflow: hidden; border: 1px solid var(--border-color); display: flex; flex-direction: column; transition: 0.3s; position: relative; }
     .product-card:hover { transform: translateY(-10px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-    
-    /* Product Image Clickable */
     .product-img { width: 100%; height: 250px; overflow: hidden; background: #000; position: relative; cursor: pointer; }
     .product-img img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
     .product-img:hover img { transform: scale(1.1); }
 
-    /* ❤️ Wishlist Button (Toggle Effect) ❤️ */
-    .wish-btn-overlay { 
-        position: absolute; top: 10px; right: 10px; 
-        background: rgba(255, 255, 255, 0.8); 
-        width: 35px; height: 35px; border-radius: 50%; 
-        display: flex; justify-content: center; align-items: center; 
-        cursor: pointer; color: #ccc; transition: 0.3s; 
-        box-shadow: 0 2px 5px rgba(0,0,0,0.3); z-index: 10; 
-    }
-        /* --- PRODUCT BADGE (NEW/SALE) --- */
-    .product-badge {
-        position: absolute;
-        top: 10px;
-        left: 10px; /* বাম কোণায় থাকবে */
-        padding: 5px 10px;
-        font-size: 12px;
-        font-weight: bold;
-        color: white;
-        border-radius: 4px;
-        z-index: 10;
-        text-transform: uppercase;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-    }
-    .badge-new { background-color: #10b981; } /* সবুজ রঙ */
-    .badge-sale { background-color: #ef4444; } /* লাল রঙ */
-
-    /* --- COUPON INPUT STYLE --- */
-    .coupon-box {
-        display: flex;
-        gap: 5px;
-        margin-bottom: 15px;
-    }
-    .coupon-input {
-        width: 70%;
-        padding: 8px;
-        border: 1px solid var(--border-color);
-        border-radius: 5px;
-        background: var(--dark-bg);
-        color: var(--text-color);
-        outline: none;
-    }
-    .coupon-btn {
-        width: 30%;
-        background: var(--accent-color);
-        border: none;
-        color: white;
-        border-radius: 5px;
-        cursor: pointer;
-        font-weight: bold;
-    }
-
+    /* Overlay & Badges */
+    .wish-btn-overlay { position: absolute; top: 10px; right: 10px; background: rgba(255, 255, 255, 0.8); width: 35px; height: 35px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; color: #ccc; transition: 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.3); z-index: 10; }
     .wish-btn-overlay:hover { transform: scale(1.1); }
     .wish-btn-overlay.active { color: var(--love-color); background: white; box-shadow: 0 0 10px var(--love-color); }
+
+    .product-badge { position: absolute; top: 10px; left: 10px; padding: 5px 10px; font-size: 12px; font-weight: bold; color: white; border-radius: 4px; z-index: 10; text-transform: uppercase; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
+    .badge-new { background-color: #10b981; }
+    .badge-sale { background-color: #ef4444; }
+
+    .coupon-box { display: flex; gap: 5px; margin-bottom: 15px; }
+    .coupon-input { width: 70%; padding: 8px; border: 1px solid var(--border-color); border-radius: 5px; background: var(--dark-bg); color: var(--text-color); outline: none; }
+    .coupon-btn { width: 30%; background: var(--accent-color); border: none; color: white; border-radius: 5px; cursor: pointer; font-weight: bold; }
 
     .product-info { padding: 20px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
     .product-name { color: var(--text-color); font-weight: 600; margin-bottom: 10px; cursor: pointer; }
     .product-name:hover { color: var(--primary-color); }
     .price { color: var(--accent-color); font-size: 1.4rem; font-weight: 700; margin-bottom: 15px; }
-
     .btn { padding: 10px 20px; border-radius: 50px; font-weight: 600; cursor: pointer; border: none; width: 100%; margin-top: 10px; }
     .btn-buy { background-color: var(--primary-color); color: white; }
     .btn-cart { background-color: transparent; border: 2px solid var(--primary-color); color: var(--text-color); }
     .btn-cart:hover { background-color: var(--primary-color); color: white; }
 
-    /* ========================================= */
-    /* --- ✨ PRODUCT DETAILS MODAL (POPUP) --- */
-    /* ========================================= */
-    .modal-overlay {
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background-color: rgba(0,0,0,0.85); z-index: 9999;
-        display: none; /* Initially hidden */
-        justify-content: center; align-items: center;
-        opacity: 0; transition: opacity 0.3s ease;
-    }
+    /* Modal & Footer */
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); z-index: 9999; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease; }
     .modal-overlay.open { display: flex; opacity: 1; }
-
-    .modal-box {
-        background: var(--card-bg); width: 90%; max-width: 900px;
-        border-radius: 15px; padding: 20px; position: relative;
-        display: flex; gap: 30px; flex-wrap: wrap;
-        border: 1px solid var(--border-color);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        transform: scale(0.8); transition: transform 0.3s ease;
-        max-height: 90vh; overflow-y: auto;
-    }
+    .modal-box { background: var(--card-bg); width: 90%; max-width: 900px; border-radius: 15px; padding: 20px; position: relative; display: flex; gap: 30px; flex-wrap: wrap; border: 1px solid var(--border-color); box-shadow: 0 10px 30px rgba(0,0,0,0.5); transform: scale(0.8); transition: transform 0.3s ease; max-height: 90vh; overflow-y: auto; }
     .modal-overlay.open .modal-box { transform: scale(1); }
-
-    .modal-close-btn {
-        position: absolute; top: 15px; right: 20px;
-        font-size: 1.5rem; color: var(--text-color);
-        cursor: pointer; z-index: 100; transition: 0.3s;
-    }
+    .modal-close-btn { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; color: var(--text-color); cursor: pointer; z-index: 100; transition: 0.3s; }
     .modal-close-btn:hover { color: #ef4444; transform: rotate(90deg); }
-
     .modal-img-wrapper { flex: 1; min-width: 300px; }
     .modal-img-wrapper img { width: 100%; border-radius: 10px; border: 2px solid var(--primary-color); }
-
     .modal-info-wrapper { flex: 1; min-width: 300px; display: flex; flex-direction: column; justify-content: center; }
     .modal-title { font-size: 2rem; color: var(--primary-color); margin-bottom: 10px; }
     .modal-price { font-size: 1.8rem; color: #10b981; font-weight: bold; margin-bottom: 20px; }
     .modal-desc { color: var(--text-color); opacity: 0.9; margin-bottom: 30px; line-height: 1.6; }
 
-    /* --- FOOTER & FORMS --- */
     .contact-section { max-width: 600px; margin: 80px auto 50px auto; padding: 0 20px; text-align: center; }
     .contact-form { display: flex; flex-direction: column; gap: 15px; background: var(--card-bg); padding: 30px; border-radius: 15px; border: 1px solid var(--border-color); }
     .contact-input { width: 100%; padding: 15px; border-radius: 10px; border: 1px solid var(--border-color); background-color: var(--dark-bg); color: var(--text-color); outline: none; }
@@ -291,18 +224,7 @@ body.user-logged-in #login-btn {
     .footer-col ul li a { color: var(--text-color); text-decoration: none; opacity: 0.8; }
     .footer-bottom { text-align: center; padding: 20px; margin-top: 40px; border-top: 1px solid var(--border-color); }
 
-    /* --- LOGIN POPUP --- */
-    
-   #login-btn {
-   position:absolute ;
-   
-   right: 285px;
-   top: 37px;
-    
-     /* এটি বাটনটিকে বাম দিকে সরিয়ে আনবে */
-}
-
-
+    /* Login Popup */
     .login-popup { position: fixed; top: 0; right: 0px; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); display: flex; justify-content: center; align-items: center; visibility: hidden; opacity: 0; transform: scale(0); transition: transform 0.4s ease, opacity 0.4s ease; z-index: 10000; }
     .login-popup.open-popup { visibility: visible; opacity: 1; transform: scale(1); }
     .box { position: relative; width: 380px; height: 480px; background: #1c1c1c; border-radius: 8px; overflow: hidden; display: flex; justify-content: center; align-items: center; }
@@ -315,7 +237,7 @@ body.user-logged-in #login-btn {
     .links a { font-size: 0.75em; color: #8f8f8f; text-decoration: none; }
     .submit-btn { border: none; padding: 9px 25px; background: #fff; cursor: pointer; font-weight: 600; border-radius: 4px; margin-top: 15px; width: 100px; }
     .popup-close-icon { position: absolute; top: 20px; right: 20px; color: #ff2770; font-size: 1.5rem; cursor: pointer; z-index: 100; }
-    </style>
+</style>
 </head>
 <body>
     
