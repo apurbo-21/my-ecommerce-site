@@ -243,6 +243,9 @@
     
 <nav class="navbar">
     <div class="logo">APURBO<span>.DEV</span></div>
+
+    <a href="login.html" id="login-btn" style="color: var(--text-color); text-decoration: none; font-weight: bold; font-size: 1rem;">Login</a>
+
     <div class="nav-icons">
         <i class="fas fa-sun theme-btn" id="theme-icon" onclick="toggleTheme()" title="Switch Theme"></i>
 
@@ -251,8 +254,6 @@
             <a class="search-btn" href="#" onclick="toggleSearch()"><i class="fas fa-search"></i></a>
             <div id="suggestion-box"></div>
         </div>
-        
-        <a href="#" id="login-btn" onclick="openLogin()" style="color: var(--text-color); text-decoration: none; font-weight: bold; font-size: 1rem;">Login</a>
         
         <div class="icon-wrapper" onclick="toggleWishlist()" title="Wishlist">
             <i class="fas fa-heart"></i>
@@ -267,6 +268,7 @@
         <div class="menu-bar" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
     </div>
 </nav>
+
 
 <div class="sidebar" id="sideMenu">
     <i class="fas fa-times close-icon" onclick="toggleMenu()"></i>
@@ -789,28 +791,37 @@
     }
     function logoutUser() { if(confirm("Logout?")) { localStorage.removeItem('currentUser'); location.reload(); } }
            function checkLoginStatus() {
-        let user = localStorage.getItem('currentUser');
-        if (user) { 
-            let btn = document.getElementById('login-btn');
-            
-            // ১. আইকন ছাড়া শুধু নাম
-            btn.innerHTML = user; 
-            
-            // ২. মার্জিন ছাড়া নাম সরানোর কোড
-            btn.style.position = "relative"; 
-            btn.style.left = "-205px";
-            btn.style.right="px";
-             // ডানে সরাতে চাইলে এই সংখ্যা বাড়ান (যেমন: 20px, 30px)
-            // btn.style.right = "50px"; // বামে সরাতে চাইলে উপরের লাইন কেটে এই লাইনটি ব্যবহার করুন
-            btn.style.top ="20px";
-            
+    let user = localStorage.getItem('currentUser');
+    let btn = document.getElementById('login-btn');
+    
+    if (user && btn) { 
+        // ১. নামের বদলে প্রফেশনাল আইকন
+        btn.innerHTML = '<i class="fas fa-user-circle" style="font-size: 1.8rem; color: #38bdf8;"></i>'; 
+        btn.title = "Logged in as " + user;
 
-            // ৩. স্টাইল এবং লিংক
-            btn.style.fontWeight = "bold"; 
-            btn.href = "#";
-            document.getElementById('menu-logout-btn').style.display = "block"; 
-        }
+        // ২. সব পজিশনিং মুছে ফেললাম (এগুলোই গ্যাপ তৈরি করছিল)
+        btn.style.position = "static"; 
+        btn.style.margin = "0"; 
+        btn.style.padding = "0";
+        
+        btn.href = "#";
+        btn.onclick = function() {
+            if(confirm("Do you want to logout?")) {
+                localStorage.removeItem('currentUser');
+                window.location.reload();
+            }
+        };
     }
+}
+
+
+        // তোমার আগের সাইডবারের লগআউট বাটনটি দেখাবে
+        if (document.getElementById('menu-logout-btn')) {
+            document.getElementById('menu-logout-btn').style.display = "block";
+        }
+    
+
+
 
       // --- NEW GREETING POPUP LOGIC ---
     function showGreetingPopup(user) {
@@ -857,4 +868,4 @@
 </script>
 
 </body>
-</html>
+</html> 
