@@ -15,6 +15,17 @@
     </script>
 
     <style>
+        /* পাসওয়ার্ড ইনপুটের ভেতরে ডানপাশে জায়গা রাখা */
+.inputBox input {
+    padding-right: 35px !important;
+}
+
+/* আইকনটি যেন মাউস নিলে একটু বড় হয় */
+#togglePassIcon:hover {
+    transform: scale(1.2);
+    transition: 0.2s;
+}
+
     /* ========================================= */
     /* --- 🎨 তোমার অরিজিনাল সেটিংস --- */
     /* ========================================= */
@@ -241,33 +252,30 @@
 </head>
 <body>
     
-<nav class="navbar">
-    <div class="logo">APURBO<span>.DEV</span></div>
+<nav class="navbar" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 5%;">
+    
+    <div class="logo-container" style="display: flex; flex-direction: column; align-items: flex-start;">
+        <div class="logo" style="margin: 0;">APURBO<span>.DEV</span></div>
+        
+        <a href="javascript:void(0)" id="login-btn" onclick="openLogin()" 
+           style="color: var(--text-color); text-decoration: none; font-weight: bold; font-size: 0.9rem; margin-top: -5px;">
+           Login
+        </a>
+    </div>
 
-    <a href="login.html" id="login-btn" style="color: var(--text-color); text-decoration: none; font-weight: bold; font-size: 1rem;">Login</a>
-
-    <div class="nav-icons">
-        <i class="fas fa-sun theme-btn" id="theme-icon" onclick="toggleTheme()" title="Switch Theme"></i>
-
+    <div class="nav-icons" style="display: flex; align-items: center; gap: 15px;">
+        <i class="fas fa-sun theme-btn" id="theme-icon" onclick="toggleTheme()"></i>
         <div class="search-box">
             <input class="search-txt" type="text" id="search-box" placeholder="Search..." onkeyup="showSuggestions()">
             <a class="search-btn" href="#" onclick="toggleSearch()"><i class="fas fa-search"></i></a>
             <div id="suggestion-box"></div>
         </div>
-        
-        <div class="icon-wrapper" onclick="toggleWishlist()" title="Wishlist">
-            <i class="fas fa-heart"></i>
-            <span id="wishlist-count" class="badge">0</span>
-        </div>
-
-        <div class="icon-wrapper" onclick="toggleCart()" title="Cart">
-            <i class="fas fa-shopping-cart"></i>
-            <span id="cart-count" class="badge">0</span>
-        </div>
-        
+        <div class="icon-wrapper" onclick="toggleWishlist()"><i class="fas fa-heart"></i><span id="wishlist-count" class="badge">0</span></div>
+        <div class="icon-wrapper" onclick="toggleCart()"><i class="fas fa-shopping-cart"></i><span id="cart-count" class="badge">0</span></div>
         <div class="menu-bar" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
     </div>
 </nav>
+
 
 
 <div class="sidebar" id="sideMenu">
@@ -454,7 +462,13 @@
         <form onsubmit="event.preventDefault(); loginUser();" autocomplete="off">
             <h2>Login</h2>
             <div class="inputBox"><input type="text" id="userLogin" required><span>Username</span></div>
-            <div class="inputBox"><input type="password" id="passLogin" required><span>Password</span></div>
+            <div class="inputBox" style="position: relative;">
+    <input type="password" id="passLogin" required style="padding-right: 40px;">
+    <span>Password</span>
+    <i class="fas fa-eye" id="togglePassIcon" onclick="togglePassword()" 
+       style="position: absolute; right: 10px; top: 15px; cursor: pointer; color: #ccc; z-index: 10;"></i>
+</div>
+
             <div class="links"><a href="#" onclick="openForgot()">Forgot Password</a><a href="#" onclick="openSignup()">Signup</a></div>
             <input type="submit" value="Login" class="submit-btn">
         </form>
@@ -498,8 +512,7 @@
 <script>
     // --- Data Management ---
     let cart = JSON.parse(localStorage.getItem("myCart")) || [];
-    let discount = 0; // ডিসকাউন্ট ভ্যালু স্টোর করার জন্য
-
+    let discount = 0; 
     let wishlist = JSON.parse(localStorage.getItem("myWishlist")) || [];
     let currentModalProduct = {};
 
@@ -508,14 +521,32 @@
         updateWishlistHTML();
         syncHeartIcons(); 
         checkLoginStatus();
+        // পাসওয়ার্ড দেখানো বা লুকানোর লজিক
+function togglePassword() {
+    const passInput = document.getElementById("passLogin");
+    const toggleIcon = document.getElementById("togglePassIcon");
+
+    if (passInput.type === "password") {
+        // পাসওয়ার্ড টেক্সট হিসেবে দেখাবে
+        passInput.type = "text";
+        // আইকন পরিবর্তন করে 'বন্ধ চোখ' করা হলো
+        toggleIcon.classList.replace("fa-eye", "fa-eye-slash");
+        toggleIcon.style.color = "#38bdf8"; // নীল রঙ যাতে বোঝা যায় এটি অন আছে
+    } else {
+        // পাসওয়ার্ড আবার ডট ডট হয়ে যাবে
+        passInput.type = "password";
+        // আইকন পরিবর্তন করে 'খোলা চোখ' করা হলো
+        toggleIcon.classList.replace("fa-eye-slash", "fa-eye");
+        toggleIcon.style.color = "#ccc"; // স্বাভাবিক রঙ
+    }
+}
+
         
-        // Theme Load
         if(localStorage.getItem("theme") === "light") {
             document.body.classList.add("light-mode");
             document.getElementById("theme-icon").classList.replace("fa-sun", "fa-moon");
         }
 
-        // Search Click Outside
         document.addEventListener('click', function(e) {
             if (!document.querySelector('.search-box').contains(e.target)) {
                 document.getElementById('suggestion-box').style.display = 'none';
@@ -523,44 +554,33 @@
         });
     };
 
-    // --- MODAL FUNCTIONS (POPUP) ---
+    // --- MODAL FUNCTIONS ---
     function openDetails(name, price, img, desc) {
-        // Set Data
         document.getElementById("modal-name").innerText = name;
         document.getElementById("modal-price").innerText = "৳ " + price;
         document.getElementById("modal-img").src = img;
         document.getElementById("modal-desc").innerText = desc;
-        
-        // Save for Add to Cart
         currentModalProduct = { name: name, price: price, image: img };
-
-        // Show Modal with Animation
         const modal = document.getElementById("product-modal-overlay");
         modal.style.display = "flex";
-        // Small delay to allow CSS transition to work
         setTimeout(() => { modal.classList.add("open"); }, 10);
-        
-        document.body.style.overflow = "hidden"; // Prevent background scroll
+        document.body.style.overflow = "hidden";
     }
 
-    // Close when clicking outside the box
     function closeDetails(event) {
-        if(event.target.id === "product-modal-overlay") {
-            closeDetailsBtn();
-        }
+        if(event.target.id === "product-modal-overlay") { closeDetailsBtn(); }
     }
 
-    // Close Button Function
     function closeDetailsBtn() {
         const modal = document.getElementById("product-modal-overlay");
         modal.classList.remove("open");
-        setTimeout(() => { modal.style.display = "none"; }, 300); // Wait for animation
+        setTimeout(() => { modal.style.display = "none"; }, 300);
         document.body.style.overflow = "auto";
     }
 
     function addToCartFromModal() {
         addToCart(currentModalProduct.name, currentModalProduct.price, currentModalProduct.image);
-        alert("Added to cart from Details view!");
+        alert("Added to cart!");
         closeDetailsBtn();
     }
 
@@ -568,7 +588,6 @@
     function toggleHeart(name, price, img, btn) {
         event.stopPropagation(); 
         const index = wishlist.findIndex(item => item.name === name);
-
         if(index !== -1) {
             wishlist.splice(index, 1);
             btn.classList.remove("active"); 
@@ -584,9 +603,7 @@
         const btns = document.querySelectorAll(".wish-btn-overlay");
         btns.forEach(btn => {
             const pName = btn.getAttribute("data-name"); 
-            if(wishlist.some(item => item.name === pName)) {
-                btn.classList.add("active");
-            }
+            if(wishlist.some(item => item.name === pName)) { btn.classList.add("active"); }
         });
     }
 
@@ -597,19 +614,15 @@
     }
 
     function updateWishlistHTML() {
-    let countEl = document.getElementById("wishlist-count");
-    
-    // আইটেম থাকলে লাল ব্যাজ দেখাবে, না থাকলে একদম সরিয়ে দিবে
-    if (wishlist.length > 0) {
-        countEl.style.display = "block"; // দেখাবে
-        countEl.innerText = wishlist.length;
-    } else {
-        countEl.style.display = "none"; // লুকাবে
-    }
+        let container = document.getElementById("wishlist-items-container");
+        let countEl = document.getElementById("wishlist-count");
+        if (!container) return;
+        container.innerHTML = ""; 
 
-    // আপনার বাকি আইটেম দেখানোর কোড এখানে থাকবে...
-}
-
+        if (countEl) {
+            countEl.style.display = wishlist.length > 0 ? "block" : "none";
+            countEl.innerText = wishlist.length;
+        }
 
         wishlist.forEach((item, index) => {
             container.innerHTML += `
@@ -624,19 +637,20 @@
                 </div>
             `;
         });
-    
+
+        if (wishlist.length === 0) {
+            container.innerHTML = `<div style="text-align:center; padding:20px; color: grey;">Wishlist is empty!</div>`;
+        }
+    }
 
     function removeFromWishlist(index) {
         let removedItem = wishlist[index];
         wishlist.splice(index, 1);
         localStorage.setItem("myWishlist", JSON.stringify(wishlist));
         updateWishlistHTML();
-        
         const btns = document.querySelectorAll(".wish-btn-overlay");
         btns.forEach(btn => {
-            if(btn.getAttribute("data-name") === removedItem.name) {
-                btn.classList.remove("active");
-            }
+            if(btn.getAttribute("data-name") === removedItem.name) { btn.classList.remove("active"); }
         });
     }
 
@@ -659,66 +673,45 @@
         document.getElementById("cartSidebar").classList.add("active"); 
     }
 
-        function updateCartHTML() {
+    function updateCartHTML() {
         let c = document.getElementById("cart-items-container");
         let subTotalEl = document.getElementById("cart-subtotal");
         let discountEl = document.getElementById("cart-discount");
         let totalEl = document.getElementById("cart-total");
-        
         if(!c || !totalEl) return;
-        
         c.innerHTML = ""; 
         let subTotal = 0;
-
         cart.forEach((x, i) => { 
             subTotal += parseInt(x.price); 
             c.innerHTML += `<div class="cart-item"><img src="${x.image}"><div><h4>${x.name}</h4><p>${x.price} BDT</p></div><i class="fas fa-trash remove-btn" onclick="rem(${i})"></i></div>`; 
         });
-
-        // ক্যালকুলেশন
         let finalTotal = subTotal - discount;
-        if(finalTotal < 0) finalTotal = 0;
-
-        // HTML আপডেট
         subTotalEl.innerText = subTotal;
         discountEl.innerText = discount;
-        totalEl.innerText = finalTotal;
-        
+        totalEl.innerText = finalTotal < 0 ? 0 : finalTotal;
         document.getElementById("cart-count").innerText = cart.length;
         if(cart.length === 0) {
             c.innerHTML = "<div style='text-align:center; padding:20px; color: grey;'>Cart is empty!</div>";
-            discount = 0; // কার্ট খালি হলে ডিসকাউন্ট রিসেট
-            discountEl.innerText = 0;
-            totalEl.innerText = 0;
+            discount = 0;
         }
     }
+
     function applyCoupon() {
         let codeInput = document.getElementById("coupon-code").value.trim().toUpperCase();
         let subTotal = parseInt(document.getElementById("cart-subtotal").innerText);
-
-        if(subTotal === 0) {
-            alert("Cart is empty!");
-            return;
-        }
-
+        if(subTotal === 0) { alert("Cart is empty!"); return; }
         if (codeInput === "SAVE20") {
-            // ২০% ডিসকাউন্ট লজিক
             discount = Math.round(subTotal * 0.20); 
-            alert("Coupon Applied! You saved " + discount + " BDT");
-            updateCartHTML(); // আবার আপডেট কল করো যাতে নতুন প্রাইস দেখায়
-        } else {
-            alert("Invalid Coupon Code ❌");
-            discount = 0;
+            alert("Coupon Applied!");
             updateCartHTML();
-        }
+        } else { alert("Invalid Coupon!"); discount = 0; updateCartHTML(); }
     }
-
 
     function rem(i) { cart.splice(i, 1); localStorage.setItem("myCart", JSON.stringify(cart)); updateCartHTML(); }
     function clearCart() { if(confirm("Clear?")) { cart=[]; localStorage.removeItem("myCart"); updateCartHTML(); } }
     function checkout() { alert("Order Placed!"); clearCart(); toggleCart(); }
 
-    // --- Other Functions ---
+    // --- Others ---
     function toggleTheme() {
         document.body.classList.toggle("light-mode");
         let icon = document.getElementById("theme-icon");
@@ -730,10 +723,8 @@
     }
     
     function toggleMenu() { document.getElementById("sideMenu").classList.toggle("active"); }
-    function buyNow(n) { alert("Buy " + n); }
     function sendMessage() { alert("Message Sent!"); }
     
-    // Auth & Search
     function openLogin() { closeAll(); document.getElementById("animatedLoginForm").classList.add("open-popup"); }
     function closeLogin() { document.getElementById("animatedLoginForm").classList.remove("open-popup"); }
     function openSignup() { closeAll(); document.getElementById("signupForm").classList.add("open-popup"); }
@@ -742,115 +733,54 @@
     function closeForgot() { document.getElementById("forgotForm").classList.remove("open-popup"); }
     function closeAll() { closeLogin(); closeSignup(); closeForgot(); }
 
-        function registerUser() {
-        let u = document.getElementById("regUser").value;
-        let e = document.getElementById("regEmail").value;
-        let p = document.getElementById("regPass").value;
-
-        // ভ্যালিডেশন লজিক (Validation Logic)
-        if (!e.includes("@")) {
-            alert("⚠️ Invalid Email! Must contain '@'");
-            return;
-        }
-        if (p.length < 6) {
-            alert("⚠️ Password too weak! Must be at least 6 characters.");
-            return;
-        }
-
-        localStorage.setItem("storedUser", u); 
-        localStorage.setItem("storedPass", p);
-        
-        // সফল হলে ইমেইল সেন্ড
-        emailjs.send("service_gkqcuvl", "template_8svpcra", { user_name: u, user_email: e, message: "Pass: " + p })
-        .then(() => { alert("✅ Signup Success!"); openLogin(); }, 
-              () => { alert("✅ Signup Success (Local Only)!"); openLogin(); });
-    }
-
-       function loginUser() {
+    function loginUser() {
         let u = document.getElementById("userLogin").value;
         let p = document.getElementById("passLogin").value;
         let su = localStorage.getItem("storedUser");
         let sp = localStorage.getItem("storedPass");
-
         if ((u === su && p === sp) || (u === "admin" && p === "1234")) {
-            // লগইন সফল
             localStorage.setItem("currentUser", u);
-            closeLogin(); // লগইন ফর্ম বন্ধ
-            showGreetingPopup(u); // গ্রিটিং পপ-আপ ওপেন
-            checkLoginStatus(); // মেনু আপডেট
-        } else { 
-            alert("❌ Wrong Username or Password!"); 
-        }
+            closeLogin();
+            showGreetingPopup(u);
+            checkLoginStatus();
+        } else { alert("❌ Wrong Username or Password!"); }
     }
 
-    function recoverPassword() {
-        let su = localStorage.getItem("storedUser"), sp = localStorage.getItem("storedPass");
-        if(!sp) { alert("No account found!"); return; }
-        emailjs.send("service_gkqcuvl", "template_8svpcra", { user_name: "Recovery", user_pass: "Pass: "+sp, message: "User: "+su })
-        .then(() => { alert("Sent to email!"); closeForgot(); }, () => { alert("Failed!"); });
-    }
-    function logoutUser() { if(confirm("Logout?")) { localStorage.removeItem('currentUser'); location.reload(); } }
-           function checkLoginStatus() {
-    let user = localStorage.getItem('currentUser');
-    let btn = document.getElementById('login-btn');
-    
-    if (user && btn) { 
-        // ১. নামের বদলে প্রফেশনাল আইকন
-        btn.innerHTML = '<i class="fas fa-user-circle" style="font-size: 1.8rem; color: #38bdf8;"></i>'; 
-        btn.title = "Logged in as " + user;
-
-        // ২. সব পজিশনিং মুছে ফেললাম (এগুলোই গ্যাপ তৈরি করছিল)
-        btn.style.position = "static"; 
-        btn.style.margin = "0"; 
-        btn.style.padding = "0";
+    function checkLoginStatus() {
+        let user = localStorage.getItem('currentUser');
+        let btn = document.getElementById('login-btn');
+        let logoutBtn = document.getElementById('menu-logout-btn');
         
-        btn.href = "#";
-        btn.onclick = function() {
-            if(confirm("Do you want to logout?")) {
-                localStorage.removeItem('currentUser');
-                window.location.reload();
-            }
-        };
-    }
-}
-
-
-        // তোমার আগের সাইডবারের লগআউট বাটনটি দেখাবে
-        if (document.getElementById('menu-logout-btn')) {
-            document.getElementById('menu-logout-btn').style.display = "block";
+        if (user && btn) { 
+            btn.innerHTML = '<i class="fas fa-user-circle" style="font-size: 1.6rem; color: #38bdf8;"></i>'; 
+            btn.title = "Logged in as " + user;
+            btn.style.display = "inline-block";
+            btn.onclick = function(e) {
+                e.preventDefault();
+                if(confirm("Logout?")) { localStorage.removeItem('currentUser'); window.location.reload(); }
+            };
+            if (logoutBtn) logoutBtn.style.display = "block";
+        } else if (btn) {
+            btn.innerHTML = "Login";
+            btn.onclick = openLogin;
+            if (logoutBtn) logoutBtn.style.display = "none";
         }
-    
+    }
 
-
-
-      // --- NEW GREETING POPUP LOGIC ---
     function showGreetingPopup(user) {
         const hour = new Date().getHours();
-        let greeting = "Welcome";
-        
-        if (hour >= 5 && hour < 12) greeting = "Good Morning ☀️";
-        else if (hour >= 12 && hour < 17) greeting = "Good Afternoon 🌤️";
-        else if (hour >= 17 && hour < 21) greeting = "Good Evening 🌙";
-        else greeting = "Hello 🌌";
-
-        // টেক্সট সেট করা
+        let greeting = (hour < 12) ? "Good Morning ☀️" : (hour < 17) ? "Good Afternoon 🌤️" : "Good Evening 🌙";
         document.getElementById("greet-text").innerHTML = `${greeting}, <br> <span style="color: #38bdf8;">${user}</span>`;
-        
-        // পপ-আপ ওপেন করা
         document.getElementById("greetingModal").classList.add("open-popup");
     }
 
-    function closeGreeting() {
-        document.getElementById("greetingModal").classList.remove("open-popup");
-        // পপ-আপ বন্ধ করে পেজ রিফ্রেশ দিতে চাইলে নিচের লাইনটি রাখতে পারো, না চাইলে কেটে দিও
-        // location.reload(); 
-    }
- 
+    function closeGreeting() { document.getElementById("greetingModal").classList.remove("open-popup"); }
+    
     function toggleSearch() { 
         const sb = document.querySelector('.search-box'); sb.classList.toggle('active'); 
-        if(sb.classList.contains('active')) { document.getElementById("search-box").focus(); document.getElementById("search-box").value=""; }
-        else document.getElementById('suggestion-box').style.display = 'none';
+        if(sb.classList.contains('active')) { document.getElementById("search-box").focus(); }
     }
+
     function showSuggestions() {
         let input = document.getElementById('search-box').value.toLowerCase().trim();
         let box = document.getElementById('suggestion-box'); box.innerHTML = '';
@@ -860,12 +790,13 @@
             let n = cards[i].querySelector(".product-name").innerText, img = cards[i].querySelector("img").src;
             if (n.toLowerCase().includes(input)) {
                 box.style.display = 'block'; found=true;
-                box.innerHTML += `<div class="suggestion-item" onclick="alert('Found: ${n}')"><img src="${img}"><span>${n}</span></div>`;
+                box.innerHTML += `<div class="suggestion-item"><img src="${img}"><span>${n}</span></div>`;
             }
         }
-        if (!found) { box.style.display = 'block'; box.innerHTML = `<div style="padding:10px; color:var(--text-color); text-align:center;">No items found</div>`; }
+        if (!found) { box.style.display = 'block'; box.innerHTML = `<div style="padding:10px; text-align:center;">No items found</div>`; }
     }
 </script>
+
 
 </body>
 </html> 
