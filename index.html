@@ -15,19 +15,8 @@
     </script>
 
     <style>
-        /* পাসওয়ার্ড ইনপুটের ভেতরে ডানপাশে জায়গা রাখা */
-.inputBox input {
-    padding-right: 35px !important;
-}
-
-/* আইকনটি যেন মাউস নিলে একটু বড় হয় */
-#togglePassIcon:hover {
-    transform: scale(1.2);
-    transition: 0.2s;
-}
-
     /* ========================================= */
-    /* --- 🎨 তোমার অরিজিনাল সেটিংস --- */
+    /* --- 🎨 মূল সেটিংস --- */
     /* ========================================= */
     
     /* --- LOGIN BOX ANIMATION --- */
@@ -73,16 +62,12 @@
     /* --- NAVBAR --- */
     .navbar { 
         display: flex; justify-content: space-between; align-items: center; 
-        background-color: var(--card-bg); padding: 15px 2%; 
+        background-color: var(--card-bg); padding: 15px 5%; 
         position: sticky; top: 0; z-index: 1000; 
         border-bottom: 2px solid var(--primary-color); transition: background-color 0.3s; 
     }
 
-    /* তোমার ম্যানুয়াল লোগো সেটিংস (অপরিবর্তিত) */
     .logo { 
-        margin-top: -10px;
-        position: relative;
-        top: -13px;
         font-size: 1.2rem;
         font-weight: 700;
         color: var(--text-color); 
@@ -93,18 +78,11 @@
     .nav-icons {
         display: flex;
         align-items: center;
-        gap: 12px; 
+        gap: 15px; 
     }
 
-    .menu-bar {
-        order: 10 !important; 
-        margin-left: 5px;    
-        cursor: pointer; font-size: 1.5rem; color: var(--text-color);
-    }
-    
-    .theme-btn { 
-        cursor: pointer; font-size: 1.2rem; color: var(--text-color); transition: 0.3s; 
-    }
+    .menu-bar { cursor: pointer; font-size: 1.5rem; color: var(--text-color); }
+    .theme-btn { cursor: pointer; font-size: 1.2rem; color: var(--text-color); transition: 0.3s; }
     .theme-btn:hover { color: var(--primary-color); transform: rotate(180deg); }
 
     /* --- SEARCH --- */
@@ -119,15 +97,7 @@
     .suggestion-item img { width: 40px; height: 40px; object-fit: cover; border-radius: 5px; margin-right: 10px; border: 1px solid var(--primary-color); }
 
     /* --- ICONS --- */
-    .icon-wrapper { 
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        order: 3;
-        cursor: pointer; font-size: 1.5rem; color: var(--text-color); transition: 0.3s; 
-    }
-     
+    .icon-wrapper { position: relative; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.5rem; color: var(--text-color); transition: 0.3s; }
     .icon-wrapper:hover { transform: scale(1.1); color: var(--primary-color); }
     
     .badge {
@@ -137,33 +107,16 @@
         border-radius: 50%; min-width: 18px; text-align: center;
     }
 
-    /* ========================================= */
-    /* --- 🔧 THE LOGIN BUTTON FIX --- */
-    /* ========================================= */
-
-    /* ১. লগইন করার আগে (তোমার ম্যানুয়াল পজিশন) */
+    /* --- LOGIN BUTTON --- */
     #login-btn {
-        position: absolute;
-        right: 285px;  /* তোমার দেওয়া মান */
-        top: 37px;     /* তোমার দেওয়া মান */
+        /* পজিশন static করে দেওয়া হয়েছে যাতে এটি লোগোর নিচে থাকে */
+        position: static !important;
+        margin-top: 5px;
         color: var(--text-color);
         text-decoration: none;
         font-weight: 600;
-        white-space: nowrap; /* লেখা ভাঙবে না */
+        cursor: pointer;
     }
-
-    /* ২. লগইন করার পরে (একই পজিশন থাকবে, নড়বে না) */
-    body.user-logged-in #login-btn {
-        position: absolute !important; /* জোর করে পজিশন ঠিক রাখা */
-        right: 285px !important;       /* ঠিক আগের জায়গাতেই থাকবে */
-        top: 37px !important;          /* ঠিক আগের জায়গাতেই থাকবে */
-        
-        color: var(--accent-color);    /* নাম হাইলাইট কালার */
-        font-weight: bold;
-        display: block;                /* বাটন হিসেবে দেখাবে */
-    }
-
-    /* ========================================= */
 
     /* --- SIDEBAR --- */
     .sidebar { position: fixed; top: 0; right: -320px; width: 320px; height: 100%; background-color: var(--card-bg); box-shadow: -5px 0 15px rgba(0,0,0,0.5); padding-top: 60px; transition: 0.4s; z-index: 2000; display: flex; flex-direction: column; }
@@ -248,22 +201,22 @@
     .links a { font-size: 0.75em; color: #8f8f8f; text-decoration: none; }
     .submit-btn { border: none; padding: 9px 25px; background: #fff; cursor: pointer; font-weight: 600; border-radius: 4px; margin-top: 15px; width: 100px; }
     .popup-close-icon { position: absolute; top: 20px; right: 20px; color: #ff2770; font-size: 1.5rem; cursor: pointer; z-index: 100; }
+
+    /* পাসওয়ার্ড ইনপুটের ভেতরে ডানপাশে জায়গা রাখা */
+    .inputBox input { padding-right: 35px !important; }
+    /* আইকনটি যেন মাউস নিলে একটু বড় হয় */
+    #togglePassIcon:hover { transform: scale(1.2); transition: 0.2s; }
 </style>
 </head>
 <body>
     
-<nav class="navbar" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 5%;">
-    
+<nav class="navbar">
     <div class="logo-container" style="display: flex; flex-direction: column; align-items: flex-start;">
         <div class="logo" style="margin: 0;">APURBO<span>.DEV</span></div>
-        
-        <a href="javascript:void(0)" id="login-btn" onclick="openLogin()" 
-           style="color: var(--text-color); text-decoration: none; font-weight: bold; font-size: 0.9rem; margin-top: -5px;">
-           Login
-        </a>
+        <a href="javascript:void(0)" id="login-btn" onclick="openLogin()" style="font-size: 0.9rem; margin-top: -5px;">Login</a>
     </div>
 
-    <div class="nav-icons" style="display: flex; align-items: center; gap: 15px;">
+    <div class="nav-icons">
         <i class="fas fa-sun theme-btn" id="theme-icon" onclick="toggleTheme()"></i>
         <div class="search-box">
             <input class="search-txt" type="text" id="search-box" placeholder="Search..." onkeyup="showSuggestions()">
@@ -275,8 +228,6 @@
         <div class="menu-bar" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
     </div>
 </nav>
-
-
 
 <div class="sidebar" id="sideMenu">
     <i class="fas fa-times close-icon" onclick="toggleMenu()"></i>
@@ -315,8 +266,6 @@
     </div>
 </div> 
 
-
-
 <div class="sidebar" id="wishlistSidebar">
     <div class="sidebar-header"><h3>My Wishlist ❤️</h3><i class="fas fa-times close-icon" onclick="toggleWishlist()"></i></div>
     <div id="wishlist-items-container" style="padding: 20px; color: grey;">No saved items!</div>
@@ -335,10 +284,7 @@
         <div class="product-card">
             <div class="product-img" onclick="openDetails('K65 PLUS Wireless Keyboard', 4500, 'https://i.ibb.co.com/HL39hg93/K65-PLUS-WIRELESS-14-width-1000-bgcolor-000-format-webp.webp', 'This is the best 75% wireless keyboard for developers. It features hot-swappable switches, sound dampening foam, and a long-lasting battery.')">
                 <img src="https://i.ibb.co.com/HL39hg93/K65-PLUS-WIRELESS-14-width-1000-bgcolor-000-format-webp.webp" alt="Keyboard">
-                
-                <div class="wish-btn-overlay" 
-                     data-name="K65 Keyboard"
-                     onclick="event.stopPropagation(); toggleHeart('K65 Keyboard', 4500, 'https://i.ibb.co.com/HL39hg93/K65-PLUS-WIRELESS-14-width-1000-bgcolor-000-format-webp.webp', this)">
+                <div class="wish-btn-overlay" data-name="K65 Keyboard" onclick="event.stopPropagation(); toggleHeart('K65 Keyboard', 4500, 'https://i.ibb.co.com/HL39hg93/K65-PLUS-WIRELESS-14-width-1000-bgcolor-000-format-webp.webp', this)">
                     <i class="fas fa-heart"></i>
                 </div>
             </div>
@@ -355,12 +301,8 @@
         <div class="product-card">
             <div class="product-img" onclick="openDetails('Premium Slim Fit Suit', 3200, 'https://i.ibb.co.com/jkxLG2Nq/3c.jpg', 'High-quality fabric slim fit suit perfect for formal interviews and office wear. Stylish, comfortable, and durable material.')">
                 <span class="product-badge badge-new">New</span>
-
                 <img src="https://i.ibb.co.com/jkxLG2Nq/3c.jpg" alt="Suit">
-                
-                <div class="wish-btn-overlay" 
-                     data-name="Premium Suit"
-                     onclick="event.stopPropagation(); toggleHeart('Premium Suit', 3200, 'https://i.ibb.co.com/jkxLG2Nq/3c.jpg', this)">
+                <div class="wish-btn-overlay" data-name="Premium Suit" onclick="event.stopPropagation(); toggleHeart('Premium Suit', 3200, 'https://i.ibb.co.com/jkxLG2Nq/3c.jpg', this)">
                     <i class="fas fa-heart"></i>
                 </div>
             </div>
@@ -377,12 +319,8 @@
         <div class="product-card">
             <div class="product-img" onclick="openDetails('Wireless Gaming Mouse', 1800, 'https://i.ibb.co/xR3SP9K/s-l1200.jpg', 'Ultra-fast response time, RGB lighting, and ergonomic design for long gaming sessions. Adjustable DPI and programmable buttons.')">
                <span class="product-badge badge-sale">-20% OFF</span>
-
                 <img src="https://i.ibb.co/xR3SP9K/s-l1200.jpg" alt="Mouse">
-                
-                <div class="wish-btn-overlay" 
-                     data-name="Gaming Mouse"
-                     onclick="event.stopPropagation(); toggleHeart('Gaming Mouse', 1800, 'https://i.ibb.co/xR3SP9K/s-l1200.jpg', this)">
+                <div class="wish-btn-overlay" data-name="Gaming Mouse" onclick="event.stopPropagation(); toggleHeart('Gaming Mouse', 1800, 'https://i.ibb.co/xR3SP9K/s-l1200.jpg', this)">
                     <i class="fas fa-heart"></i>
                 </div>
             </div>
@@ -463,12 +401,10 @@
             <h2>Login</h2>
             <div class="inputBox"><input type="text" id="userLogin" required><span>Username</span></div>
             <div class="inputBox" style="position: relative;">
-    <input type="password" id="passLogin" required style="padding-right: 40px;">
-    <span>Password</span>
-    <i class="fas fa-eye" id="togglePassIcon" onclick="togglePassword()" 
-       style="position: absolute; right: 10px; top: 15px; cursor: pointer; color: #ccc; z-index: 10;"></i>
-</div>
-
+                <input type="password" id="passLogin" required style="padding-right: 40px;">
+                <span>Password</span>
+                <i class="fas fa-eye" id="togglePassIcon" onclick="togglePassword()" style="position: absolute; right: 10px; top: 15px; cursor: pointer; color: #ccc; z-index: 10;"></i>
+            </div>
             <div class="links"><a href="#" onclick="openForgot()">Forgot Password</a><a href="#" onclick="openSignup()">Signup</a></div>
             <input type="submit" value="Login" class="submit-btn">
         </form>
@@ -521,26 +457,6 @@
         updateWishlistHTML();
         syncHeartIcons(); 
         checkLoginStatus();
-        // পাসওয়ার্ড দেখানো বা লুকানোর লজিক
-function togglePassword() {
-    const passInput = document.getElementById("passLogin");
-    const toggleIcon = document.getElementById("togglePassIcon");
-
-    if (passInput.type === "password") {
-        // পাসওয়ার্ড টেক্সট হিসেবে দেখাবে
-        passInput.type = "text";
-        // আইকন পরিবর্তন করে 'বন্ধ চোখ' করা হলো
-        toggleIcon.classList.replace("fa-eye", "fa-eye-slash");
-        toggleIcon.style.color = "#38bdf8"; // নীল রঙ যাতে বোঝা যায় এটি অন আছে
-    } else {
-        // পাসওয়ার্ড আবার ডট ডট হয়ে যাবে
-        passInput.type = "password";
-        // আইকন পরিবর্তন করে 'খোলা চোখ' করা হলো
-        toggleIcon.classList.replace("fa-eye-slash", "fa-eye");
-        toggleIcon.style.color = "#ccc"; // স্বাভাবিক রঙ
-    }
-}
-
         
         if(localStorage.getItem("theme") === "light") {
             document.body.classList.add("light-mode");
@@ -553,6 +469,24 @@ function togglePassword() {
             }
         });
     };
+
+    // --- HELPER: Password Toggle ---
+    function togglePassword() {
+        const passInput = document.getElementById("passLogin");
+        const toggleIcon = document.getElementById("togglePassIcon");
+
+        if (passInput && toggleIcon) {
+            if (passInput.type === "password") {
+                passInput.type = "text";
+                toggleIcon.classList.replace("fa-eye", "fa-eye-slash");
+                toggleIcon.style.color = "#38bdf8"; 
+            } else {
+                passInput.type = "password";
+                toggleIcon.classList.replace("fa-eye-slash", "fa-eye");
+                toggleIcon.style.color = "#ccc";
+            }
+        }
+    }
 
     // --- MODAL FUNCTIONS ---
     function openDetails(name, price, img, desc) {
@@ -613,6 +547,7 @@ function togglePassword() {
         document.getElementById("cartSidebar").classList.remove("active");
     }
 
+    // --- FIXED: Wishlist HTML Update ---
     function updateWishlistHTML() {
         let container = document.getElementById("wishlist-items-container");
         let countEl = document.getElementById("wishlist-count");
@@ -634,8 +569,7 @@ function togglePassword() {
                     </div>
                     <i class="fas fa-cart-plus move-btn" title="Move to Cart" onclick="moveToCartFromWish(${index})"></i>
                     <i class="fas fa-trash remove-btn" onclick="removeFromWishlist(${index})"></i>
-                </div>
-            `;
+                </div>`;
         });
 
         if (wishlist.length === 0) {
@@ -673,26 +607,37 @@ function togglePassword() {
         document.getElementById("cartSidebar").classList.add("active"); 
     }
 
+    // --- FIXED: Cart HTML Update ---
     function updateCartHTML() {
         let c = document.getElementById("cart-items-container");
-        let subTotalEl = document.getElementById("cart-subtotal");
-        let discountEl = document.getElementById("cart-discount");
         let totalEl = document.getElementById("cart-total");
+        
         if(!c || !totalEl) return;
         c.innerHTML = ""; 
         let subTotal = 0;
+
         cart.forEach((x, i) => { 
             subTotal += parseInt(x.price); 
-            c.innerHTML += `<div class="cart-item"><img src="${x.image}"><div><h4>${x.name}</h4><p>${x.price} BDT</p></div><i class="fas fa-trash remove-btn" onclick="rem(${i})"></i></div>`; 
+            // Corrected with backticks
+            c.innerHTML += `
+                <div class="cart-item">
+                    <img src="${x.image}">
+                    <div>
+                        <h4>${x.name}</h4>
+                        <p>${x.price} BDT</p>
+                    </div>
+                    <i class="fas fa-trash remove-btn" onclick="rem(${i})"></i>
+                </div>`; 
         });
+
+        document.getElementById("cart-subtotal").innerText = subTotal;
         let finalTotal = subTotal - discount;
-        subTotalEl.innerText = subTotal;
-        discountEl.innerText = discount;
         totalEl.innerText = finalTotal < 0 ? 0 : finalTotal;
         document.getElementById("cart-count").innerText = cart.length;
+        document.getElementById("cart-discount").innerText = discount;
+        
         if(cart.length === 0) {
-            c.innerHTML = "<div style='text-align:center; padding:20px; color: grey;'>Cart is empty!</div>";
-            discount = 0;
+             c.innerHTML = "<div style='text-align:center; padding:20px; color: grey;'>Cart is empty!</div>";
         }
     }
 
@@ -799,4 +744,4 @@ function togglePassword() {
 
 
 </body>
-</html> 
+</html>
